@@ -223,6 +223,21 @@ public class AudioSegmentLooper : MonoBehaviour
         }
     }
 
+    // TODO: check how well this works with compressed audio.
+    // sets the current time in clip as a percentage of the whole c
+    public void SetClipTime(float t)
+    {
+        // sets the clip time
+        audioSource.time = Mathf.Clamp(t, 0, audioSource.clip.length);
+    }
+
+    // sets the clip time as a percentage. Argument 'percent' ranges from 0 to 1.
+    public void SetClipTimeAsPercentage(float percent)
+    {
+        // sets the clip time
+        audioSource.time = audioSource.clip.length * Mathf.Clamp01(percent);
+    }
+
 
     // Update is called once per frame
     void Update()
