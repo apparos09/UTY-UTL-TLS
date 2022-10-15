@@ -213,7 +213,7 @@ public class Mouse : MonoBehaviour
                         // left mouse button has been clicked, so save to clicked object as well.
                         if (Input.GetKeyDown(mouseKey))
                         {
-                            heldObject = hitInfo.collider.gameObject;
+                            heldObject = rayHit2D.collider.gameObject;
                             lastClickedObject = heldObject;
                         }
                     }
