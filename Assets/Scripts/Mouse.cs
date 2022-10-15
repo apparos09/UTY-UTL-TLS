@@ -57,7 +57,7 @@ public class Mouse : MonoBehaviour
         // gets the viewport position
         Vector3 viewPos = cam.ScreenToViewportPoint(Input.mousePosition);
 
-        // check horizontal an vertical.
+        // check horizontal and vertical.
         inX = (viewPos.x >= 0 && viewPos.x <= 1.0);
         inY = (viewPos.y >= 0 && viewPos.y <= 1.0);
 
@@ -106,7 +106,7 @@ public class Mouse : MonoBehaviour
         // Vector3 target = camWPos - refObject.transform.position;
         // return target;
 
-        return GetMouseTargetPositionInWorldSpace(Camera.main, refObject.transform.position);
+        return GetMouseTargetPositionInWorldSpace(cam, refObject.transform.position);
     }
 
     // gets the mouse target position in world space with a reference vector.
