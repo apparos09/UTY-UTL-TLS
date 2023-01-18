@@ -22,11 +22,18 @@ public class MouseTouchInput : MonoBehaviour
     public bool ignoreUI = true;
 
     // The mouse key for mouse operations. The default is Keycode.Mouse0, which is the left mouse button.
+    // TODO: add functions for all 6 mouse buttons (0 - 6)
     public KeyCode mouseKey = KeyCode.Mouse0;
 
     // The world position of the mouse.
     // NOTE: it appears that the touch input is detected as a mouse input as well. The latest input overrides this variable.
     public Vector3 mouseWorldPosition;
+
+    // // The check rate for the mouse hovering over entities. 
+    // public float hoverCheckRate = 0.0F;
+    // 
+    // // The hover timer for shooting a ray to check for hovering objects.
+    // private float hoverTimer = 0.0F;
 
     [Header("Mouse/Interactions")]
 
@@ -39,6 +46,21 @@ public class MouseTouchInput : MonoBehaviour
 
     // The last object that was clicked on. The next time someone clicks on something, this will be set to null.
     public GameObject mouseLastClickedObject = null;
+
+    // The callback for the mouse.
+    public delegate void MouseCallback(GameObject hitObject);
+
+    // The callback for the mouse hovering over an object.
+    private MouseCallback mouseHoverCallback;
+
+    // The callback for the mouse being pressed over an object.
+    private MouseCallback mousePressedCallback;
+
+    // The callback for the mouse being held.
+    private MouseCallback mouseHeldCallback;
+
+    // The callback for the mouse being released.
+    private MouseCallback mouseReleasedCallback;
 
     [Header("Touch")]
 
@@ -58,6 +80,18 @@ public class MouseTouchInput : MonoBehaviour
     // The touched object will be removed from the list when it is let go, but the amount of touches will be retained...
     // for the saved touch.
     public List<Touch> currentTouches = new List<Touch>();
+
+    // The callback for the touch.
+    public delegate void TouchCallback(GameObject hitObject, Touch touch);
+
+    // The callback for touch down interaction.
+    private TouchCallback TouchDownCallback;
+
+    // The callback for touch held interaction.
+    private TouchCallback TouchHeldCallback;
+
+    // The callback for touch up interaction.
+    private TouchCallback TouchReleasedCallback;
 
     // Start is called before the first frame update.
     void Start()
