@@ -7,6 +7,23 @@ using UnityEngine.EventSystems;
 // used for tracking inputs with either the mouse or the touch.
 public class MouseTouchInput : MonoBehaviour
 {
+    // A struct for mouse buttons.
+    protected struct MouseButton
+    {
+        // The keycode for the mouse button.
+        public KeyCode keyCode;
+
+        // The object clicked on by the mouse button.
+        public GameObject clicked;
+
+        // The object being held on by the mouse button.
+        public GameObject held;
+
+        // The object that was last clicked by the mouse button.
+        public GameObject lastClicked;
+
+    }
+
     // If 'true', Mouse operations are tracked.
     public bool trackMouse = true;
 
@@ -47,8 +64,11 @@ public class MouseTouchInput : MonoBehaviour
     // The last object that was clicked on. The next time someone clicks on something, this will be set to null.
     public GameObject mouseLastClickedObject = null;
 
+    // The mouse buttons that are being checked.
+    private MouseButton[] mouseButtons;
+
     // The callback for the mouse.
-    public delegate void MouseCallback(GameObject hitObject);
+    public delegate void MouseCallback(KeyCode mousekey, GameObject hitObject);
 
     // The callback for the mouse hovering over an object.
     private MouseCallback mouseHoverCallback;
@@ -93,10 +113,34 @@ public class MouseTouchInput : MonoBehaviour
     // The callback for touch up interaction.
     private TouchCallback TouchReleasedCallback;
 
-    // Start is called before the first frame update.
-    void Start()
+    // Awake is called when the script instance is being loaded.
+    void Awake()
     {
+        // Has an index for each mouse button.
+        // Unity supports 6 mouse buttons (Mouse0 - Mouse6, 323 - 329).
+        mouseButtons = new MouseButton[7];
 
+        // The mouse key.
+        KeyCode mouseKey = KeyCode.Mouse0;
+
+        // Goes through each mouse button.
+        for(int i = 0; i < mouseButtons.Length; i++)
+        {
+            // Creates a new mouse button object.
+            mouseButtons[i] = new MouseButton();
+
+            // Current mouse key.
+            mouseButtons[i].keyCode = mouseKey;
+
+            // Sets these values to null.
+            mouseButtons[i].clicked = null;
+            mouseButtons[i].held = null;
+            mouseButtons[i].lastClicked = null;
+
+            // Moves onto the next mouse key.
+            if(i + 1 < mouseButtons.Length)
+                mouseKey += 1;
+        }
     }
 
     // Gets the screen to world point using the main camera.
@@ -468,6 +512,28 @@ public class MouseTouchInput : MonoBehaviour
             // If this is set to null, then the space will be empty.
             touchObjects.Add(touchedObject);
         }
+    }
+
+
+    // CALLBACKS
+    // MOUSE HOVER CALLBACK
+    // On mouse hover add callback.
+    public void AddOnMouseHoverCallback(MouseCallback callback)
+    {
+        mouseHoverCallback += callback;
+    }
+
+    // On mouse hover remove callback.
+    public void RemoveOnMouseHoverCallback(MouseCallback callback)
+    {
+        mouseHoverCallback -= callback;
+    }
+
+    // Trigger mouse hover callback.
+    private void OnMouseHoverCallback(KeyCode mouseKey, GameObject hitObject)
+    {
+        if(mouseHoverCallback != null)
+            mouseHoverCallback(mouseKey, hitObject);
     }
 
     // Update is called once per frame
