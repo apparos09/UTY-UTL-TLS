@@ -4,26 +4,23 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+// A struct for mouse buttons.
+public struct MouseButton
+{
+    // The keycode for the mouse button.
+    public KeyCode keyCode;
+
+    // The object being held on by the mouse button.
+    public GameObject held;
+
+    // The object that was last clicked by the mouse button.
+    public GameObject lastClicked;
+
+}
+
 // used for tracking inputs with either the mouse or the touch.
 public class MouseTouchInput : MonoBehaviour
 {
-    // A struct for mouse buttons.
-    protected struct MouseButton
-    {
-        // The keycode for the mouse button.
-        public KeyCode keyCode;
-
-        // The object clicked on by the mouse button.
-        public GameObject clicked;
-
-        // The object being held on by the mouse button.
-        public GameObject held;
-
-        // The object that was last clicked by the mouse button.
-        public GameObject lastClicked;
-
-    }
-
     // If 'true', Mouse operations are tracked.
     public bool trackMouse = true;
 
@@ -38,9 +35,9 @@ public class MouseTouchInput : MonoBehaviour
     [Tooltip("if true, the UI is ignored for raycast collisions. If false, UI elements can block a raycast.")]
     public bool ignoreUI = true;
 
-    // The mouse key for mouse operations. The default is Keycode.Mouse0, which is the left mouse button.
-    // TODO: add functions for all 6 mouse buttons (0 - 6)
-    public KeyCode mouseKey = KeyCode.Mouse0;
+    // // The mouse key for mouse operations. The default is Keycode.Mouse0, which is the left mouse button.
+    // // TODO: add functions for all 6 mouse buttons (0 - 6)
+    // public KeyCode mouseKey = KeyCode.Mouse0;
 
     // The world position of the mouse.
     // NOTE: it appears that the touch input is detected as a mouse input as well. The latest input overrides this variable.
@@ -52,35 +49,38 @@ public class MouseTouchInput : MonoBehaviour
     // // The hover timer for shooting a ray to check for hovering objects.
     // private float hoverTimer = 0.0F;
 
+    // The mouse buttons that are being checked.
+    private MouseButton[] mouseButtons;
+
     [Header("Mouse/Interactions")]
 
     // The object the mouse is hovering over.
     public GameObject mouseHoveredObject = null;
 
-    // The object that has been clicked and held on.
-    // When the mouse button is released, this is set to null. This variable gets set to null when the mouse button is released.
-    public GameObject mouseHeldObject = null;
+    // // The object that has been clicked and held on.
+    // // When the mouse button is released, this is set to null. This variable gets set to null when the mouse button is released.
+    // public GameObject mouseHeldObject = null;
+    // 
+    // // The last object that was clicked on. The next time someone clicks on something, this will be set to null.
+    // public GameObject mouseLastClickedObject = null;
 
-    // The last object that was clicked on. The next time someone clicks on something, this will be set to null.
-    public GameObject mouseLastClickedObject = null;
+    // The callback for the mouse hover and mouse button.
+    public delegate void MouseHoverCallback(GameObject hitObject);
+    public delegate void MouseButtonCallback(KeyCode mousekey, GameObject hitObject);
 
-    // The mouse buttons that are being checked.
-    private MouseButton[] mouseButtons;
-
-    // The callback for the mouse.
-    public delegate void MouseCallback(KeyCode mousekey, GameObject hitObject);
+    // TODO: add drag callback?
 
     // The callback for the mouse hovering over an object.
-    private MouseCallback mouseHoverCallback;
+    private MouseHoverCallback mouseHoveredCallback;
 
     // The callback for the mouse being pressed over an object.
-    private MouseCallback mousePressedCallback;
+    private MouseButtonCallback mousePressedCallback;
 
     // The callback for the mouse being held.
-    private MouseCallback mouseHeldCallback;
+    private MouseButtonCallback mouseHeldCallback;
 
     // The callback for the mouse being released.
-    private MouseCallback mouseReleasedCallback;
+    private MouseButtonCallback mouseReleasedCallback;
 
     [Header("Touch")]
 
@@ -133,7 +133,6 @@ public class MouseTouchInput : MonoBehaviour
             mouseButtons[i].keyCode = mouseKey;
 
             // Sets these values to null.
-            mouseButtons[i].clicked = null;
             mouseButtons[i].held = null;
             mouseButtons[i].lastClicked = null;
 
@@ -158,7 +157,9 @@ public class MouseTouchInput : MonoBehaviour
             return cam.ScreenToWorldPoint(new Vector3(position.x, position.y, cam.focalLength));
     }
 
-    // MOUSE //
+
+
+    // MOUSE INPUT //
 
     // Checks to see if the cursor is in the window.
     public static bool MouseInWindow()
@@ -221,6 +222,61 @@ public class MouseTouchInput : MonoBehaviour
         Vector3 target = camWPos - refPos;
         return target;
     }
+
+    // MOUSE BUTTONS
+    // Mouse 0 (Left)
+    public MouseButton MouseButton0
+    {
+        get { return mouseButtons[0]; }
+    }
+
+    // Mouse 1 (Right)
+    public MouseButton MouseButton1
+    {
+        get { return mouseButtons[1]; }
+    }
+
+    // Mouse 2 (Middle)
+    public MouseButton MouseButton2
+    {
+        get { return mouseButtons[2]; }
+    }
+
+    // Mouse 3 (Additional Button)
+    public MouseButton MouseButton3
+    {
+        get { return mouseButtons[3]; }
+    }
+
+    // Mouse 4 (Additional Button)
+    public MouseButton MouseButton4
+    {
+        get { return mouseButtons[4]; }
+    }
+
+    // Mouse 5 (Additional Button)
+    public MouseButton MouseButton5
+    {
+        get { return mouseButtons[5]; }
+    }
+
+    // Mouse 6 (Additional Button)
+    public MouseButton MouseButton6
+    {
+        get { return mouseButtons[6]; }
+    }
+
+    // Returns the mouse button.
+    private MouseButton GetMouseButton(int index)
+    {
+        // Checks if the mouse button is valid.
+        if (index < 0 || index >= mouseButtons.Length)
+            return new MouseButton();
+        else
+            return mouseButtons[index];
+    }
+
+
 
     // TOUCH INPUT
     // Gets the list of touches.
@@ -295,6 +351,7 @@ public class MouseTouchInput : MonoBehaviour
     }
 
 
+
     // UPDATES //
     // Check the mouse input.
     private void MouseUpdate()
@@ -310,6 +367,9 @@ public class MouseTouchInput : MonoBehaviour
 
         // gets the mouse position.
         mouseWorldPosition = GetMousePositionInWorldSpace();
+
+        // Tracks what pressed functions should be called.
+        bool[] pressedCalls = new bool[mouseButtons.Length];
 
         // if the ray is not blocked.
         if (!rayBlocked)
@@ -352,11 +412,20 @@ public class MouseTouchInput : MonoBehaviour
             {
                 mouseHoveredObject = hitInfo.collider.gameObject;
 
-                // left mouse button has been clicked, so save to held object as well.
-                if (Input.GetKeyDown(mouseKey))
+                // Checks what mouse buttons have been pressed.
+                for (int i = 0; i < mouseButtons.Length; i++)
                 {
-                    mouseHeldObject = hitInfo.collider.gameObject;
-                    mouseLastClickedObject = mouseHeldObject;
+                    // If the current mouse button is being pressed down.
+                    // TODO: maybe make this happen on a button press, regardless of if the ray hits anything.
+                    if (Input.GetKeyDown(mouseButtons[i].keyCode))
+                    {
+                        // Marks the array for whether or not a pressed call for this button should happen.
+                        pressedCalls[i] = mouseButtons[i].held != hitInfo.collider.gameObject;
+
+                        // Held and Last Clicked
+                        mouseButtons[i].held = hitInfo.collider.gameObject;
+                        mouseButtons[i].lastClicked = hitInfo.collider.gameObject;
+                    }
                 }
             }
             else
@@ -383,11 +452,20 @@ public class MouseTouchInput : MonoBehaviour
                         // saves the hovered over object.
                         mouseHoveredObject = rayHit2D.collider.gameObject;
 
-                        // left mouse button has been clicked, so save to clicked object as well.
-                        if (Input.GetKeyDown(mouseKey))
+
+                        // Checks what mouse buttons have been pressed.
+                        for (int i = 0; i < mouseButtons.Length; i++)
                         {
-                            mouseHeldObject = rayHit2D.collider.gameObject;
-                            mouseLastClickedObject = mouseHeldObject;
+                            // If the current mouse button is being pressed down.
+                            if (Input.GetKeyDown(mouseButtons[i].keyCode))
+                            {
+                                // Marks the array for whether or not a pressed call for this button should happen.
+                                pressedCalls[i] = mouseButtons[i].held != hitInfo.collider.gameObject;
+
+                                // Held and Last Clicked
+                                mouseButtons[i].held = rayHit2D.collider.gameObject;
+                                mouseButtons[i].lastClicked = rayHit2D.collider.gameObject;
+                            }
                         }
                     }
                 }
@@ -399,16 +477,61 @@ public class MouseTouchInput : MonoBehaviour
                     // no object beng hovered over.
                     mouseHoveredObject = null;
 
-                    // mouse hasb een clicked down again.
-                    if (Input.GetKeyDown(mouseKey))
-                        mouseLastClickedObject = null;
+                    // Checks all the moues buttons.
+                    for (int i = 0; i < mouseButtons.Length; i++)
+                    {
+                        // If the current mouse button is being pressed down, clear the last clicked.
+                        if (Input.GetKeyDown(mouseButtons[i].keyCode))
+                        {
+                            mouseButtons[i].lastClicked = null;
+                        }
+                    }
                 }
             }
+
+            // Calls the hover callback. This gets set if the rayHit was successful (from either 3D or 2D check).
+            if (mouseHoveredObject != null)
+                OnMouseHoveredCallback(mouseHoveredObject);
         }
 
-        // left mouse button released, so clear clicked object.
-        if (Input.GetKeyUp(mouseKey))
-            mouseHeldObject = null;
+        // Clear out held objects.
+        for (int i = 0; i < mouseButtons.Length; i++)
+        {
+            // Calls the pressed callback.
+            if (pressedCalls[i] == true)
+                OnMousePressedCallback(mouseButtons[i].keyCode, mouseButtons[i].held);
+
+            // If the provided mouse key was released.
+            if (Input.GetKeyUp(mouseButtons[i].keyCode))
+            {
+                // Clears out the held object.
+                if(mouseButtons[i].held != null)
+                {
+                    // Triggers the callback.
+                    OnMouseReleasedCallback(mouseButtons[i].keyCode, mouseButtons[i].held);
+
+                    // Sets the object to null.
+                    mouseButtons[i].held = null;
+                }
+            }
+            else // The key is being held down.
+            {
+                // Calls the held down callback.
+                if (mouseButtons[i].held != null)
+                    OnMouseHeldCallback(mouseButtons[i].keyCode, mouseButtons[i].held);
+            }
+        }
+    }
+
+    // Clears out all of the last mouse clicks.
+    public void ClearAllLastMouseClicks()
+    {
+        // Checks every mouse button.
+        for (int i = 0; i < mouseButtons.Length; i++)
+        {
+            // Clears out the last click.
+            mouseButtons[i].lastClicked = null;
+        }
     }
 
     // Updates the touch tracking.
@@ -518,22 +641,83 @@ public class MouseTouchInput : MonoBehaviour
     // CALLBACKS
     // MOUSE HOVER CALLBACK
     // On mouse hover add callback.
-    public void AddOnMouseHoverCallback(MouseCallback callback)
+    public void AddOnMouseHoveredCallback(MouseHoverCallback callback)
     {
-        mouseHoverCallback += callback;
+        mouseHoveredCallback += callback;
     }
 
     // On mouse hover remove callback.
-    public void RemoveOnMouseHoverCallback(MouseCallback callback)
+    public void RemoveOnMouseHoveredCallback(MouseHoverCallback callback)
     {
-        mouseHoverCallback -= callback;
+        mouseHoveredCallback -= callback;
     }
 
     // Trigger mouse hover callback.
-    private void OnMouseHoverCallback(KeyCode mouseKey, GameObject hitObject)
+    private void OnMouseHoveredCallback(GameObject hitObject)
     {
-        if(mouseHoverCallback != null)
-            mouseHoverCallback(mouseKey, hitObject);
+        if(mouseHoveredCallback != null)
+            mouseHoveredCallback(hitObject);
+    }
+
+
+    // MOUSE PRESSED CALLBACK
+    // On mouse pressed add callback.
+    public void AddOnMousePressedCallback(MouseButtonCallback callback)
+    {
+        mousePressedCallback += callback;
+    }
+
+    // On mouse pressed remove callback.
+    public void RemoveOnMousePressedCallback(MouseButtonCallback callback)
+    {
+        mousePressedCallback -= callback;
+    }
+
+    // Trigger pressed hover callback.
+    private void OnMousePressedCallback(KeyCode mouseKey, GameObject hitObject)
+    {
+        if (mousePressedCallback != null)
+            mousePressedCallback(mouseKey, hitObject);
+    }
+
+    // MOUSE HELD CALLBACK
+    // On mouse held add callback.
+    public void AddOnMouseHeldCallback(MouseButtonCallback callback)
+    {
+        mouseHeldCallback += callback;
+    }
+
+    // On mouse held remove callback.
+    public void RemoveOnMouseHeldCallback(MouseButtonCallback callback)
+    {
+        mouseHeldCallback -= callback;
+    }
+
+    // Trigger mouse heldcallback.
+    private void OnMouseHeldCallback(KeyCode mouseKey, GameObject hitObject)
+    {
+        if(mouseHeldCallback != null)
+            mouseHeldCallback(mouseKey, hitObject);
+    }
+
+    // MOUSE RELEASED CALLBACK
+    // On mouse released add callback.
+    public void AddOnMouseReleasedCallback(MouseButtonCallback callback)
+    {
+        mouseReleasedCallback += callback;
+    }
+
+    // On mouse released remove callback.
+    public void RemoveOnMouseReleasedCallback(MouseButtonCallback callback)
+    {
+        mouseReleasedCallback -= callback;
+    }
+
+    // Trigger released held callback.
+    private void OnMouseReleasedCallback(KeyCode mouseKey, GameObject hitObject)
+    {
+        if (mouseReleasedCallback != null)
+            mouseReleasedCallback(mouseKey, hitObject);
     }
 
     // Update is called once per frame
@@ -546,5 +730,15 @@ public class MouseTouchInput : MonoBehaviour
         // If the touch should be tracked.
         if (trackTouch)
             TouchUpdate();
+
+        // // TODO: comment out.
+        // // Prints Out Left Mouse Button Information.
+        // {
+        //     MouseButton mb = mouseButtons[1];
+        //     Debug.Log("KeyCode: " + mb.keyCode.ToString());
+        //     Debug.Log(mb.keyCode.ToString() + " - Mouse Held: " + ((mb.held != null) ? mb.held.name : ""));
+        //     Debug.Log(mb.keyCode.ToString() + " - Mouse Last Click: " + ((mb.lastClicked != null) ? mb.lastClicked.name : ""));
+        //     Debug.Log("");
+        // }
     }
 }
