@@ -68,7 +68,7 @@ public class MouseTouchInput : MonoBehaviour
     public delegate void MouseHoverCallback(GameObject hitObject);
     public delegate void MouseButtonCallback(KeyCode mousekey, GameObject hitObject);
 
-    // TODO: add drag callback?
+    // TODO: maybe add the rest of the mouse functions.
 
     // The callback for the mouse hovering over an object.
     private MouseHoverCallback mouseHoveredCallback;
@@ -80,7 +80,7 @@ public class MouseTouchInput : MonoBehaviour
     private MouseButtonCallback mouseHeldCallback;
 
     // The callback for the mouse being released.
-    private MouseButtonCallback mouseReleasedCallback;
+    private MouseButtonCallback mouseUpCallback;
 
     [Header("Touch")]
 
@@ -102,16 +102,19 @@ public class MouseTouchInput : MonoBehaviour
     public List<Touch> currentTouches = new List<Touch>();
 
     // The callback for the touch.
-    public delegate void TouchCallback(GameObject hitObject, Touch touch);
+    public delegate void TouchCallback(Touch touch, GameObject hitObject);
 
-    // The callback for touch down interaction.
-    private TouchCallback TouchDownCallback;
+    // The callback for touch began interaction.
+    private TouchCallback touchBeganCallback;
 
     // The callback for touch held interaction.
-    private TouchCallback TouchHeldCallback;
+    private TouchCallback touchHeldCallback;
 
-    // The callback for touch up interaction.
-    private TouchCallback TouchReleasedCallback;
+    // The callback for touch ended interaction.
+    private TouchCallback touchEndedCallback;
+
+    // The callback for touch cancelled interaction.
+    private TouchCallback touchCanceledCallback;
 
     // Awake is called when the script instance is being loaded.
     void Awake()
@@ -141,6 +144,12 @@ public class MouseTouchInput : MonoBehaviour
                 mouseKey += 1;
         }
     }
+
+    // // Start is called just before any of the Update methods is called the first time.
+    // private void Start()
+    // {
+    //     AddOnMousePressedCallback(OnMousePressedTest);
+    // }
 
     // Gets the screen to world point using the main camera.
     public static Vector3 GetScreenToWorldPoint(Vector3 position)
@@ -508,7 +517,7 @@ public class MouseTouchInput : MonoBehaviour
                 if(mouseButtons[i].held != null)
                 {
                     // Triggers the callback.
-                    OnMouseReleasedCallback(mouseButtons[i].keyCode, mouseButtons[i].held);
+                    OnMouseUpCallback(mouseButtons[i].keyCode, mouseButtons[i].held);
 
                     // Sets the object to null.
                     mouseButtons[i].held = null;
@@ -524,7 +533,7 @@ public class MouseTouchInput : MonoBehaviour
     }
 
     // Clears out all of the last mouse clicks.
-    public void ClearAllLastMouseClicks()
+    public void ClearAllMouseLastClicks()
     {
         // Checks every mouse button.
         for (int i = 0; i < mouseButtons.Length; i++)
@@ -635,10 +644,37 @@ public class MouseTouchInput : MonoBehaviour
             // If this is set to null, then the space will be empty.
             touchObjects.Add(touchedObject);
         }
+
+        // GOes through all touches.
+        for(int i = 0; i < touches.Length; i++)
+        {
+            switch (touches[i].phase)
+            {
+                case TouchPhase.Began: // Touch started.
+                    OnTouchBeganCallback(touches[i], touchObjects[i]);
+                    break;
+
+                case TouchPhase.Ended: // Touch ended.
+                    OnTouchEndedCallback(touches[i], touchObjects[i]);
+                    break;
+
+
+                case TouchPhase.Stationary: // Touch held.
+                case TouchPhase.Moved:
+                    OnTouchHeldCallback(touches[i], touchObjects[i]);
+                    break;
+
+                case TouchPhase.Canceled: // Touch cancelled.
+                    OnTouchCanceledCallback(touches[i], touchObjects[i]);
+                    break;
+            }
+
+        }
     }
 
 
-    // CALLBACKS
+    // CALLBACKS //
+    // MOUSE CALLBACKS
     // MOUSE HOVER CALLBACK
     // On mouse hover add callback.
     public void AddOnMouseHoveredCallback(MouseHoverCallback callback)
@@ -661,19 +697,19 @@ public class MouseTouchInput : MonoBehaviour
 
 
     // MOUSE PRESSED CALLBACK
-    // On mouse pressed add callback.
+    // On mouse pressed add callback. This is only called on the first frame of the mouse being pressed.
     public void AddOnMousePressedCallback(MouseButtonCallback callback)
     {
         mousePressedCallback += callback;
     }
 
-    // On mouse pressed remove callback.
+    // On mouse pressed remove callback. This is only called on the first frame of the mouse being pressed.
     public void RemoveOnMousePressedCallback(MouseButtonCallback callback)
     {
         mousePressedCallback -= callback;
     }
 
-    // Trigger pressed hover callback.
+    // On mouse pressed callback. This is only called on the first frame of the mouse being pressed.
     private void OnMousePressedCallback(KeyCode mouseKey, GameObject hitObject)
     {
         if (mousePressedCallback != null)
@@ -693,7 +729,7 @@ public class MouseTouchInput : MonoBehaviour
         mouseHeldCallback -= callback;
     }
 
-    // Trigger mouse heldcallback.
+    // Trigger mouse held callback.
     private void OnMouseHeldCallback(KeyCode mouseKey, GameObject hitObject)
     {
         if(mouseHeldCallback != null)
@@ -701,24 +737,115 @@ public class MouseTouchInput : MonoBehaviour
     }
 
     // MOUSE RELEASED CALLBACK
-    // On mouse released add callback.
-    public void AddOnMouseReleasedCallback(MouseButtonCallback callback)
+    // On mouse up add callback.
+    public void AddOnMouseUpCallback(MouseButtonCallback callback)
     {
-        mouseReleasedCallback += callback;
+        mouseUpCallback += callback;
     }
 
-    // On mouse released remove callback.
-    public void RemoveOnMouseReleasedCallback(MouseButtonCallback callback)
+    // On mouse up remove callback.
+    public void RemoveOnMouseUpCallback(MouseButtonCallback callback)
     {
-        mouseReleasedCallback -= callback;
+        mouseUpCallback -= callback;
     }
 
-    // Trigger released held callback.
-    private void OnMouseReleasedCallback(KeyCode mouseKey, GameObject hitObject)
+    // Trigger on mouse released callback.
+    private void OnMouseUpCallback(KeyCode mouseKey, GameObject hitObject)
     {
-        if (mouseReleasedCallback != null)
-            mouseReleasedCallback(mouseKey, hitObject);
+        if (mouseUpCallback != null)
+            mouseUpCallback(mouseKey, hitObject);
     }
+
+
+
+    // TOUCH CALLBACKS //
+    // TOUCH BEGAN
+    // On touch began add callback.
+    public void AddOnTouchBeganCallback(TouchCallback callback)
+    {
+        touchBeganCallback += callback;
+    }
+
+    // On touch began remove callback.
+    public void RemoveOnTouchBeganCallback(TouchCallback callback)
+    {
+        touchBeganCallback -= callback;
+    }
+
+    // On touch began callback.
+    private void OnTouchBeganCallback(Touch touch, GameObject hitObject)
+    {
+        if (touchBeganCallback != null)
+            touchBeganCallback(touch, hitObject);
+    }
+
+    // TOUCH HELD
+    // On touch held add callback.
+    public void AddOnTouchHeldCallback(TouchCallback callback)
+    {
+        touchHeldCallback += callback;
+    }
+
+    // On touch held remove callback.
+    public void RemoveOnTouchHeldCallback(TouchCallback callback)
+    {
+        touchHeldCallback -= callback;
+    }
+
+    // On touch held callback.
+    private void OnTouchHeldCallback(Touch touch, GameObject hitObject)
+    {
+        if (touchHeldCallback != null)
+            touchHeldCallback(touch, hitObject);
+    }
+
+    // TOUCH ENDED
+    // On touch ended add callback.
+    public void AddOnTouchEndedCallback(TouchCallback callback)
+    {
+        touchEndedCallback += callback;
+    }
+
+    // On touch ended remove callback.
+    public void RemoveOnTouchEndedCallback(TouchCallback callback)
+    {
+        touchEndedCallback -= callback;
+    }
+
+    // On touch ended callback.
+    private void OnTouchEndedCallback(Touch touch, GameObject hitObject)
+    {
+        if (touchEndedCallback != null)
+            touchEndedCallback(touch, hitObject);
+    }
+
+    // TOUCH CANCELLED
+    // On touch cancelled add callback.
+    public void AddOnTouchCanceledCallback(TouchCallback callback)
+    {
+        touchCanceledCallback += callback;
+    }
+
+    // On touch cancelled remove callback.
+    public void RemoveOnTouchCanceledCallback(TouchCallback callback)
+    {
+        touchCanceledCallback -= callback;
+    }
+
+    // On touch cancelled callback.
+    private void OnTouchCanceledCallback(Touch touch, GameObject hitObject)
+    {
+        if (touchCanceledCallback != null)
+            touchCanceledCallback(touch, hitObject);
+    }
+
+
+    // Test function.
+    private void OnMousePressedTest(KeyCode mouseKey, GameObject hitObject)
+    {
+        Debug.Log("This is a test. This is only a test.");
+    }
+
 
     // Update is called once per frame
     void Update()
