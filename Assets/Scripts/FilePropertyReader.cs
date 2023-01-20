@@ -10,48 +10,51 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-// reads the properties of a file.
-public class FilePropertyReader : MonoBehaviour
+namespace util
 {
-    // information from the file.
-    private FileInfo fileInfo;
-
-    // the audio clip being read from.
-    public string fileName = "";
-
-    // the location of the file.
-    public string filePath = "";
-
-    // Start is called before the first frame update
-    void Start()
+    // reads the properties of a file.
+    public class FilePropertyReader : MonoBehaviour
     {
-        // reads the file properties.
-        if (fileName != "")
-            ReadFileProperties();
-    }
+        // information from the file.
+        private FileInfo fileInfo;
 
-    // reads the properties of the file.
-    public bool ReadFileProperties()
-    {
-        // the file.
-        string file = filePath + fileName;
+        // the audio clip being read from.
+        public string fileName = "";
 
-        // grabs the information.
-        fileInfo = new FileInfo(file);
+        // the location of the file.
+        public string filePath = "";
 
-        return fileInfo.Exists;
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            // reads the file properties.
+            if (fileName != "")
+                ReadFileProperties();
+        }
 
-    // TODO: figure out how to do this.
-    // // gets a property from the file.
-    // public string GetProperty(string propertyName)
-    // {
-    //     // https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.serializationinfo?view=net-6.0
-    // }
+        // reads the properties of the file.
+        public bool ReadFileProperties()
+        {
+            // the file.
+            string file = filePath + fileName;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            // grabs the information.
+            fileInfo = new FileInfo(file);
+
+            return fileInfo.Exists;
+        }
+
+        // TODO: figure out how to do this.
+        // // gets a property from the file.
+        // public string GetProperty(string propertyName)
+        // {
+        //     // https://docs.microsoft.com/en-us/dotnet/api/system.runtime.serialization.serializationinfo?view=net-6.0
+        // }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }
