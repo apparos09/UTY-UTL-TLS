@@ -12,10 +12,17 @@ public class AudioSceneManager : MonoBehaviour
     // the audio slider.
     public Slider slider;
 
+    // The audio fader
+    public AudioFader audioFader;
+
+    // The current time of the audio.
+    public Text audioCurrTime;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        // audioFader.FadeOut();
+        // audioFader.FadeIn();
     }
 
     // plays the audio
@@ -56,17 +63,48 @@ public class AudioSceneManager : MonoBehaviour
         audioSource.time = audioSource.clip.length * t;
     }
 
+    // Converts the audio time from the provided seconds.
+    public string FormatAudioTime(float timeInSeconds)
+    {
+        // The current time.
+        float currTime = timeInSeconds;
+
+        // Hours.
+        float hours = Mathf.Floor(currTime / 3600.0F);
+        currTime -= hours * 3600.0F;
+
+        // Minutes.
+        float minutes = Mathf.Floor((currTime)/ 60.0F);
+        currTime -= minutes * 60.0F;
+
+        // Seconds.
+        float seconds = Mathf.Floor(currTime);
+
+        if (seconds < 0.0F)
+            seconds = 0.0F;
+
+        // The resulting time code.
+        string result = hours.ToString("00") + ": " + minutes.ToString("00") + ": " + seconds.ToString("00");
+
+        return result;
+    }
+
     // Update is called once per frame
     void Update()
     {
         // parameters set.
         if(audioSource != null && slider != null)
         {
-            // audio is playing.
+            // Audio is playing.
             if(audioSource.isPlaying)
             {
                 slider.value = audioSource.time / audioSource.clip.length;
+                audioCurrTime.text = FormatAudioTime(audioSource.time);
             }
+        }
+        else
+        {
+            audioCurrTime.text = "-";
         }
     }
 }
