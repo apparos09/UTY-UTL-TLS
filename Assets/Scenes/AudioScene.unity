@@ -1025,6 +1025,7 @@ GameObject:
   - component: {fileID: 1418963698}
   - component: {fileID: 1418963699}
   - component: {fileID: 1418963700}
+  - component: {fileID: 1418963701}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1077,7 +1078,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 810703979}
   slider: {fileID: 195997346}
+  audioFader: {fileID: 1418963701}
   audioCurrTime: {fileID: 1907770511}
+--- !u!114 &1418963701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418963697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31b6ce5708a9b004c95c7d4b1de5a292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 810703979}
+  stopOnFadeOut: 1
+  fadeDuration: 7
 --- !u!1 &1504940983
 GameObject:
   m_ObjectHideFlags: 0
