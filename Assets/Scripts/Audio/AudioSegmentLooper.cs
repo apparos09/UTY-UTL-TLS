@@ -240,6 +240,23 @@ namespace util
             audioSource.time = audioSource.clip.length * Mathf.Clamp01(percent);
         }
 
+        // Called to loop the clip back to its start.
+        protected virtual void OnLoopClip()
+        {
+            // checks to see if the audio is looping
+            switch (audioSource.loop)
+            {
+                case true: // audio is looping
+                    audioSource.time = clipStart;
+                    break;
+
+                case false: // audio is not looping
+                            // audio is stopped, and returns to clip start.
+                    audioSource.Stop();
+                    audioSource.time = clipStart;
+                    break;
+            }
+        }
 
         // Update is called once per frame
         void Update()
@@ -279,19 +296,8 @@ namespace util
                 // the audioSource has reached the end of the clip.
                 if (audioSource.time >= clipEnd)
                 {
-                    // checks to see if the audio is looping
-                    switch (audioSource.loop)
-                    {
-                        case true: // audio is looping
-                            audioSource.time = clipStart;
-                            break;
-
-                        case false: // audio is not looping
-                                    // audio is stopped, and returns to clip start.
-                            audioSource.Stop();
-                            audioSource.time = clipStart;
-                            break;
-                    }
+                    // Call to loop the clip.
+                    OnLoopClip();
                 }
             }
         }

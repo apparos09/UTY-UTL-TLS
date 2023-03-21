@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using util;
 
 // an audio scene manager.
 public class AudioSceneManager : MonoBehaviour
@@ -18,11 +19,23 @@ public class AudioSceneManager : MonoBehaviour
     // The current time of the audio.
     public Text audioCurrTime;
 
+    // The audio looper.
+    public AudioSegmentLooper looper;
+
+    // The clip start time text.
+    public Text clipStartText;
+
+    // The clip end time text.
+    public Text clipEndText;
+
     // Start is called before the first frame update
     void Start()
     {
         // audioFader.FadeOut();
         // audioFader.FadeIn();
+
+        clipStartText.text = looper.clipStart.ToString();
+        clipEndText.text = looper.clipEnd.ToString();
     }
 
     // plays the audio
