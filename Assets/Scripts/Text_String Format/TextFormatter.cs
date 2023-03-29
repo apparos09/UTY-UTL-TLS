@@ -83,40 +83,40 @@ public class TextFormatter : StringFormatter
     }
 
     // Gets the length of the set text with no formatting.
-    public int GetLengthNoFromatting()
-    {
-        // The resulting length.
-        int result = 0;
+    // public int GetLengthNoFromatting()
+    // {
+    //     // The resulting length.
+    //     int result = 0;
+    // 
+    //     // Validity check.
+    //     if (text != null)
+    //         result = GetTextLengthNoFromatting();
+    //     else if (TMP_text != null)
+    //         result = GetTMP_TextLengthNoFromatting();
+    // 
+    //     return result;
+    // }
 
-        // Validity check.
-        if (text != null)
-            result = GetTextLengthNoFromatting();
-        else if (TMP_text != null)
-            result = GetTMP_TextLengthNoFromatting();
+    // // Gets the length of the regular text with no formatting.
+    // public int GetTextLengthNoFromatting()
+    // {
+    //     int result = 0;
+    // 
+    //     if (text != null)
+    //         result = GetStringLengthNoFormatting(text.text);
+    // 
+    //     return result;
+    // 
+    // }
 
-        return result;
-    }
-
-    // Gets the length of the regular text with no formatting.
-    public int GetTextLengthNoFromatting()
-    {
-        int result = 0;
-
-        if (text != null)
-            result = GetStringLengthNoFormatting(text.text);
-
-        return result;
-
-    }
-
-    // Gets the length of the tmp_text with no formatting.
-    public int GetTMP_TextLengthNoFromatting()
-    {
-        int result = 0;
-
-        if (TMP_text != null)
-            result = GetStringLengthNoFormatting(TMP_text.text);
-
-        return result;
-    }
+    // // Gets the length of the tmp_text with no formatting.
+    // public int GetTMP_TextLengthNoFromatting()
+    // {
+    //     int result = 0;
+    // 
+    //     if (TMP_text != null)
+    //         result = GetStringLengthNoFormatting(TMP_text.text);
+    // 
+    //     return result;
+    // }
 }
