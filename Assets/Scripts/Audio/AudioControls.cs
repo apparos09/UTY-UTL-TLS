@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 namespace util
 {
-    // The audio settings for the game.
-    public class AudioSettings : MonoBehaviour
+    // The audio settings for the game. This was renamed from "AudioSettings" since Unity has a clas sof the same name.
+    public class AudioControls : MonoBehaviour
     {
         // the instance of the audio settings.
-        private static AudioSettings instance;
+        private static AudioControls instance;
 
         // Adjusts the audio levels when a new level is loaded.
         public bool adjustAudioOnLevelLoaded = true;
@@ -74,14 +74,14 @@ namespace util
         }
 
         // Returns the instance of the audio settings.
-        public static AudioSettings Instance
+        public static AudioControls Instance
         {
             get
             {
                 // Checks to see if the instance exists. If it doesn't, generate an object.
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<AudioSettings>(true);
+                    instance = FindObjectOfType<AudioControls>(true);
 
                     // Generate new instance if an existing instance was not found.
                     if (instance == null)
@@ -90,7 +90,7 @@ namespace util
                         GameObject go = new GameObject("(Singleton) Audio Settings");
 
                         // adds the instance component to the new object.
-                        instance = go.AddComponent<AudioSettings>();
+                        instance = go.AddComponent<AudioControls>();
                     }
 
                 }

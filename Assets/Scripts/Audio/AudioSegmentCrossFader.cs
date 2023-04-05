@@ -1,7 +1,7 @@
 namespace util
 {
     // Loops a piece of audio using a cross-fade.
-    public class AudioSegmentLoopCrossFader : AudioSegmentLooper
+    public class AudioSegmentCrossFader : AudioSegmentLooper
     {
         // The main audio fade.
         public AudioFader mainFade;

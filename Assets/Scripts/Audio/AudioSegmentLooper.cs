@@ -14,7 +14,9 @@ namespace util
         // audio source
         public AudioSource audioSource = null;
 
-        // start start and end of the audio clip being played. This is in seconds.
+        // start and end of the audio clip being played. This is in seconds.
+        // Note: be aware that the time of the audio may not be accurate if the audio is compressed.
+        // As such, it may be best not to use this.
 
         // the start of the clip. If this value is negative, the clip continues like normal.
         // if clip start is less than 0, then it doesn't function.
