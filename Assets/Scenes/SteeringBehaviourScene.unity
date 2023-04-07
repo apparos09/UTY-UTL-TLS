@@ -172,6 +172,7 @@ GameObject:
   - component: {fileID: 211368685}
   - component: {fileID: 211368684}
   - component: {fileID: 211368683}
+  - component: {fileID: 211368688}
   m_Layer: 0
   m_Name: Blue Sphere
   m_TagString: Untagged
@@ -289,6 +290,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211368681}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &211368688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211368681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7bd9edfa0d79764b92f42b6abaf77fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBehaviour: 0
+  rigidBody: {fileID: 0}
+  forceMode: 0
+  speed: 100
+  applyDeltaTime: 1
+  target: {fileID: 332032282}
 --- !u!1 &264914898
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,6 +417,7 @@ GameObject:
   - component: {fileID: 332032279}
   - component: {fileID: 332032278}
   - component: {fileID: 332032282}
+  - component: {fileID: 332032283}
   m_Layer: 0
   m_Name: Red Sphere
   m_TagString: Untagged
@@ -515,6 +535,24 @@ MonoBehaviour:
   speed: 100
   applyDeltaTime: 1
   target: {fileID: 211368681}
+--- !u!114 &332032283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 332032276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bee483db438aab04184e5ff17336a9a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBehaviour: 0
+  rigidBody: {fileID: 0}
+  forceMode: 0
+  speed: 100
+  applyDeltaTime: 1
+  target: {fileID: 211368683}
 --- !u!1 &358831935
 GameObject:
   m_ObjectHideFlags: 0

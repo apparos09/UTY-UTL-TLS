@@ -44,6 +44,24 @@ namespace util
             rigidBody.velocity = Vector3.zero;
         }
 
+        // Applies force to the attached object. The vector provided is the distance of the force.
+        protected void ApplyForce(Vector3 direction)
+        {
+            // Set forward to the normalized distance vector.
+            transform.forward = direction.normalized;
+
+            // Calculates the force that's being applied.
+            Vector3 force = transform.forward * speed;
+
+            // Applies delta time to the object's force.
+            if (applyDeltaTime)
+                force *= Time.deltaTime;
+
+
+            // Adds force to the rigidbody.
+            rigidBody.AddForce(force, forceMode);
+        }
+
         // Runs the behaviour for the object.
         public abstract void RunBehaviour();
 

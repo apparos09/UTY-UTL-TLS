@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace util
 {
-    // Seeks a target.
-    public class SeekBehaviour : SteeringBehaviour
+    // Pursues the target.
+    // This is similar to the 'flee behaviour', except the target's next moves are predicted and taken into account.
+    public class PursueBehaviour : SteeringBehaviour
     {
         // The target object.
-        public GameObject target;
+        public SteeringBehaviour target;
 
         // Start is called before the first frame update
         protected override void Start()
@@ -19,8 +20,8 @@ namespace util
         // Runs the flee behaviour.
         public override void RunBehaviour()
         {
-            // The distance vector from the object's current position to the target's current position.
-            Vector3 distVec = target.transform.position - transform.position;
+            // The distance vector from the object's current position to the target's predicted position.
+            Vector3 distVec = (target.transform.position + target.rigidBody.velocity) - transform.position;
 
             // Applies force.
             ApplyForce(distVec);
