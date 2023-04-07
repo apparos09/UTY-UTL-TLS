@@ -8,6 +8,7 @@ namespace util
     // This is similar to the 'flee behaviour', except the target's next moves are predicted and taken into account.
     public class PursueBehaviour : SteeringBehaviour
     {
+        [Header("Pursue")]
         // The target object.
         public SteeringBehaviour target;
 

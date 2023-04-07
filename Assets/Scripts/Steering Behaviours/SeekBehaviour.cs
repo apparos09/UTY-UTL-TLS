@@ -7,6 +7,7 @@ namespace util
     // Seeks a target.
     public class SeekBehaviour : SteeringBehaviour
     {
+        [Header("Seek")]
         // The target object.
         public GameObject target;
 

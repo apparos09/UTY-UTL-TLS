@@ -47,11 +47,31 @@ namespace util
         // Applies force to the attached object. The vector provided is the distance of the force.
         protected void ApplyForce(Vector3 direction)
         {
+            ApplyForce(direction, speed, forceMode, false);
+        }
+
+        // Applies force with the provided speed. Argument 'overwrite' determines if this should be set as the object's speed.
+        protected void ApplyForce(Vector3 direction, float a_speed, bool overwrite)
+        {
+            ApplyForce(direction, a_speed, forceMode, overwrite);
+        }
+
+        // Applies force with the provided force mode.
+        // Argument 'overwrite' determines if this should be set as the object's force mode.
+        protected void ApplyForce(Vector3 direction, ForceMode a_forceMode, bool overwrite)
+        {
+            ApplyForce(direction, speed, a_forceMode, overwrite);
+        }
+
+        // Applies force to the attached object. The vector provided is the distance of the force.
+        // If 'overwrite' is set to 'true', then the set speed and force mode are overwritten.
+        protected void ApplyForce(Vector3 direction, float a_speed, ForceMode a_forceMode, bool overwrite)
+        {
             // Set forward to the normalized distance vector.
             transform.forward = direction.normalized;
 
             // Calculates the force that's being applied.
-            Vector3 force = transform.forward * speed;
+            Vector3 force = transform.forward * a_speed;
 
             // Applies delta time to the object's force.
             if (applyDeltaTime)
@@ -59,7 +79,14 @@ namespace util
 
 
             // Adds force to the rigidbody.
-            rigidBody.AddForce(force, forceMode);
+            rigidBody.AddForce(force, a_forceMode);
+
+            // Values should be overwritten.
+            if(overwrite)
+            {
+                speed = a_speed;
+                forceMode = a_forceMode;
+            }
         }
 
         // Runs the behaviour for the object.

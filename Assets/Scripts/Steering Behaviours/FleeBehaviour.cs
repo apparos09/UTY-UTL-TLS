@@ -7,6 +7,7 @@ namespace util
     // Flees from a target.
     public class FleeBehaviour : SteeringBehaviour
     {
+        [Header("Flee")]
         // The target object.
         public GameObject target;
 
