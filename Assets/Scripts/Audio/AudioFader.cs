@@ -91,8 +91,8 @@ namespace util
         // Update is called once per frame
         void Update()
         {
-            // Should be fading.
-            if (fading)
+            // Should be fading, and the audio is playing.
+            if (fading && audioSource.isPlaying)
             {
                 // If the fade direction is set.
                 if (fadeDirec != 0)

@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace util
 {
-    // loops a section of the audio.
-    // NOTE: if the audio is compressed or otherwise changed this script may not work properly.
+    // Loops a section of the audio.
+    // NOTE: if the audio is compressed or changed in some similar way this script may not work properly.
     public class AudioSegmentLooper : MonoBehaviour
     {
         // audio source
@@ -35,10 +35,17 @@ namespace util
         [Tooltip("The end of the clip in seconds.")]
         public float clipEnd = 0.0F;
 
-        // if 'true', a song will be limited to the clip range.
-        // if 'false', the start of the song will play normally,...
-        // but once within the clip range it will stay within the clip.
+        // If 'true', a song will be limited to the clip range.
+        // If 'false', the start of the song will play normally,...
+        // But once within the clip range it will stay within the clip.
+        [Tooltip("If true, the audio starts at clipStart instead of at the start of the audio clip itself when PlayAudio() is called.")]
         public bool playAtClipStart = false;
+
+
+        // Adjusts the loop point dynamically based on where the audio is.
+        // e.g., if the audio is 1 second past the endpoint, it loops back to 1 second past the clip start point.
+        [Tooltip("Offsets clipStart based on where the audio is relative to clipEnd when performing a loop.")]
+        public bool loopRelative = true;
 
         // Start is called before the first frame update
         void Start()
@@ -61,8 +68,7 @@ namespace util
             }
         }
 
-        // plays the audio.
-        // if limited to the clip start, it starts from the loop point.
+        // Plays the audio - if limited to the clip start, it starts from the loop point.
         public void PlayAudio()
         {
             // audio source or audio clip doesn't exist.
@@ -82,7 +88,7 @@ namespace util
             audioSource.Play();
         }
 
-        // stops te audio
+        // Stops the audio
         public void StopAudio()
         {
             // audio source or audio clip doesn't exist.
@@ -98,7 +104,7 @@ namespace util
                 audioSource.time = 0.0F;
         }
 
-        // if the audio is set to loop
+        // If the audio is set to loop
         public bool GetLooping()
         {
             if (audioSource != null)
@@ -107,7 +113,7 @@ namespace util
                 return false;
         }
 
-        // sets the audio to loop
+        // Sets the audio to loop
         public void SetLooping(bool looping)
         {
             if (audioSource != null)
@@ -249,7 +255,27 @@ namespace util
             switch (audioSource.loop)
             {
                 case true: // audio is looping
-                    audioSource.time = clipStart;
+                    // Checks if clipStart should be offset relative to how far past clipEnd the audio currently is.
+                    if(loopRelative) // Offset clip start.
+                    {
+                        // Calculates how much clipStart should be offset by.
+                        float offsetStart = audioSource.time - clipEnd;
+
+                        // Set current clip start as clipStart adjusted by the offset amount.
+                        float currClipStart = clipStart + offsetStart;
+
+
+                        // If the current clip start is negative (i.e., it's before the start of the audio itself)...
+                        // Then use normal clipStart.
+                        if(currClipStart >= 0)
+                            audioSource.time = currClipStart;
+                        else
+                            audioSource.time = clipStart;
+                    }
+                    else // Set back to clipStart.
+                    {
+                        audioSource.time = clipStart;
+                    }
                     break;
 
                 case false: // audio is not looping
