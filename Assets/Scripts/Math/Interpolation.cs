@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 // TODO: implement catmull-rom and bezier versions with speed control.
 
@@ -326,6 +327,8 @@ namespace util
         }
 
 
+        // INTERPOLATION //
+
         // Interpolates using the 2 provided points.
         public static Vector3 InterpolateByType(interType type, Vector3 v1, Vector3 v2, float t)
         {
@@ -444,6 +447,118 @@ namespace util
             }
 
             return result;
+        }
+
+        // Interpolates using the 2 provided points with speed control.
+        public static Vector3 InterpolateByTypeWithSpeedControl(interType type, Vector3 v1, Vector3 v2, float t)
+        {
+            return InterpolateByTypeWithSpeedControl(type, v1, v1, v2, v2, t);
+        }
+
+        // Interpolations usin 4 points with speed control.
+        // v1 and v2 are the main points, while v0 and v3 are control points for certain functions.
+        public static Vector3 InterpolateByTypeWithSpeedControl(interType type, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float t)
+        {
+            // STEP 1 - Calculate sample times and sample points.
+            // Calculates the samples - the 11 sample points (0 - 1, with 0.1 inc).
+            const int SAMPLE_MAX = 11;
+            float[] sampleTimes = new float[SAMPLE_MAX];
+            Vector3[] samplePoints = new Vector3[SAMPLE_MAX];
+
+            // The sample increment.
+            float sampleInc = 1.0F / (SAMPLE_MAX - 1);
+
+            // Calculates the samples points.
+            for (int i = 0; i < samplePoints.Length; i++)
+            {
+                // Calculate the sample time.
+                sampleTimes[i] = sampleInc * i;
+
+                // Calculate the point.
+                samplePoints[i] = InterpolateByType(type, v0, v1, v2, v3, sampleTimes[i]);
+            }
+
+            // Step 2 - Calculate pairwise distances.
+            float[] sampleDists = new float[SAMPLE_MAX];
+
+            // First distance is 0.
+            sampleDists[0] = 0.0F;
+
+            // Calculates the sample distances.
+            for(int i = 1; i < sampleDists.Length; i++)
+            {
+                // Calculate the distance.
+                float dist = Vector3.Distance(samplePoints[i - 1], samplePoints[i]);
+
+                // Save the distances.
+                sampleDists[i] = dist;
+            }
+
+            // Step 3 - Calculate the distance along the curve.
+            float[] distsOnCurve = new float[SAMPLE_MAX];
+
+            // First curve dist is 0.
+            distsOnCurve[0] = 0.0F;
+
+            // Calculate the rest of the curve distances.
+            for(int i = 1; i < distsOnCurve.Length; i++)
+            {
+                // Calculate the distance.
+                float dist = distsOnCurve[i - 1] + sampleDists[i];
+
+                // Save the distance.
+                distsOnCurve[i] = dist;
+            }
+
+            // Step 4 - Use t to find the line segment the point falls on.
+            // The index that marks the end value of what points (t) values between.
+            int endIndex = -1;
+
+            // Goes thrugh all curve distances.
+            for(int i = 1; i < distsOnCurve.Length; i++)
+            {
+                // Between point found.
+                if (Mathf.Clamp(t, distsOnCurve[i - 1], distsOnCurve[i]) == t)
+                {
+                    endIndex = i;
+                    break;
+                }  
+            }
+
+            // Calculates how far along the curve segment t is.
+            float curveT = Mathf.InverseLerp(distsOnCurve[endIndex - 1], distsOnCurve[endIndex], t);
+
+            // STEP 6 - Perform the Interpolation
+
+            // The four points for the interpolation.
+            Vector3 p0, p1, p2, p3;
+
+            // The four indexes for the interpolation.
+            int p0Index, p1Index, p2Index, p3Index;
+
+            // MAIN POINTS
+            // P1 - start point.
+            p1Index = endIndex - 1;
+            p1 = samplePoints[p1Index];
+
+            // P2 - end point.
+            p2Index = p1Index + 1 < samplePoints.Length ? p1Index + 1 : 0;
+            p2 = samplePoints[p2Index];
+
+            // TANGENTS/EXTRAS
+            // P0 - point before the start point.
+            p0Index = p1Index - 1 >= 0 ? p1Index - 1 : samplePoints.Length - 1;
+            p0 = samplePoints[p0Index];
+
+            // P3 - point after the end point.
+            p3Index = p2Index + 1 < samplePoints.Length ? p2Index + 1 : 0;
+            p3 = samplePoints[p3Index];
+
+            // Interpolates between the positions that curve T falls between.
+            Vector3 finalPos = InterpolateByType(type, p0, p1, p2, p3, curveT);
+
+            // Returns the final position.
+            return finalPos;
         }
     }
 }

@@ -24,6 +24,9 @@ public class InterpolationSceneManager : MonoBehaviour
     // The travel speed of the marker.
     public float speed = 1.0F;
 
+    // Uses speed control to make the object move at the same speed regardless.
+    public bool useSpeedControl = false;
+
     // If set to 'true', the animation is reversed.
     public bool reversed = false;
 
@@ -39,6 +42,7 @@ public class InterpolationSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Checks if the interpolation is paused or not.
         if(!paused)
         {
             // There must be at least 2 points for interpolation to work.
@@ -79,13 +83,30 @@ public class InterpolationSceneManager : MonoBehaviour
                 p3 = points[p3Index];
 
                 // Gets the new position.
-                Vector3 newPos = Interpolation.InterpolateByType(
-                    interpolation,
-                    p0.transform.position,
-                    p1.transform.position,
-                    p2.transform.position,
-                    p3.transform.position,
-                    t);
+                Vector3 newPos;
+
+                // Checks if speed control should be used.
+                if(useSpeedControl) // Use speed control.
+                {
+                    newPos = Interpolation.InterpolateByTypeWithSpeedControl(
+                        interpolation,
+                        p0.transform.position,
+                        p1.transform.position,
+                        p2.transform.position,
+                        p3.transform.position,
+                        t);
+                }
+                else // Don't use speed control.
+                {
+                    newPos = Interpolation.InterpolateByType(
+                        interpolation,
+                        p0.transform.position,
+                        p1.transform.position,
+                        p2.transform.position,
+                        p3.transform.position,
+                        t);
+                }
+                
 
                 // Set the new position.
                 marker.transform.position = newPos;
