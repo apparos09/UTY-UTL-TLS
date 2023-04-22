@@ -14,6 +14,8 @@ namespace util
         public enum interType
         {
             lerp,
+            bezier,
+            catmullRom,
             easeIn1,
             easeIn2,
             easeIn3,
@@ -38,14 +40,97 @@ namespace util
         }
 
         // SELF DEFINED
-        // 0. LERP - linear interpolation (standard)
+        // LERP - linear interpolation (standard)
         public static Vector3 Lerp(Vector3 v1, Vector3 v2, float t)
         {
             return ((1.0F - t) * v1 + t * v2);
         }
 
+        // Catmull Rom - goes between points 1 and 2 using points 0 and 3 to create a curve.
+        public static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float u)
+        {
+            // the catmull-rom matrix, which has a 0.5F scalar applied from the start.
+            Matrix4x4 matCatmullRom = new Matrix4x4();
+
+            // setting the rows
+            matCatmullRom.SetRow(0, new Vector4(0.5F * -1.0F, 0.5F * 3.0F, 0.5F * -3.0F, 0.5F * 1.0F));
+            matCatmullRom.SetRow(1, new Vector4(0.5F * 2.0F, 0.5F * -5.0F, 0.5F * 4.0F, 0.5F * -1.0F));
+            matCatmullRom.SetRow(2, new Vector4(0.5F * -1.0F, 0.5F * 0.0F, 0.5F * 1.0F, 0.5F * 0.0F));
+            matCatmullRom.SetRow(3, new Vector4(0.5F * 0.0F, 0.5F * 2.0F, 0.5F * 0.0F, 0.5F * 0.0F));
 
 
+            // Points
+            Matrix4x4 pointsMat = new Matrix4x4();
+
+            pointsMat.SetRow(0, new Vector4(p0.x, p0.y, p0.z, 0));
+            pointsMat.SetRow(1, new Vector4(p1.x, p1.y, p1.z, 0));
+            pointsMat.SetRow(2, new Vector4(p2.x, p2.y, p2.z, 0));
+            pointsMat.SetRow(3, new Vector4(p3.x, p3.y, p3.z, 0));
+
+
+            // Matrix for u to the power of given functions.
+            Matrix4x4 uMat = new Matrix4x4(); // the matrix for 'u' (also called 't').
+
+            // Setting the 'u' values to the proper row, since this is being used as a 1 X 4 matrix.
+            uMat.SetRow(0, new Vector4(Mathf.Pow(u, 3), Mathf.Pow(u, 2), Mathf.Pow(u, 1), Mathf.Pow(u, 0)));
+
+            // Result matrix from a calculation. 
+            Matrix4x4 result;
+
+            // Order of [u^3, u^2, u, 0] * M * <points matrix>
+            // The catmull-rom matrix has already had the (1/2) scalar applied.
+            result = matCatmullRom * pointsMat;
+
+            result = uMat * result; // [u^3, u^2, u, 0] * (M * points)
+
+            // the resulting values are stored at the top.
+            return result.GetRow(0);
+        }
+
+        // Bezier - interpolates between two points using 2 control points to change the movement curve.
+        public static Vector3 Bezier(Vector3 t1, Vector3 p1, Vector3 p2, Vector3 t2, float u)
+        {
+            // Bezier matrix
+            Matrix4x4 matBezier = new Matrix4x4();
+
+            matBezier.SetRow(0, new Vector4(-1, 3, -3, 1));
+            matBezier.SetRow(1, new Vector4(3, -6, 3, 0));
+            matBezier.SetRow(2, new Vector4(-3, 3, 0, 0));
+            matBezier.SetRow(3, new Vector4(1, 0, 0, 0));
+
+
+            // Result matrix from a calculation. 
+            Matrix4x4 result;
+
+            // The two points on the line, and their control points
+            Matrix4x4 pointsMat = new Matrix4x4();
+
+            pointsMat.SetRow(0, new Vector4(p1.x, p1.y, p1.z, 0));
+            pointsMat.SetRow(1, new Vector4(t1.x, t1.y, t1.z, 0));
+            pointsMat.SetRow(2, new Vector4(t2.x, t2.y, t2.z, 0));
+            pointsMat.SetRow(3, new Vector4(p2.x, p2.y, p2.z, 0));
+
+
+            // Matrix for 'u' to the exponent 0 through 3.
+            Matrix4x4 uMat = new Matrix4x4(); // the matrix for 'u' (also called 't').
+
+            // Setting the 'u' values to the proper row, since this is being used as a 1 X 4 matrix.
+            // The exponent values are being applied as well.
+            uMat.SetRow(0, new Vector4(Mathf.Pow(u, 3), Mathf.Pow(u, 2), Mathf.Pow(u, 1), Mathf.Pow(u, 0)));
+
+            // Doing the bezier calculation
+            // Order of [u^3, u^2, u, 0] * M * <points matrix>
+            result = matBezier * pointsMat; // bezier matrix * points matrix
+            result = uMat * result; // u matrix * (bezier matrix * points matrix)
+
+            // the needed values are stored at the top of the result matrix.
+            return result.GetRow(0);
+        }
+
+
+
+
+        // LERP Expanded Calculations
         // EaseIn Operation
         public static Vector3 EaseIn(Vector3 v1, Vector3 v2, float t, float pow)
         {
@@ -240,8 +325,17 @@ namespace util
             return Lerp(v1, v2, t);
         }
 
+
+        // Interpolates using the 2 provided points.
+        public static Vector3 InterpolateByType(interType type, Vector3 v1, Vector3 v2, float t)
+        {
+            return InterpolateByType(type, v1, v1, v2, v2, t);
+        }
+
         // Interpolate by Type
-        public Vector3 InterpolateByType(interType type, Vector3 v1, Vector3 v2, float t)
+        // If bezier or catmull-rom are selected, v0 and v3 will be used accordingly.
+        // If an interpolation method with 2 points are selected, v1 and v2 will be used.
+        public static Vector3 InterpolateByType(interType type, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float t)
         {
             Vector3 result; // result of operation
 
@@ -250,6 +344,14 @@ namespace util
             {
                 case interType.lerp:
                     result = Lerp(v1, v2, t);
+                    break;
+
+                case interType.catmullRom: // Catmull Rom Curve
+                    result = CatmullRom(v0, v1, v2, v3, t);
+                    break;
+
+                case interType.bezier: // Bezier Curve
+                    result = Bezier(v0, v1, v2, v3, t);
                     break;
 
                 case interType.easeIn1:

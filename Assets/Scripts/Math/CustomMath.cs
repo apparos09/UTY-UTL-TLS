@@ -7,6 +7,8 @@ namespace util
     // Calculations for custom math.
     public class CustomMath
     {
+        // ROTATE //
+
         // Rotates the 2D vector (around its z-axis).
         public static Vector2 Rotate(Vector2 v, float angle, bool inDegrees)
         {
@@ -128,5 +130,19 @@ namespace util
             return Rotate(v, angle, 'Z', inDegrees);
         }
 
+        // MATRIX //
+        // Multiplies a 4 x 4 matrix by a value.
+        public static Matrix4x4 Matrix4x4Multiply(Matrix4x4 m, float value)
+        {
+            Matrix4x4 mx = new Matrix4x4();
+
+            // calculation
+            mx.SetRow(0, new Vector4(value * m.m00, value * m.m01, value * m.m02, value * m.m03));
+            mx.SetRow(1, new Vector4(value * m.m10, value * m.m11, value * m.m12, value * m.m13));
+            mx.SetRow(2, new Vector4(value * m.m20, value * m.m21, value * m.m22, value * m.m23));
+            mx.SetRow(3, new Vector4(value * m.m30, value * m.m31, value * m.m32, value * m.m33));
+
+            return mx;
+        }
     }
 }
