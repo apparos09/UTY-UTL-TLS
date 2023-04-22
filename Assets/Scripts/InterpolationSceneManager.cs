@@ -24,6 +24,9 @@ public class InterpolationSceneManager : MonoBehaviour
     // The travel speed of the marker.
     public float speed = 1.0F;
 
+    // If set to 'true', the animation is reversed.
+    public bool reversed = false;
+
     // Set to 'true' if the interpolation should be paused.
     public bool paused = false;
 
@@ -41,8 +44,13 @@ public class InterpolationSceneManager : MonoBehaviour
             // There must be at least 2 points for interpolation to work.
             if(points.Count >= 2)
             {
-                // Increase t-value, and clamp it.
-                t += Time.deltaTime * speed;
+                // Calculate the change in the t-value.
+                float tInc = Time.deltaTime * speed;
+
+                // Change the t-value. If reversed, the t-value is subtracted from.
+                t += (reversed) ? -tInc : tInc;
+
+                // Clamp t-value.
                 t = Mathf.Clamp01(t);
 
 
@@ -83,17 +91,22 @@ public class InterpolationSceneManager : MonoBehaviour
                 marker.transform.position = newPos;
 
                 // Move onto the next point.
-                if(t >= 1.0F)
+                if((t >= 1.0F && !reversed) || (t <= 0.0F && reversed))
                 {
                     // Reset t-value.
-                    t = 0.0F;
+                    t = (reversed) ? 1.0F : 0.0F;
 
-                    // Increase index.
-                    startPointIndex++;
+                    // Changes the index.
+                    if (reversed) // Decrease index.
+                        startPointIndex--;
+                    else // Increase index.
+                        startPointIndex++;
 
-                    // Index needs to be reset to 0.
-                    if (startPointIndex >= points.Count)
+                    // Bounds checking.
+                    if (startPointIndex >= points.Count) // Reset to 0.
                         startPointIndex = 0;
+                    else if (startPointIndex < 0) // Reset to end of the list.
+                        startPointIndex = points.Count - 1;
                 }
             }
         }
