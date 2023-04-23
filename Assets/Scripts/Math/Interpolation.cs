@@ -40,11 +40,79 @@ namespace util
             easeInOutBounce3
         }
 
-        // SELF DEFINED
-        // LERP - linear interpolation (standard)
+        // Lerp - linear interpolation (standard) [self defined]
         public static Vector3 Lerp(Vector3 v1, Vector3 v2, float t)
         {
             return ((1.0F - t) * v1 + t * v2);
+        }
+
+
+        // Lerp - linear interpolation (at a fixed speed)
+        public static Vector3 LerpAtFixedSpeed(List<Vector3> points, float t)
+        {
+            // The total number of point distances.
+            float[] pointDists = new float[points.Count];
+            pointDists[0] = 0.0F;
+
+            // The summary of the distance travelled.
+            float distSum = 0.0F;
+
+            // Increases the distance summary.
+            for(int i = 1; i < points.Count; i++)
+            {
+                pointDists[i] = Vector3.Distance(points[i - 1], points[i]);
+                distSum += pointDists[i];
+            }
+
+            // The distance adder.
+            float distAdder = 0.0F;
+
+            // Gets the distance crossed according to the provied t-value.
+            float distCrossed = distSum * Mathf.Clamp01(t);
+
+            // The start index of the lerp calculation.
+            int startIndex = -1;
+
+            // The local t-value to be used for calculating the position along the selected line segment.
+            float localT = t;
+
+            // Goes through all points to 
+            for (int i = 0; i < pointDists.Length; i++)
+            {
+                // The point along the line has been found.
+                if(distCrossed <= distAdder)
+                {
+                    startIndex = i - 1;
+                    localT = Mathf.InverseLerp(distAdder - pointDists[i - 1], distAdder, distCrossed);
+                    break;
+                }
+                else
+                {
+                    // Add to the dist adder.
+                    distAdder += pointDists[i];
+                }
+            }
+
+            // The resulting position.
+            Vector3 returnPos;
+
+            // Checks the starting index.
+            if (startIndex < 0) // Just stay at first point.
+            {
+                returnPos = points[0];
+            }
+            else if (startIndex >= points.Count - 1) // Grab the last point.
+            {
+                returnPos = points[points.Count - 1];
+            }
+            else // Lerp calculation.
+            {
+                returnPos = Lerp(points[startIndex], points[startIndex + 1], localT);
+            }
+                
+
+            // Returns the position.
+            return returnPos;
         }
 
         // Catmull Rom - goes between points 1 and 2 using points 0 and 3 to create a curve.
