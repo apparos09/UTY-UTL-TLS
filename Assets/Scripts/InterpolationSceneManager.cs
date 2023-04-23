@@ -90,34 +90,13 @@ public class InterpolationSceneManager : MonoBehaviour
                 // Checks if speed control should be used.
                 if(useSpeedControl) // Use speed control.
                 {
-                    if(interpolation == Interpolation.interType.lerp)
-                    {
-                        // The position list.
-                        List<Vector3> posList = new List<Vector3>();
-
-                        // Goes through all points.
-                        foreach(GameObject point in points)
-                        {
-                            // Add the position to the list.
-                            posList.Add(point.transform.position);
-                        }
-
-
-                        // Calculates the new position.
-                        newPos = Interpolation.LerpAtFixedSpeed(posList, t);
-                    }
-                    else
-                    {
-                        newPos = Interpolation.InterpolateByTypeWithSpeedControl(
+                    newPos = Interpolation.InterpolateByTypeWithSpeedControl(
                         interpolation,
                         p0.transform.position,
                         p1.transform.position,
                         p2.transform.position,
                         p3.transform.position,
                         t);
-                    }
-
-                    
                 }
                 else // Don't use speed control.
                 {

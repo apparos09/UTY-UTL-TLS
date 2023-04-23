@@ -47,73 +47,73 @@ namespace util
         }
 
 
-        // Lerp - linear interpolation (at a fixed speed)
-        public static Vector3 LerpAtFixedSpeed(List<Vector3> points, float t)
-        {
-            // The total number of point distances.
-            float[] pointDists = new float[points.Count];
-            pointDists[0] = 0.0F;
+        //// Lerp - linear interpolation (at a fixed speed)
+        //public static Vector3 LerpAtFixedSpeed(List<Vector3> points, float t)
+        //{
+        //    // The total number of point distances.
+        //    float[] pointDists = new float[points.Count];
+        //    pointDists[0] = 0.0F;
 
-            // The summary of the distance travelled.
-            float distSum = 0.0F;
+        //    // The summary of the distance travelled.
+        //    float distSum = 0.0F;
 
-            // Increases the distance summary.
-            for(int i = 1; i < points.Count; i++)
-            {
-                pointDists[i] = Vector3.Distance(points[i - 1], points[i]);
-                distSum += pointDists[i];
-            }
+        //    // Increases the distance summary.
+        //    for(int i = 1; i < points.Count; i++)
+        //    {
+        //        pointDists[i] = Vector3.Distance(points[i - 1], points[i]);
+        //        distSum += pointDists[i];
+        //    }
 
-            // The distance adder.
-            float distAdder = 0.0F;
+        //    // The distance adder.
+        //    float distAdder = 0.0F;
 
-            // Gets the distance crossed according to the provied t-value.
-            float distCrossed = distSum * Mathf.Clamp01(t);
+        //    // Gets the distance crossed according to the provied t-value.
+        //    float distCrossed = distSum * Mathf.Clamp01(t);
 
-            // The start index of the lerp calculation.
-            int startIndex = -1;
+        //    // The start index of the lerp calculation.
+        //    int startIndex = -1;
 
-            // The local t-value to be used for calculating the position along the selected line segment.
-            float localT = t;
+        //    // The local t-value to be used for calculating the position along the selected line segment.
+        //    float localT = t;
 
-            // Goes through all points to 
-            for (int i = 0; i < pointDists.Length; i++)
-            {
-                // The point along the line has been found.
-                if(distCrossed <= distAdder)
-                {
-                    startIndex = i - 1;
-                    localT = Mathf.InverseLerp(distAdder - pointDists[i - 1], distAdder, distCrossed);
-                    break;
-                }
-                else
-                {
-                    // Add to the dist adder.
-                    distAdder += pointDists[i];
-                }
-            }
+        //    // Goes through all points to 
+        //    for (int i = 0; i < pointDists.Length; i++)
+        //    {
+        //        // The point along the line has been found.
+        //        if(distCrossed <= distAdder)
+        //        {
+        //            startIndex = i - 1;
+        //            localT = Mathf.InverseLerp(distAdder - pointDists[i - 1], distAdder, distCrossed);
+        //            break;
+        //        }
+        //        else
+        //        {
+        //            // Add to the dist adder.
+        //            distAdder += pointDists[i];
+        //        }
+        //    }
 
-            // The resulting position.
-            Vector3 returnPos;
+        //    // The resulting position.
+        //    Vector3 returnPos;
 
-            // Checks the starting index.
-            if (startIndex < 0) // Just stay at first point.
-            {
-                returnPos = points[0];
-            }
-            else if (startIndex >= points.Count - 1) // Grab the last point.
-            {
-                returnPos = points[points.Count - 1];
-            }
-            else // Lerp calculation.
-            {
-                returnPos = Lerp(points[startIndex], points[startIndex + 1], localT);
-            }
+        //    // Checks the starting index.
+        //    if (startIndex < 0) // Just stay at first point.
+        //    {
+        //        returnPos = points[0];
+        //    }
+        //    else if (startIndex >= points.Count - 1) // Grab the last point.
+        //    {
+        //        returnPos = points[points.Count - 1];
+        //    }
+        //    else // Lerp calculation.
+        //    {
+        //        returnPos = Lerp(points[startIndex], points[startIndex + 1], localT);
+        //    }
                 
 
-            // Returns the position.
-            return returnPos;
-        }
+        //    // Returns the position.
+        //    return returnPos;
+        //}
 
         // Catmull Rom - goes between points 1 and 2 using points 0 and 3 to create a curve.
         public static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float u)
@@ -579,51 +579,52 @@ namespace util
             }
 
             // Step 4 - Use t to find the line segment the point falls on.
-            // The index that marks the end value of what points (t) values between.
-            int endIndex = -1;
 
-            // Goes thrugh all curve distances.
-            for(int i = 1; i < distsOnCurve.Length; i++)
+            // New - the user provides the t-value, so check the sampleTime array to solve the distance...
+            // for the equation: Speed = Distance / Time
+            
+            // The index taken from sample times.
+            int sampleTimesIndex = -1;
+
+            // Clamps the t-value.
+            float tClamped = Mathf.Clamp01(t);
+            
+            // Find sample time the t-value falls into.
+            for (int i = 0; i < sampleTimes.Length; i++)
             {
-                // Between point found.
-                if (Mathf.Clamp(t, distsOnCurve[i - 1], distsOnCurve[i]) == t)
+                // The end point has been found for sample times.
+                if(tClamped <= sampleTimes[i])
                 {
-                    endIndex = i;
+                    sampleTimesIndex = i;
                     break;
-                }  
+                }
+
             }
 
-            // Calculates how far along the curve segment t is.
-            float curveT = Mathf.InverseLerp(distsOnCurve[endIndex - 1], distsOnCurve[endIndex], t);
+            // Checks sample times value.
+            // 0, so just use 1 as the end index (0 will be the start index).
+            if (sampleTimesIndex <= 0)
+            {
+                sampleTimesIndex = 1;
+            }
+            // >= Length, so just put at end of the curve (list length - 1).
+            else if (sampleTimesIndex >= sampleTimes.Length)
+            {
+                sampleTimesIndex = sampleTimes.Length - 1;
+            }
 
-            // STEP 6 - Perform the Interpolation
 
-            // The four points for the interpolation.
-            Vector3 p0, p1, p2, p3;
+            // Step 5 - Calculate position by lerping between the two ends of the line segment.
 
-            // The four indexes for the interpolation.
-            int p0Index, p1Index, p2Index, p3Index;
+            // Calculates the t-value between the start and end point of the curve segment.
+            float curveT = Mathf.InverseLerp(
+                sampleTimes[sampleTimesIndex - 1], 
+                sampleTimes[sampleTimesIndex],
+                tClamped);
 
-            // MAIN POINTS
-            // P1 - start point.
-            p1Index = endIndex - 1;
-            p1 = samplePoints[p1Index];
-
-            // P2 - end point.
-            p2Index = p1Index + 1 < samplePoints.Length ? p1Index + 1 : 0;
-            p2 = samplePoints[p2Index];
-
-            // TANGENTS/EXTRAS
-            // P0 - point before the start point.
-            p0Index = p1Index - 1 >= 0 ? p1Index - 1 : samplePoints.Length - 1;
-            p0 = samplePoints[p0Index];
-
-            // P3 - point after the end point.
-            p3Index = p2Index + 1 < samplePoints.Length ? p2Index + 1 : 0;
-            p3 = samplePoints[p3Index];
 
             // Interpolates between the positions that curve T falls between.
-            Vector3 finalPos = InterpolateByType(type, p0, p1, p2, p3, curveT);
+            Vector3 finalPos = Vector3.Lerp(samplePoints[sampleTimesIndex - 1], samplePoints[sampleTimesIndex], curveT);
 
             // Returns the final position.
             return finalPos;
