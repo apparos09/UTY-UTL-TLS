@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 // TODO: implement catmull-rom and bezier versions with speed control.
 
@@ -610,13 +607,13 @@ namespace util
 
                     break;
 
-                //     // TODO: implement.
-                // case interType.bezier: // Bezier
-                // 
-                //     break;
-                // 
-                // case interType.catmullRom: // Catmull-Rom
-                //     break;
+                case interType.bezier: // Bezier
+                
+                    break;
+                
+                case interType.catmullRom: // Catmull-Rom
+
+                    break;
 
                 
             }
@@ -655,6 +652,63 @@ namespace util
 
             // Returns the resulting position.
             return resultPos;
+        }
+
+
+        // Calculates the lerp path length. The index acts as the end point (e.g., length[1] is the distance from p0 to p1). 
+        // If 'loop' is true, then the path length includes end point to start point.
+        // Sum them all up to get the total path length.
+        public static List<float> CalculateLerpPointDistances(List<Vector3> points, bool loop)
+        {
+            // The point lengths.
+            List<float> pointLengths = new List<float>();
+
+            // Point length.
+            pointLengths.Add(0.0F);
+
+            // Goes through the points.
+            for(int i = 1; i < points.Count; i++)
+            {
+                // Calculate the distance, and add it to the point lengths list.
+                float dist = Vector3.Distance(points[i - 1], points[i]);
+                pointLengths.Add(dist);
+            }
+
+
+            // If the path should loop back to the start.
+            if(loop)
+            {
+                // Calculates and adds the distance loop back to the start.
+                float dist = Vector3.Distance(points[points.Count - 1], points[0]);
+                pointLengths.Add(dist);
+            }
+
+            // Return the point length list.
+            return pointLengths;
+        }
+
+        // Calculate the catmull rom distances.
+        public static List<float> CalculateCatmullRomPointDistances(List<Vector3> points, bool loop, int samples = 10)
+        {
+            // The point lengths.
+            List<float> pointLengths = new List<float>();
+
+            // TODO: implement.
+
+            // Return the point length list.
+            return pointLengths;
+        }
+
+        // Calculate the bezier point distances.
+        public static List<float> CalculateBezierPointDistances(List<Vector3> points, bool loop, int samples = 10)
+        {
+            // The point lengths.
+            List<float> pointLengths = new List<float>();
+
+            // TODO: implement.
+
+            // Return the point length list.
+            return pointLengths;
         }
     }
 }
