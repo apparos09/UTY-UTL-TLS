@@ -141,7 +141,25 @@ public class InterpolationSceneManager : MonoBehaviour
     // Calculates interpolation at a fixed speed.
     private void InterpolateFixedSpeed()
     {
+        // Increase the distance sum.
+        distSum += (reversed ? -1.0F : 1.0F) * (distInc * Time.deltaTime) * speed;
 
+        // // TODO: clamp within path length.
+        // Debug.Log(distSum);
+
+        // The position list.
+        List<Vector3> posList = new List<Vector3>();
+
+        // Add point positions to the position list. 
+        // Redoing this every time is inefficient, but it's fine for test purposes.
+        foreach(GameObject go in points)
+            posList.Add(go.transform.position);
+
+        // Calculate the new position.
+        Vector3 newPos = Interpolation.InterpolateAtFixedSpeed(interpolation, posList, distSum, true);
+
+        // Set the new position.
+        marker.transform.position = newPos;
     }
 
     // Update is called once per frame

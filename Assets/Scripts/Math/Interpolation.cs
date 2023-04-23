@@ -565,7 +565,8 @@ namespace util
         // Interpolate (at a fixed speed) - uses distance travelled to find 'T'.
         // This only really works if you're using lerp, bezier, or catmull-rom
         // If 'loop' is true, then the calculation treats the points as a loop, rather than having a start and end. 
-        public static Vector3 InterpolateAtFixedSpeed(interType type, List<Vector3> points, float distance, bool loop)
+        // 'samples' is used to determine how many points are sampled for curves.
+        public static Vector3 InterpolateAtFixedSpeed(interType type, List<Vector3> points, float distance, bool loop, int samples = 10)
         {
             // Copies the points for the calculation.
             List<Vector3> pathPoints = new List<Vector3>(points);
@@ -609,7 +610,7 @@ namespace util
 
                     break;
 
-                    // TODO: implement.
+                //     // TODO: implement.
                 // case interType.bezier: // Bezier
                 // 
                 //     break;
@@ -621,7 +622,7 @@ namespace util
             }
 
             // Puts the distance within the bounds of the interpolation.
-            float distClamped = pathLengthTotal % distance;
+            float distClamped = distance - Mathf.Floor(distance / pathLengthTotal) * pathLengthTotal;
 
             // If the distance is negative, calculate the positive distance from it.
             if (distClamped < 0)
