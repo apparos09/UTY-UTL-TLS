@@ -44,7 +44,7 @@ public class InterpolationSceneManager : MonoBehaviour
     public float distInc = 1.0F;
 
     // The distance sum (TODO: reset when it passes a certain amount).
-    private float distSum = 0.0F;
+    public float distSum = 0.0F;
 
     // Start is called before the first frame update
     void Start()

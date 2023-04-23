@@ -38,6 +38,235 @@ namespace util
             easeInOutBounce3
         }
 
+
+
+        // Calculates the lerp path length. The index acts as the end point (e.g., length[1] is the distance from p0 to p1). 
+        // If 'loop' is true, then the path length includes end point to start point.
+        // Sum them all up to get the total path length.
+        public static List<float> CalculateLerpPointDistances(List<Vector3> points, bool loop)
+        {
+            // The point lengths.
+            List<float> pointLengths = new List<float>();
+
+            // Point length.
+            pointLengths.Add(0.0F);
+
+            // Goes through the points.
+            for (int i = 1; i < points.Count; i++)
+            {
+                // Calculate the distance, and add it to the point lengths list.
+                float dist = Vector3.Distance(points[i - 1], points[i]);
+                pointLengths.Add(dist);
+            }
+
+
+            // If the path should loop back to the start.
+            if (loop)
+            {
+                // Calculates and adds the distance loop back to the start.
+                float dist = Vector3.Distance(points[points.Count - 1], points[0]);
+                pointLengths.Add(dist);
+            }
+
+            // Return the point length list.
+            return pointLengths;
+        }
+
+
+        // Calculates the spline point samples.
+        public static List<Vector3> CalculateSplineSamples(bool isBezier, List<Vector3> points, bool loop, int sampleCount = 11)
+        {
+            // The list of spline distances.
+            List<Vector3> splineSamples = new List<Vector3>();
+
+            // The number of points to go through.
+            int pointCount = (loop) ? points.Count : points.Count - 1;
+
+            // Goes through each point.
+            for (int p = 0; p < pointCount; p++)
+            {
+                // The points and the indexes.
+                Vector3 p0, p1, p2, p3;
+                int startIndex, endIndex;
+
+                startIndex = p;
+                endIndex = (p + 1 >= points.Count) ? 0 : p + 1;
+
+                p0 = (startIndex - 1 < 0) ? points[points.Count - 1] : points[startIndex - 1];
+                p1 = points[startIndex];
+                p2 = points[endIndex];
+                p3 = (endIndex + 1 >= points.Count) ? points[0] : points[endIndex + 1];
+
+
+                // Will save the sample points, and the times needed.
+                float[] sampleTimes = new float[sampleCount];
+                Vector3[] curveSamples = new Vector3[sampleCount];
+
+                // The sample increment.
+                float sampleInc = 1.0F / (sampleCount - 1);
+
+                // Calculates the samples points.
+                for (int i = 0; i < curveSamples.Length; i++)
+                {
+                    // Calculate the sample time.
+                    sampleTimes[i] = sampleInc * i;
+
+                    // Calculate the point.
+                    if (isBezier) // Bezier
+                        curveSamples[i] = Bezier(p0, p1, p2, p3, sampleTimes[i]);
+                    else // Catmull-Rom
+                        curveSamples[i] = CatmullRom(p0, p1, p2, p3, sampleTimes[i]);
+
+                    // Add to the spline sample list.
+                    splineSamples.Add(curveSamples[i]);
+                }
+            }
+
+            // Returns the spline distances.
+            return splineSamples;
+        }
+
+        // Calculate the bezier point distances.
+        public static List<Vector3> CalculateBezierSamples(List<Vector3> points, bool loop, int sampleCount = 11)
+        {
+            // The spline samples.
+            List<Vector3> splineSamples = CalculateSplineSamples(true, points, loop, sampleCount);
+
+            // Return the distances.
+            return splineSamples;
+        }
+
+        // Calculate the catmull rom distances.
+        public static List<Vector3> CalculateCatmullRomSamples(List<Vector3> points, bool loop, int sampleCount = 11)
+        {
+            // The spline samples.
+            List<Vector3> splineSamples = CalculateSplineSamples(false, points, loop, sampleCount);
+
+            // Return the distances.
+            return splineSamples;
+        }
+
+
+        // Calculates distances on the curve.
+        // if 'isCatmull' is true, it's a catmull-rom curve. If isCatmull is false, it's a bezier curve.
+        public static List<float> CalculateSplinePointDistances(bool isBezier, List<Vector3> points, bool loop, int sampleCount = 11)
+        {
+            // The list of spline distances.
+            List<float> splineDists = new List<float>();
+
+            // Add 0 distance for start.
+            splineDists.Add(0.0F);
+
+            // The number of points to go through.
+            int pointCount = (loop) ? points.Count : points.Count - 1;
+
+
+            // Goes through each point.
+            for (int p = 0; p < pointCount; p++)
+            {
+                // The points and the indexes.
+                Vector3 p0, p1, p2, p3;
+                int startIndex, endIndex;
+
+                startIndex = p;
+                endIndex = (p + 1 >= points.Count) ? 0 : p + 1;
+
+                p0 = (startIndex - 1 < 0) ? points[points.Count - 1] : points[startIndex - 1];
+                p1 = points[startIndex];
+                p2 = points[endIndex];
+                p3 = (endIndex + 1 >= points.Count) ? points[0] : points[endIndex + 1];
+
+
+                // TODO: maybe re-use 'CalculateSplineSamples' function.
+                // STEP 1 - Calculate sample times and sample points.
+                float[] sampleTimes = new float[sampleCount];
+                Vector3[] samplePoints = new Vector3[sampleCount];
+
+                // The sample increment.
+                float sampleInc = 1.0F / (sampleCount - 1);
+
+                // Calculates the samples points.
+                for (int i = 0; i < samplePoints.Length; i++)
+                {
+                    // Calculate the sample time.
+                    sampleTimes[i] = sampleInc * i;
+
+                    // Calculate the point.
+                    if (isBezier) // Bezier
+                        samplePoints[i] = Bezier(p0, p1, p2, p3, sampleTimes[i]);
+                    else // Catmull-Rom
+                        samplePoints[i] = CatmullRom(p0, p1, p2, p3, sampleTimes[i]);
+                }
+
+                // Step 2 - Calculate pairwise distances.
+                float[] sampleDists = new float[sampleCount];
+
+                // First distance is 0.
+                sampleDists[0] = 0.0F;
+
+                // Calculates the sample distances.
+                for (int i = 1; i < sampleDists.Length; i++)
+                {
+                    // Calculate the distance.
+                    float dist = Vector3.Distance(samplePoints[i - 1], samplePoints[i]);
+
+                    // Save the distances.
+                    sampleDists[i] = dist;
+                }
+
+                // Step 3 - Calculate the distance along the curve.
+                float[] distsOnCurve = new float[sampleCount];
+
+                // The distance sum.
+                float distSum = 0.0F;
+
+                // First curve dist is 0.
+                distsOnCurve[0] = 0.0F;
+                distSum += distsOnCurve[0];
+
+                // Calculate the rest of the curve distances.
+                for (int i = 1; i < distsOnCurve.Length; i++)
+                {
+                    // Calculate the distance.
+                    float dist = distsOnCurve[i - 1] + sampleDists[i];
+
+                    // Save the distance.
+                    distsOnCurve[i] = dist;
+
+                    // Adds to the distance sum.
+                    distSum += dist;
+                }
+
+                // Step 4 - sum the distances and save them to the list.
+                splineDists.Add(distSum);
+            }
+
+            // Returns the spline distances.
+            return splineDists;
+        }
+
+        // Calculate the bezier point distances.
+        public static List<float> CalculateBezierPointDistances(List<Vector3> points, bool loop, int sampleCount = 11)
+        {
+            // The point lengths.
+            List<float> pointDists = CalculateSplinePointDistances(true, points, loop, sampleCount);
+
+            // Return the distances.
+            return pointDists;
+        }
+
+        // Calculate the catmull rom distances.
+        public static List<float> CalculateCatmullRomPointDistances(List<Vector3> points, bool loop, int sampleCount = 11)
+        {
+            // The point lengths.
+            List<float> pointDists = CalculateSplinePointDistances(false, points, loop, sampleCount);
+
+            // Return the distances.
+            return pointDists;
+        }
+
+
+
         // Lerp - linear interpolation (standard) [self defined]
         public static Vector3 Lerp(Vector3 v1, Vector3 v2, float t)
         {
@@ -608,14 +837,39 @@ namespace util
                     break;
 
                 case interType.bezier: // Bezier
-                
-                    break;
-                
                 case interType.catmullRom: // Catmull-Rom
 
-                    break;
+                    
+                    // Checks the type for calculations
+                    // This is VERY inefficient since the samples are calculated twice.
+                    // But since this is just a test, it's fine.
+                    switch(type)
+                    {
+                        case interType.bezier: // Bezier curve.
+                            pathPoints = CalculateBezierSamples(points, loop);
+                            pointDists = CalculateBezierPointDistances(points, loop);
 
-                
+                            break;
+
+                        case interType.catmullRom: // Catmull-rom curve.
+                            pathPoints = CalculateCatmullRomSamples(points, loop);
+                            pointDists = CalculateCatmullRomPointDistances(points, loop);
+
+                            break;
+                    }
+
+                    // This should be 0.
+                    pointDistSums[0] = pointDists[0];
+
+                    // Sum the distances together.
+                    for (int i = 1; i < pointDists.Count; i++)
+                    {
+                        // Sum the path length total, and ad to the point dist sums.
+                        pathLengthTotal += pointDists[i];
+                        pointDistSums.Add(pointDistSums[i - 1] + pointDists[i]);
+                    }
+
+                    break;  
             }
 
             // Puts the distance within the bounds of the interpolation.
@@ -648,67 +902,29 @@ namespace util
             float t = Mathf.InverseLerp(pointDistSums[endIndex - 1], pointDistSums[endIndex], distClamped);
 
             // Calculates the resulting position.
-            Vector3 resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+            Vector3 resultPos;
+            
+            // Checks what type of calculation to do.
+            switch(type)
+            {
+                case interType.bezier: // Bezier curve.
+                    resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+                    
+                    break;
+
+                case interType.catmullRom: // Catmull-rom curve.
+                    resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+
+                    break;
+
+                default: // Default.
+                    resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+                    break;
+
+            }            
 
             // Returns the resulting position.
             return resultPos;
-        }
-
-
-        // Calculates the lerp path length. The index acts as the end point (e.g., length[1] is the distance from p0 to p1). 
-        // If 'loop' is true, then the path length includes end point to start point.
-        // Sum them all up to get the total path length.
-        public static List<float> CalculateLerpPointDistances(List<Vector3> points, bool loop)
-        {
-            // The point lengths.
-            List<float> pointLengths = new List<float>();
-
-            // Point length.
-            pointLengths.Add(0.0F);
-
-            // Goes through the points.
-            for(int i = 1; i < points.Count; i++)
-            {
-                // Calculate the distance, and add it to the point lengths list.
-                float dist = Vector3.Distance(points[i - 1], points[i]);
-                pointLengths.Add(dist);
-            }
-
-
-            // If the path should loop back to the start.
-            if(loop)
-            {
-                // Calculates and adds the distance loop back to the start.
-                float dist = Vector3.Distance(points[points.Count - 1], points[0]);
-                pointLengths.Add(dist);
-            }
-
-            // Return the point length list.
-            return pointLengths;
-        }
-
-        // Calculate the catmull rom distances.
-        public static List<float> CalculateCatmullRomPointDistances(List<Vector3> points, bool loop, int samples = 10)
-        {
-            // The point lengths.
-            List<float> pointLengths = new List<float>();
-
-            // TODO: implement.
-
-            // Return the point length list.
-            return pointLengths;
-        }
-
-        // Calculate the bezier point distances.
-        public static List<float> CalculateBezierPointDistances(List<Vector3> points, bool loop, int samples = 10)
-        {
-            // The point lengths.
-            List<float> pointLengths = new List<float>();
-
-            // TODO: implement.
-
-            // Return the point length list.
-            return pointLengths;
         }
     }
 }
