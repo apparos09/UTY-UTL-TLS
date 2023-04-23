@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,75 +46,6 @@ namespace util
         {
             return ((1.0F - t) * v1 + t * v2);
         }
-
-
-        //// Lerp - linear interpolation (at a fixed speed)
-        //public static Vector3 LerpAtFixedSpeed(List<Vector3> points, float t)
-        //{
-        //    // The total number of point distances.
-        //    float[] pointDists = new float[points.Count];
-        //    pointDists[0] = 0.0F;
-
-        //    // The summary of the distance travelled.
-        //    float distSum = 0.0F;
-
-        //    // Increases the distance summary.
-        //    for(int i = 1; i < points.Count; i++)
-        //    {
-        //        pointDists[i] = Vector3.Distance(points[i - 1], points[i]);
-        //        distSum += pointDists[i];
-        //    }
-
-        //    // The distance adder.
-        //    float distAdder = 0.0F;
-
-        //    // Gets the distance crossed according to the provied t-value.
-        //    float distCrossed = distSum * Mathf.Clamp01(t);
-
-        //    // The start index of the lerp calculation.
-        //    int startIndex = -1;
-
-        //    // The local t-value to be used for calculating the position along the selected line segment.
-        //    float localT = t;
-
-        //    // Goes through all points to 
-        //    for (int i = 0; i < pointDists.Length; i++)
-        //    {
-        //        // The point along the line has been found.
-        //        if(distCrossed <= distAdder)
-        //        {
-        //            startIndex = i - 1;
-        //            localT = Mathf.InverseLerp(distAdder - pointDists[i - 1], distAdder, distCrossed);
-        //            break;
-        //        }
-        //        else
-        //        {
-        //            // Add to the dist adder.
-        //            distAdder += pointDists[i];
-        //        }
-        //    }
-
-        //    // The resulting position.
-        //    Vector3 returnPos;
-
-        //    // Checks the starting index.
-        //    if (startIndex < 0) // Just stay at first point.
-        //    {
-        //        returnPos = points[0];
-        //    }
-        //    else if (startIndex >= points.Count - 1) // Grab the last point.
-        //    {
-        //        returnPos = points[points.Count - 1];
-        //    }
-        //    else // Lerp calculation.
-        //    {
-        //        returnPos = Lerp(points[startIndex], points[startIndex + 1], localT);
-        //    }
-                
-
-        //    // Returns the position.
-        //    return returnPos;
-        //}
 
         // Catmull Rom - goes between points 1 and 2 using points 0 and 3 to create a curve.
         public static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float u)
@@ -398,15 +330,15 @@ namespace util
         // INTERPOLATION //
 
         // Interpolates using the 2 provided points.
-        public static Vector3 InterpolateByType(interType type, Vector3 v1, Vector3 v2, float t)
+        public static Vector3 Interpolate(interType type, Vector3 v1, Vector3 v2, float t)
         {
-            return InterpolateByType(type, v1, v1, v2, v2, t);
+            return Interpolate(type, v1, v1, v2, v2, t);
         }
 
         // Interpolate by Type
         // If bezier or catmull-rom are selected, v0 and v3 will be used accordingly.
         // If an interpolation method with 2 points are selected, v1 and v2 will be used.
-        public static Vector3 InterpolateByType(interType type, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float t)
+        public static Vector3 Interpolate(interType type, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float t)
         {
             Vector3 result; // result of operation
 
@@ -518,14 +450,14 @@ namespace util
         }
 
         // Interpolates using the 2 provided points with speed control.
-        public static Vector3 InterpolateByTypeWithSpeedControl(interType type, Vector3 v1, Vector3 v2, float t)
+        public static Vector3 InterpolateWithSpeedControl(interType type, Vector3 v1, Vector3 v2, float t)
         {
-            return InterpolateByTypeWithSpeedControl(type, v1, v1, v2, v2, t);
+            return InterpolateWithSpeedControl(type, v1, v1, v2, v2, t);
         }
 
         // Interpolations usin 4 points with speed control.
         // v1 and v2 are the main points, while v0 and v3 are control points for certain functions.
-        public static Vector3 InterpolateByTypeWithSpeedControl(interType type, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float t)
+        public static Vector3 InterpolateWithSpeedControl(interType type, Vector3 v0, Vector3 v1, Vector3 v2, Vector3 v3, float t)
         {
             // STEP 1 - Calculate sample times and sample points.
             // Calculates the samples - the 11 sample points (0 - 1, with 0.1 inc).
@@ -543,7 +475,7 @@ namespace util
                 sampleTimes[i] = sampleInc * i;
 
                 // Calculate the point.
-                samplePoints[i] = InterpolateByType(type, v0, v1, v2, v3, sampleTimes[i]);
+                samplePoints[i] = Interpolate(type, v0, v1, v2, v3, sampleTimes[i]);
             }
 
             // Step 2 - Calculate pairwise distances.
@@ -628,6 +560,100 @@ namespace util
 
             // Returns the final position.
             return finalPos;
+        }
+
+        // Interpolate (at a fixed speed) - uses distance travelled to find 'T'.
+        // This only really works if you're using lerp, bezier, or catmull-rom
+        // If 'loop' is true, then the calculation treats the points as a loop, rather than having a start and end. 
+        public static Vector3 InterpolateAtFixedSpeed(interType type, List<Vector3> points, float distance, bool loop)
+        {
+            // Copies the points for the calculation.
+            List<Vector3> pathPoints = new List<Vector3>(points);
+
+            // The length of the whole interpolation set.
+            float pathLengthTotal = 0.0F;
+
+            // If the interpolation should loop, add the first point to the end of the list.
+            if (loop)
+                pathPoints.Add(points[0]);
+
+            // The distances between points.
+            List<float> pointDists = new List<float>();
+
+            // The summed distances between points.
+            List<float> pointDistSums = new List<float>();
+
+            // The first distance is 0.
+            pointDists.Add(0.0F);
+            pointDistSums.Add(0.0F);
+
+            // Checks the interpolation type.
+            switch (type)
+            {
+                case interType.lerp: // Lerp/Default
+                default:
+
+                    // Calculates the distance between each point, and sums them together.
+                    for (int i = 1; i < pathPoints.Count; i++)
+                    {
+                        // Calculates the distance.
+                        float dist = Vector3.Distance(pathPoints[i - 1], pathPoints[i]);
+
+                        // Adds to the total path length.
+                        pathLengthTotal += dist;
+
+                        // Add to the point distance, and the summed point distances.
+                        pointDists.Add(dist);
+                        pointDistSums.Add(pointDistSums[pointDistSums.Count - 1] + dist);
+                    }
+
+                    break;
+
+                    // TODO: implement.
+                // case interType.bezier: // Bezier
+                // 
+                //     break;
+                // 
+                // case interType.catmullRom: // Catmull-Rom
+                //     break;
+
+                
+            }
+
+            // Puts the distance within the bounds of the interpolation.
+            float distClamped = pathLengthTotal % distance;
+
+            // If the distance is negative, calculate the positive distance from it.
+            if (distClamped < 0)
+                distClamped = pathLengthTotal - distClamped;
+
+            // Clamps the distance within the path length total.
+            distClamped = Mathf.Clamp(distClamped, 0, pathLengthTotal);
+
+
+            // The end index of the path points.
+            // By default, it's the end of the path.
+            int endIndex = pathPoints.Count - 1;
+
+            // Finds the points on the path the requested distance fall between.
+            for(int i = 0; i < pathPoints.Count; i++)
+            {
+                // Found the path points.
+                if (distClamped < pointDistSums[i])
+                {
+                    endIndex = i;
+                    break;
+                }
+            }
+
+            // Calculates the t-value between the two points.
+            float t = Mathf.InverseLerp(pointDistSums[endIndex - 1], pointDistSums[endIndex], distClamped);
+
+            // Calculates the resulting position.
+            Vector3 resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+
+            // Returns the resulting position.
+            return resultPos;
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using util;
 
 // Manages the sample scene.
-public class SampleManager : MonoBehaviour
+public class TextManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
