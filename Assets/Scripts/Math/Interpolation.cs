@@ -39,40 +39,6 @@ namespace util
         }
 
 
-
-        // Calculates the lerp path length. The index acts as the end point (e.g., length[1] is the distance from p0 to p1). 
-        // If 'loop' is true, then the path length includes end point to start point.
-        // Sum them all up to get the total path length.
-        public static List<float> CalculateLerpPointDistances(List<Vector3> points, bool loop)
-        {
-            // The point lengths.
-            List<float> pointLengths = new List<float>();
-
-            // Point length.
-            pointLengths.Add(0.0F);
-
-            // Goes through the points.
-            for (int i = 1; i < points.Count; i++)
-            {
-                // Calculate the distance, and add it to the point lengths list.
-                float dist = Vector3.Distance(points[i - 1], points[i]);
-                pointLengths.Add(dist);
-            }
-
-
-            // If the path should loop back to the start.
-            if (loop)
-            {
-                // Calculates and adds the distance loop back to the start.
-                float dist = Vector3.Distance(points[points.Count - 1], points[0]);
-                pointLengths.Add(dist);
-            }
-
-            // Return the point length list.
-            return pointLengths;
-        }
-
-
         // Calculates the spline point samples.
         public static List<Vector3> CalculateSplineSamples(bool isBezier, List<Vector3> points, bool loop, int sampleCount = 11)
         {
@@ -147,21 +113,56 @@ namespace util
         }
 
 
+        // Calculates the distance between lerp points. The elements are the distance from the prior point to the current point.
+        // e.g., list[2] is the distance from list[1] to list[2]. list[0] will always be equal to 0.0.
+        // If 'loop' is true, then an extra element will be added to have the distance from the last point to the first point.
+        public static List<float> CalculateLerpPointDistances(List<Vector3> points, bool loop)
+        {
+            // Copy list.
+            List<Vector3> pathPoints = new List<Vector3>(points);
+
+            // If the path should loop, add the last point onto the end.
+            if (loop)
+                pathPoints.Add(pathPoints[0]);
+
+            // The distance betwene points.
+            List<float> pointDists = new List<float>();
+
+            // First space is 0.
+            pointDists.Add(0.0F);
+
+            // Calculates the distance between each point, and sums them together.
+            for (int i = 1; i < pathPoints.Count; i++)
+            {
+                // Calculates the distance.
+                float dist = Vector3.Distance(pathPoints[i - 1], pathPoints[i]);
+
+                // Add to the point distance.
+                pointDists.Add(dist);
+            }
+
+            return pointDists;
+        }
+
+
         // Calculates distances on the curve.
-        // if 'isCatmull' is true, it's a catmull-rom curve. If isCatmull is false, it's a bezier curve.
+        // If 'isCatmull' is true, it's a catmull-rom curve. If isCatmull is false, it's a bezier curve.
+        // The index is the path from the prior point to the current one (e.g., list[2] is the path length of list[1] to list[2]).
+        // If set to loop, the list size will be points.Count + 1 (extra point is length of path back to start).
+        // If not, it will be equal to point.Count
         public static List<float> CalculateSplinePointDistances(bool isBezier, List<Vector3> points, bool loop, int sampleCount = 11)
         {
             // The list of spline distances.
             List<float> splineDists = new List<float>();
 
-            // Add 0 distance for start.
+            // Add 0 distance for start (gets overwritten if loop is true).
             splineDists.Add(0.0F);
 
             // The number of points to go through.
-            int pointCount = (loop) ? points.Count : points.Count - 1;
+            // If not looping, the last point is ignored, since it would end up being used as the start point.
+            int pointCount = (loop) ? points.Count : points.Count - 1;  
 
-
-            // Goes through each point.
+            // Goes through each point. Variable (p) is the index of the start point.
             for (int p = 0; p < pointCount; p++)
             {
                 // The points and the indexes.
@@ -792,7 +793,7 @@ namespace util
         // This only really works if you're using lerp, bezier, or catmull-rom
         // If 'loop' is true, then the calculation treats the points as a loop, rather than having a start and end. 
         // 'samples' is used to determine how many points are sampled for curves.
-        public static Vector3 InterpolateAtFixedSpeed(interType type, List<Vector3> points, float distance, bool loop, int samples = 10)
+        public static Vector3 InterpolateAtFixedSpeed(interType type, List<Vector3> points, float distance, bool loop, int samples = 11)
         {
             // Copies the points for the calculation.
             List<Vector3> pathPoints = new List<Vector3>(points);
@@ -800,15 +801,21 @@ namespace util
             // The length of the whole interpolation set.
             float pathLengthTotal = 0.0F;
 
+            // Sets this to see if it's a spline or not.
+            bool isSpline = (type == interType.bezier || type == interType.catmullRom);
+
+            // Changing the implementation.
             // If the interpolation should loop, add the first point to the end of the list.
             if (loop)
             {
                 // Don't add an extra point if it's a curved line.
                 // This is because the last point effects how the loop is completed.
-                if(type != interType.bezier && type != interType.catmullRom) // TODO: maybe change it.
+                if(!isSpline) // TODO: maybe change it.
                     pathPoints.Add(points[0]);
             }
                 
+
+            // STEP 1 - CALCULATE THE DISTANCE BETWEEN POINTS
 
             // The distances between points.
             List<float> pointDists = new List<float>();
@@ -853,19 +860,16 @@ namespace util
                     {
                         case interType.bezier: // Bezier curve.
                             // pathPoints = CalculateBezierSamples(points, loop); // Not needed.
-                            pointDists = CalculateBezierPointDistances(points, loop);
+                            pointDists = CalculateBezierPointDistances(points, loop, samples);
 
                             break;
 
                         case interType.catmullRom: // Catmull-rom curve.
                             // pathPoints = CalculateCatmullRomSamples(points, loop); // Not needed.
-                            pointDists = CalculateCatmullRomPointDistances(points, loop);
+                            pointDists = CalculateCatmullRomPointDistances(points, loop, samples);
 
                             break;
                     }
-
-                    // This should be 0.
-                    pointDistSums[0] = pointDists[0];
 
                     // Sum the distances together.
                     for (int i = 1; i < pointDists.Count; i++)
@@ -878,6 +882,8 @@ namespace util
                     break;  
             }
 
+            // FIND THE END INDEX BASED ON THE DISTANCE
+
             // Puts the distance within the bounds of the interpolation.
             float distClamped = distance - Mathf.Floor(distance / pathLengthTotal) * pathLengthTotal;
 
@@ -888,24 +894,47 @@ namespace util
             // Clamps the distance within the path length total.
             distClamped = Mathf.Clamp(distClamped, 0, pathLengthTotal);
 
-
             // The end index of the path points.
             // By default, it's the end of the path.
-            int endIndex = pathPoints.Count - 1;
+            int endIndex = pathPoints.Count - 1;  
 
-            // Finds the points on the path the requested distance fall between.
-            for(int i = 0; i < pathPoints.Count; i++)
+            // Checks if it's a spline.
+            if(isSpline) // Is a spline
             {
-                // Found the path points.
-                if (distClamped < pointDistSums[i])
+                // Finds the points on the path the requested distance fall between.
+                for (int i = 0; i < pointDistSums.Count; i++)
                 {
-                    endIndex = i;
-                    break;
+                    // Found the path points.
+                    if (distClamped < pointDistSums[i])
+                    {
+                        endIndex = i;
+                        break;
+                    }
                 }
             }
+            else // Not a spline (lerp calculation)
+            {
+                // Finds the points on the path the requested distance fall between.
+                for (int i = 0; i < pathPoints.Count; i++)
+                {
+                    // Found the path points.
+                    if (distClamped < pointDistSums[i])
+                    {
+                        endIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+
+            // FIND THE T-VALUE
+
+            // Calculates the start index.
+            int startIndex = endIndex - 1 < 0 ? pathPoints.Count - 1 : endIndex - 1;
 
             // Calculates the t-value between the two points.
-            float t = Mathf.InverseLerp(pointDistSums[endIndex - 1], pointDistSums[endIndex], distClamped);
+            float t = Mathf.InverseLerp(pointDistSums[startIndex], pointDistSums[endIndex], distClamped);
+
 
             // Calculates the resulting position.
             Vector3 resultPos;
@@ -915,35 +944,50 @@ namespace util
             {
                 case interType.bezier: // Bezier
                 case interType.catmullRom: // Catmull-Rom.
-                    int p0, p1, p2, p3;
-                    
-                    p1 = (endIndex - 1 >= 0) ? endIndex - 1 : pathPoints.Count - 1;
-                    p2 = endIndex;
+                    // The 4 point indexes.
+                    int p0Index, p1Index, p2Index, p3Index;
 
-                    p0 = (p1 - 1 >= 0) ? p1 - 1 : pathPoints.Count - 1;
-                    p3 = (p2 + 1 < pathPoints.Count) ? p2 + 1 : 0;
+                    // If the spline should be looped.
+                    if(loop)
+                    {
+                        // If endIndex is at the end of pointDists
+                        // It means that it's the path that loops back to the start.
+                        if (endIndex == pointDists.Count - 1)
+                        {
+                            // Sets the indexes accordingly.
+                            startIndex = points.Count - 1;
+                            endIndex = 0;
+
+                        }
+                    }
+                    
+                    p1Index = startIndex;
+                    p2Index = endIndex;
+
+                    p0Index = (p1Index - 1 >= 0) ? p1Index - 1 : pathPoints.Count - 1;
+                    p3Index = (p2Index + 1 < pathPoints.Count) ? p2Index + 1 : 0;
 
 
                     // Checks what equation to use.
                     switch(type)
                     {
                         case interType.bezier: // Bezier
-                            resultPos = Bezier(pathPoints[p0], pathPoints[p1], pathPoints[p2], pathPoints[p3], t);
+                            resultPos = Bezier(pathPoints[p0Index], pathPoints[p1Index], pathPoints[p2Index], pathPoints[p3Index], t);
                             break;
 
                         case interType.catmullRom: // Catmull-Rom
-                            resultPos = CatmullRom(pathPoints[p0], pathPoints[p1], pathPoints[p2], pathPoints[p3], t);
+                            resultPos = CatmullRom(pathPoints[p0Index], pathPoints[p1Index], pathPoints[p2Index], pathPoints[p3Index], t);
                             break;
 
                         default: // Default
-                            resultPos = Vector3.Lerp(pathPoints[p1], pathPoints[p2], t);
+                            resultPos = Vector3.Lerp(pathPoints[p1Index], pathPoints[p2Index], t);
                             break;
                     }
 
                     break;
 
                 default: // Default.
-                    resultPos = Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+                    resultPos = Lerp(pathPoints[startIndex], pathPoints[endIndex], t);
                     break;
 
             }            

@@ -26,6 +26,9 @@ public class InterpolationSceneManager : MonoBehaviour
     // The travel speed of the marker.
     public float speed = 1.0F;
 
+    // Loops the interpolation.
+    public bool loop = true;
+
     // Uses speed control to make the marker travel curves at a fixed speed (is overwritten by useFixedSpeed).
     public bool useSpeedControl = false;
 
@@ -40,11 +43,18 @@ public class InterpolationSceneManager : MonoBehaviour
     // Interpolates at a fixed speed.
     public bool useFixedSpeed = false;
 
+    // The number of samples used for fixed speed (concerns splines only).
+    public int samples = 11;
+
     // The speed incrementer. This is multiplied by speed and delta time.
-    public float distInc = 1.0F;
+    public float distInc = 10.0F;
 
     // The distance sum (TODO: reset when it passes a certain amount).
     public float distSum = 0.0F;
+
+    // The max of the distance sum.
+    // This is just done because I don't feel like putting a proper cap on it.
+    public float distSumMax = 1000.0F;
 
     // Start is called before the first frame update
     void Start()
@@ -130,11 +140,22 @@ public class InterpolationSceneManager : MonoBehaviour
             else // Increase index.
                 startPointIndex++;
 
-            // Bounds checking.
-            if (startPointIndex >= points.Count) // Reset to 0.
-                startPointIndex = 0;
-            else if (startPointIndex < 0) // Reset to end of the list.
-                startPointIndex = points.Count - 1;
+            // Bounds checking - checks if the line should loop.
+            if(loop) // Loop
+            {
+                if (startPointIndex >= points.Count) // Reset to 0.
+                    startPointIndex = 0;
+                else if (startPointIndex < 0) // Reset to end of the list.
+                    startPointIndex = points.Count - 1;
+            }
+            else // Don't Loop
+            {
+                if (!reversed && p2Index == points.Count - 1) // At the end of the list.
+                    startPointIndex = 0;
+                else if (reversed && p2Index == 1)
+                    startPointIndex = points.Count - 2;
+            }
+            
         }
     }
 
@@ -143,6 +164,10 @@ public class InterpolationSceneManager : MonoBehaviour
     {
         // Increase the distance sum.
         distSum += (reversed ? -1.0F : 1.0F) * (distInc * Time.deltaTime) * speed;
+
+        // Return to 0.
+        if (Mathf.Abs(distSum) > distSumMax)
+            distSum = 0.0F;
 
         // // TODO: clamp within path length.
         // Debug.Log(distSum);
@@ -156,7 +181,7 @@ public class InterpolationSceneManager : MonoBehaviour
             posList.Add(go.transform.position);
 
         // Calculate the new position.
-        Vector3 newPos = Interpolation.InterpolateAtFixedSpeed(interpolation, posList, distSum, true);
+        Vector3 newPos = Interpolation.InterpolateAtFixedSpeed(interpolation, posList, distSum, loop, samples);
 
         // Set the new position.
         marker.transform.position = newPos;
