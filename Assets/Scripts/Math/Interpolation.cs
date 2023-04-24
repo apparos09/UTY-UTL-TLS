@@ -909,37 +909,6 @@ namespace util
                 }
             }
 
-            // Original - I don't think splines and lerp need a different set of behaviour...
-            // So this should be fine.
-            //// Checks if it's a spline.
-            //if(isSpline) // Is a spline
-            //{
-            //    // Finds the points on the path the requested distance fall between.
-            //    for (int i = 0; i < pointDistSums.Count; i++)
-            //    {
-            //        // Found the path points.
-            //        if (distClamped < pointDistSums[i])
-            //        {
-            //            endIndex = i;
-            //            break;
-            //        }
-            //    }
-            //}
-            //else // Not a spline (lerp calculation)
-            //{
-            //    // Finds the points on the path the requested distance fall between.
-            //    for (int i = 0; i < pathPoints.Count; i++)
-            //    {
-            //        // Found the path points.
-            //        if (distClamped < pointDistSums[i])
-            //        {
-            //            endIndex = i;
-            //            break;
-            //        }
-            //    }
-            //}
-
-
             // FIND THE T-VALUE
 
             // Calculates the start index.
