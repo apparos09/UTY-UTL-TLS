@@ -846,13 +846,13 @@ namespace util
                     switch(type)
                     {
                         case interType.bezier: // Bezier curve.
-                            pathPoints = CalculateBezierSamples(points, loop);
+                            // pathPoints = CalculateBezierSamples(points, loop); // Not needed.
                             pointDists = CalculateBezierPointDistances(points, loop);
 
                             break;
 
                         case interType.catmullRom: // Catmull-rom curve.
-                            pathPoints = CalculateCatmullRomSamples(points, loop);
+                            // pathPoints = CalculateCatmullRomSamples(points, loop); // Not needed.
                             pointDists = CalculateCatmullRomPointDistances(points, loop);
 
                             break;
@@ -907,18 +907,37 @@ namespace util
             // Checks what type of calculation to do.
             switch(type)
             {
-                case interType.bezier: // Bezier curve.
-                    resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+                case interType.bezier: // Bezier
+                case interType.catmullRom: // Catmull-Rom.
+                    int p0, p1, p2, p3;
                     
-                    break;
+                    p1 = (endIndex - 1 >= 0) ? endIndex - 1 : pathPoints.Count - 1;
+                    p2 = endIndex;
 
-                case interType.catmullRom: // Catmull-rom curve.
-                    resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+                    p0 = (p1 - 1 >= 0) ? p1 - 1 : pathPoints.Count - 1;
+                    p3 = (p2 + 1 < pathPoints.Count) ? p2 + 1 : 0;
+
+
+                    // Checks what equation to use.
+                    switch(type)
+                    {
+                        case interType.bezier: // Bezier
+                            resultPos = Bezier(pathPoints[p0], pathPoints[p1], pathPoints[p2], pathPoints[p3], t);
+                            break;
+
+                        case interType.catmullRom: // Catmull-Rom
+                            resultPos = CatmullRom(pathPoints[p0], pathPoints[p1], pathPoints[p2], pathPoints[p3], t);
+                            break;
+
+                        default: // Default
+                            resultPos = Vector3.Lerp(pathPoints[p1], pathPoints[p2], t);
+                            break;
+                    }
 
                     break;
 
                 default: // Default.
-                    resultPos = Vector3.Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
+                    resultPos = Lerp(pathPoints[endIndex - 1], pathPoints[endIndex], t);
                     break;
 
             }            
