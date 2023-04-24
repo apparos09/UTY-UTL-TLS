@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 // TODO: implement catmull-rom and bezier versions with speed control.
@@ -266,6 +268,66 @@ namespace util
             return pointDists;
         }
 
+
+        // Gets the length of the interpolation path.
+        public static float GetInterpolationLength(interType type, List<Vector3> points, bool loop, int samples = 11)
+        {
+            // The point distances.
+            List<float> pointDists;
+
+            // Gets the point distances.
+            switch(type)
+            {
+                case interType.lerp:
+                default:
+                    pointDists = CalculateLerpPointDistances(points, loop);
+                    break;
+
+                case interType.bezier:
+                    pointDists = CalculateBezierPointDistances(points, loop, samples);
+                    break;
+
+                case interType.catmullRom:
+                    pointDists = CalculateCatmullRomPointDistances(points, loop, samples);
+                    break;
+            }
+
+            // The sum of the distances.
+            float distSum = 0.0F;
+
+            // Sums together all the distances.
+            foreach(float d in pointDists)
+            {
+                distSum += d;
+            }
+
+            // Returns the distance sum.
+            return distSum;
+        }
+
+        // The length of the lerp interpolation path.
+        public static float GetLerpLength(List<Vector3> points, bool loop)
+        {
+            float result = GetInterpolationLength(interType.lerp, points, loop);
+            return result;
+        }
+
+        // The length of the bezier interpolation path.
+        public static float GetBezierLength(List<Vector3> points, bool loop, int samples = 11)
+        {
+            float result = GetInterpolationLength(interType.bezier, points, loop, samples);
+            return result;
+        }
+
+        // The length of the catmull-rom interpolation path.
+        public static float GetCatmullRomLength(List<Vector3> points, bool loop, int samples = 11)
+        {
+            float result = GetInterpolationLength(interType.catmullRom, points, loop, samples);
+            return result;
+        }
+
+
+        // INTERPOLATION FUNCTIONS
 
 
         // Lerp - linear interpolation (standard) [self defined]
