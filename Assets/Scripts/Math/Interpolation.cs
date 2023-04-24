@@ -896,36 +896,49 @@ namespace util
 
             // The end index of the path points.
             // By default, it's the end of the path.
-            int endIndex = pathPoints.Count - 1;  
+            int endIndex = pathPoints.Count - 1;
 
-            // Checks if it's a spline.
-            if(isSpline) // Is a spline
+            // Finds the points on the path the requested distance fall between.
+            for (int i = 0; i < pointDistSums.Count; i++)
             {
-                // Finds the points on the path the requested distance fall between.
-                for (int i = 0; i < pointDistSums.Count; i++)
+                // Found the path points.
+                if (distClamped < pointDistSums[i])
                 {
-                    // Found the path points.
-                    if (distClamped < pointDistSums[i])
-                    {
-                        endIndex = i;
-                        break;
-                    }
+                    endIndex = i;
+                    break;
                 }
             }
-            else // Not a spline (lerp calculation)
-            {
-                // Finds the points on the path the requested distance fall between.
-                for (int i = 0; i < pathPoints.Count; i++)
-                {
-                    // Found the path points.
-                    if (distClamped < pointDistSums[i])
-                    {
-                        endIndex = i;
-                        break;
-                    }
-                }
-            }
-            
+
+            // Original - I don't think splines and lerp need a different set of behaviour...
+            // So this should be fine.
+            //// Checks if it's a spline.
+            //if(isSpline) // Is a spline
+            //{
+            //    // Finds the points on the path the requested distance fall between.
+            //    for (int i = 0; i < pointDistSums.Count; i++)
+            //    {
+            //        // Found the path points.
+            //        if (distClamped < pointDistSums[i])
+            //        {
+            //            endIndex = i;
+            //            break;
+            //        }
+            //    }
+            //}
+            //else // Not a spline (lerp calculation)
+            //{
+            //    // Finds the points on the path the requested distance fall between.
+            //    for (int i = 0; i < pathPoints.Count; i++)
+            //    {
+            //        // Found the path points.
+            //        if (distClamped < pointDistSums[i])
+            //        {
+            //            endIndex = i;
+            //            break;
+            //        }
+            //    }
+            //}
+
 
             // FIND THE T-VALUE
 
@@ -980,7 +993,7 @@ namespace util
                             break;
 
                         default: // Default
-                            resultPos = Vector3.Lerp(pathPoints[p1Index], pathPoints[p2Index], t);
+                            resultPos = Interpolate(type, pathPoints[p1Index], pathPoints[p2Index], t);
                             break;
                     }
 

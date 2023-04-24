@@ -186,7 +186,7 @@ MonoBehaviour:
   samples: 11
   distInc: 10
   distSum: 0
-  distSumMax: 1000
+  distSumMax: 1500
 --- !u!1 &835840578
 GameObject:
   m_ObjectHideFlags: 0
