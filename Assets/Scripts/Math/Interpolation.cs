@@ -802,7 +802,13 @@ namespace util
 
             // If the interpolation should loop, add the first point to the end of the list.
             if (loop)
-                pathPoints.Add(points[0]);
+            {
+                // Don't add an extra point if it's a curved line.
+                // This is because the last point effects how the loop is completed.
+                if(type != interType.bezier && type != interType.catmullRom) // TODO: maybe change it.
+                    pathPoints.Add(points[0]);
+            }
+                
 
             // The distances between points.
             List<float> pointDists = new List<float>();
