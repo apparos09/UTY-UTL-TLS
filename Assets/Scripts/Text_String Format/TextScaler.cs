@@ -61,15 +61,15 @@ namespace util
 
 
             // If text wrapping should be automatically disabled. This only applies to TMP text.
-            if(disableWrappingOnStart)
+            if(disableWrappingOnStart && tmpText != null)
                 tmpText.enableWordWrapping = false;
 
             // Auto sets the base scale.
-            if (autoSetBaseScale)
+            if (autoSetBaseScale && text != null)
                 baseScale = text.transform.localScale;
 
             // Auto sets the base scale for TMP text.
-            if (autoSetBaseScaleTmp)
+            if (autoSetBaseScaleTmp && tmpText != null)
                 baseScaleTmp = tmpText.transform.localScale;
         }
 

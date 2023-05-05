@@ -38,6 +38,51 @@ public class StringFormatter : MonoBehaviour
     // Italicize the string.
     public bool italicize;
 
+
+    // Formats the time string.
+    public static string FormatTime(float timeSeconds, bool includeHours = true, bool includeMinutes = true)
+    {
+        // Multiples for converting times to seconds.
+        const float hourToSec = 3600.0F;
+        const float minToSec = 60.0F;
+
+        // The hours, minutes, and seconds.
+        float hours = 0, minutes = 0, seconds = 0;
+
+        // Hours, minutes, and seconds - floors value so that the remainder can be used.
+        // Hours (1 hour = 3600 seconds)
+        if(includeHours)
+            hours = Mathf.Floor(timeSeconds / hourToSec);
+
+        // Minutes (1 minute = 60 seconds).
+        if(includeMinutes)
+            minutes = Mathf.Floor((timeSeconds - (hours * hourToSec)) / minToSec);
+
+        // Seconds (round up to remove nanoseconds).
+        seconds = Mathf.Ceil(timeSeconds - (minutes * minToSec) - (hours * hourToSec));
+
+
+
+        // The time string.
+        string timeString = "";
+
+        // Add hours.
+        if (includeHours)
+            timeString += hours.ToString("00") + ": ";
+
+        // Add minutes.
+        if (includeMinutes)
+            timeString += minutes.ToString("00") + ": ";
+
+
+        // Add seconds.
+        timeString += seconds.ToString("00");
+
+        // Returns ther esults.
+        return timeString;
+    }
+
+
     // Formats the string using the string format setting.
     public string FormatString(string str, string substr)
     {

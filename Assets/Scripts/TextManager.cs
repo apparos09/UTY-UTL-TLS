@@ -9,6 +9,7 @@ public class TextManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Rotation Test
         Vector3 v = new Vector3(1, 0, 0);
         float theta = 45.0F;
 
@@ -22,8 +23,11 @@ public class TextManager : MonoBehaviour
             CustomMath.RotateY(v, theta, true).ToString());
 
         Debug.Log("Rotating " + v.ToString() + " by " + theta.ToString() + " Degrees (Z-3D) | " +
-            CustomMath.RotateZ(v, theta, true).ToString());        
+            CustomMath.RotateZ(v, theta, true).ToString());
 
+        // Time Test
+        float time = 7268.0F;
+        Debug.Log("Time (Seconds): " + time + " | Time (HH:MM:SS): " + StringFormatter.FormatTime(time));
     }
 
     // Update is called once per frame
