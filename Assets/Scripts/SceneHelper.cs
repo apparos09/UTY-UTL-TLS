@@ -5,66 +5,100 @@ using UnityEngine.SceneManagement;
 
 namespace util
 {
-    // scene assist script, which was imported from an existing project of mine.
+    // Scene assist script, which was imported from an existing project of mine.
     public class SceneHelper : MonoBehaviour
     {
-        // changes the scene using the scene number.
+
+        // Changes the scene using the scene number.
         public static void ChangeScene(int scene)
         {
             SceneManager.LoadScene(scene);
 
         }
 
-        // changes the scene using the scene name.
+        // Changes the scene using the scene name.
         public static void ChangeScene(string scene)
         {
             SceneManager.LoadScene(scene);
         }
 
-        // returns the skybox of the scene.
+        // Returns the skybox of the scene.
         public static Material GetSkybox()
         {
             return RenderSettings.skybox;
         }
 
-        // sets the skybox of the scene.
+        // Sets the skybox of the scene.
         public static void SetSkybox(Material newSkybox)
         {
             RenderSettings.skybox = newSkybox;
         }
 
-        // returns 'true' if the game is full screen.
+        // Returns 'true' if the game is full screen.
         public static bool IsFullScreen()
         {
             return Screen.fullScreen;
         }
 
-        // sets 'full screen' mode
+        // Sets 'full screen' mode
         public static void SetFullScreen(bool fullScreen)
         {
             Screen.fullScreen = fullScreen;
         }
 
-        // toggles the full screen.
+        // Toggles the full screen.
         public static void FullScreenToggle()
         {
             Screen.fullScreen = !Screen.fullScreen;
         }
 
-        // called to change the screen size.
+        // Called to change the screen size.
         public static void ChangeScreenSize(int width, int height, FullScreenMode mode)
         {
             Screen.SetResolution(width, height, mode);
         }
 
-        // called to change the screen size.
+        // Called to change the screen size.
         public static void ChangeScreenSize(int width, int height, FullScreenMode mode, bool fullScreen)
         {
             ChangeScreenSize(width, height, mode);
             Screen.fullScreen = fullScreen;
         }
 
-        // exits the game
+        // Set Screen Size (Full Screen)
+        public static void SetFullScreen()
+        {
+            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            Screen.fullScreen = true;
+        }
+
+        // Set Screen Size (1080 Resolution - 16:9)
+        public static void SetScreenSize1920x1080(FullScreenMode mode = FullScreenMode.MaximizedWindow)
+        {
+            ChangeScreenSize(1920, 1080, mode, false);
+        }
+
+        // Set Screen Size (1080 Resolution - 4:3)
+        public static void SetScreenSize1440x1080(FullScreenMode mode = FullScreenMode.Windowed)
+        {
+            ChangeScreenSize(1440, 1080, mode, false);
+        }
+
+        // Set Screen Size (720 Resolution - 16:9)
+        public static void SetScreenSize1280x720(FullScreenMode mode = FullScreenMode.Windowed)
+        {
+            ChangeScreenSize(1280, 720, mode, false);
+        }
+
+        // Set Screen Size (720 Resolution - 4:3)
+        public static void SetScreenSize960x720(FullScreenMode mode = FullScreenMode.Windowed)
+        {
+            ChangeScreenSize(960, 720, mode, false);
+        }
+
+
+
+        // Exits the game
         public static void ExitApplication()
         {
             Application.Quit();
