@@ -21,6 +21,10 @@ namespace util
         [Tooltip("If true, the audio source is stopped when a fade out is completed. It also resets the audio to its starting volume.")]
         public bool stopOnFadeOut = true;
 
+        // If 'true', the volume is set back to its starting value whe a fade out is finished.
+        [Tooltip("Resets the volume to its origina value when a fade out finishes.")]
+        public bool resetVolumeOnFadeOutEnd = true;
+
         // The fade duration (in seconds).
         [Tooltip("The fade duration in seconds.")]
         public float fadeDuration = 5.0F;
@@ -80,13 +84,13 @@ namespace util
         // Checks for fade in.
         public bool IsFadingIn()
         {
-            return fadeDirec > 0;
+            return fading && fadeDirec > 0;
         }
 
         // Checks for fade out.
         public bool IsFadingOut()
         {
-            return fadeDirec < 0;
+            return fading && fadeDirec < 0;
         }
 
         // Update is called once per frame
@@ -108,17 +112,30 @@ namespace util
                     // If the transition has finished.
                     if (fadeT >= 1.0F)
                     {
-                        fading = false;
+                        
+                        // Set fadeT to 0.
+                        fadeT = 0.0F;
 
-                        // If the audio should be stopped now that the fade out is done.
-                        if (stopOnFadeOut && fadeDirec < 0.0F)
+                        // If the audio is fading out.
+                        if(IsFadingOut())
                         {
-                            // Stops the audio.
-                            audioSource.Stop();
+                            // If the audio should be stopped now that the fade out is done.
+                            if (stopOnFadeOut)
+                            {
+                                // Stops the audio.
+                                audioSource.Stop();
+                            }
 
                             // Returns the volume to it's original setting.
-                            audioSource.volume = fadeStart;
+                            if (resetVolumeOnFadeOutEnd)
+                            {
+                                audioSource.volume = fadeStart;
+                            }
                         }
+
+                        // No longer fading.
+                        fading = false;
+
                     }
                 }
             }

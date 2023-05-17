@@ -55,8 +55,6 @@ namespace util
             transitionFade.audioSource.time = audioSource.time; // Doesn't use clip end.
             transitionFade.audioSource.Pause();
 
-            Debug.Log("Transition Time: " + transitionFade.audioSource.time.ToString());
-
             // Set the main audio source to the clip start.
             // These two should be the same audio source.
 
