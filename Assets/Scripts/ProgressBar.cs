@@ -20,11 +20,17 @@ namespace util
         // The value for the progress bar.
         private float value = 0.0F;
 
+        [Header("Speed")]
+
         // The scroll speed for the transitions.
         public float speed = 1.0F;
 
         // If 'true', the bar scrolls at a fixed speed.
         public bool fixedSpeed = false;
+
+        // If 'true', time scaled delta time is used for progress bar speed.
+        [Header("If true, timeScaled delta time is used. If false, unscaled deltaTime is used.")]
+        public bool useTimeScale = false;
 
         // The starting value that's used for animation.
         private float startValue = 0.0F;
@@ -145,8 +151,8 @@ namespace util
             // If the start value is not equal to the set value.
             if(transitioning)
             {
-                // Increases 't' and clamps it.
-                v_t += Time.deltaTime * speed;
+                // Increases 't' and clamps it. Variable determines of time scale should be used or not.
+                v_t += (useTimeScale ? Time.deltaTime : Time.unscaledDeltaTime) * speed;
                 v_t = Mathf.Clamp01(v_t);
 
                 // Checks if the bar should be moving at a fixed pace.

@@ -51,31 +51,31 @@ public class CameraController : MonoBehaviour
             // forward movement and backward movement
             if (Input.GetKey(KeyCode.W))
             {
-                transform.Translate(new Vector3(0, 0, movementSpeed.z * Time.deltaTime));
+                transform.Translate(new Vector3(0, 0, movementSpeed.z * Time.unscaledDeltaTime));
             }
             else if (Input.GetKey(KeyCode.S))
             {
-                transform.Translate(new Vector3(0, 0, -movementSpeed.z * Time.deltaTime));
+                transform.Translate(new Vector3(0, 0, -movementSpeed.z * Time.unscaledDeltaTime));
             }
 
             // leftward and rightward movement
             if (Input.GetKey(KeyCode.A))
             {
-                transform.Translate(new Vector3(-movementSpeed.x * Time.deltaTime, 0, 0));
+                transform.Translate(new Vector3(-movementSpeed.x * Time.unscaledDeltaTime, 0, 0));
             }
             else if (Input.GetKey(KeyCode.D))
             {
-                transform.Translate(new Vector3(movementSpeed.x * Time.deltaTime, 0, 0));
+                transform.Translate(new Vector3(movementSpeed.x * Time.unscaledDeltaTime, 0, 0));
             }
 
             // upward movement and downward movement
             if (Input.GetKey(KeyCode.Q))
             {
-                transform.Translate(new Vector3(0, movementSpeed.y * Time.deltaTime, 0));
+                transform.Translate(new Vector3(0, movementSpeed.y * Time.unscaledDeltaTime, 0));
             }
             else if (Input.GetKey(KeyCode.E))
             {
-                transform.Translate(new Vector3(0, -movementSpeed.y * Time.deltaTime, 0));
+                transform.Translate(new Vector3(0, -movementSpeed.y * Time.unscaledDeltaTime, 0));
             }
 
 
@@ -83,31 +83,31 @@ public class CameraController : MonoBehaviour
             // x-axis rotation
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                transform.Rotate(Vector3.right, -rotationSpeed.x * Time.deltaTime);
+                transform.Rotate(Vector3.right, -rotationSpeed.x * Time.unscaledDeltaTime);
             }
             else if (Input.GetKey(KeyCode.DownArrow))
             {
-                transform.Rotate(Vector3.right, +rotationSpeed.x * Time.deltaTime);
+                transform.Rotate(Vector3.right, +rotationSpeed.x * Time.unscaledDeltaTime);
             }
 
             // y-axis rotation
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                transform.Rotate(Vector3.up, -rotationSpeed.y * Time.deltaTime);
+                transform.Rotate(Vector3.up, -rotationSpeed.y * Time.unscaledDeltaTime);
             }
             else if (Input.GetKey(KeyCode.RightArrow))
             {
-                transform.Rotate(Vector3.up, +rotationSpeed.y * Time.deltaTime);
+                transform.Rotate(Vector3.up, +rotationSpeed.y * Time.unscaledDeltaTime);
             }
 
             // z-axis rotation
             if (Input.GetKey(KeyCode.PageUp))
             {
-                transform.Rotate(Vector3.forward, -rotationSpeed.z * Time.deltaTime);
+                transform.Rotate(Vector3.forward, -rotationSpeed.z * Time.unscaledDeltaTime);
             }
             else if (Input.GetKey(KeyCode.PageDown))
             {
-                transform.Rotate(Vector3.forward, +rotationSpeed.z * Time.deltaTime);
+                transform.Rotate(Vector3.forward, +rotationSpeed.z * Time.unscaledDeltaTime);
             }
         }
 

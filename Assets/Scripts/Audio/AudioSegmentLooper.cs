@@ -44,11 +44,11 @@ namespace util
 
         // Adjusts the loop point dynamically based on where the audio is.
         // e.g., if the audio is 1 second past the endpoint, it loops back to 1 second past the clip start point.
-        [Tooltip("Offsets clipStart based on where the audio is relative to clipEnd when performing a loop.")]
+        [Tooltip("If true, clipStart is offset by where the audio is reference to clipEnd when a loop is being performed.")]
         public bool loopRelative = true;
 
         // Start is called before the first frame update
-        void Start()
+        protected virtual void Start()
         {
             // gets the start and end of the clip if not set.
             if (audioSource != null)
@@ -287,7 +287,7 @@ namespace util
         }
 
         // Update is called once per frame
-        void Update()
+        protected virtual void Update()
         {
             // audio source, or the clip are not set.
             if (audioSource == null)

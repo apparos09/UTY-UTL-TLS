@@ -18,6 +18,7 @@ namespace util
         private int fadeDirec = 0;
 
         // If set to 'true', the audio stops when faded out.
+        [Tooltip("If true, the audio source is stopped when a fade out is completed. It also resets the audio to its starting volume.")]
         public bool stopOnFadeOut = true;
 
         // The fade duration (in seconds).
@@ -39,7 +40,7 @@ namespace util
         public void FadeIn()
         {
             // If the audio is already fading, don't do anything.
-            // TODO: implement system to handle it.
+            // TODO: implement system to handle it. (What did I mean by this?)
             if (fading)
                 return;
 
@@ -97,8 +98,8 @@ namespace util
                 // If the fade direction is set.
                 if (fadeDirec != 0)
                 {
-                    // Reduce the fade by using deltaTime.
-                    fadeT += Time.deltaTime / fadeDuration;
+                    // Reduce the fade by using unscaledDeltaTime (this should not be affected by timeScale).
+                    fadeT += Time.unscaledDeltaTime / fadeDuration;
                     fadeT = Mathf.Clamp01(fadeT);
 
                     // Set the volume.
@@ -109,10 +110,14 @@ namespace util
                     {
                         fading = false;
 
-                        // If the audio should be stopped now that the fadeo is done.
+                        // If the audio should be stopped now that the fade out is done.
                         if (stopOnFadeOut && fadeDirec < 0.0F)
                         {
+                            // Stops the audio.
                             audioSource.Stop();
+
+                            // Returns the volume to it's original setting.
+                            audioSource.volume = fadeStart;
                         }
                     }
                 }
