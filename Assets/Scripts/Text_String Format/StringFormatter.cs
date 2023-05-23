@@ -68,11 +68,11 @@ public class StringFormatter : MonoBehaviour
 
         // Add hours.
         if (includeHours)
-            timeString += hours.ToString("00") + ": ";
+            timeString += hours.ToString("00") + ":";
 
         // Add minutes.
         if (includeMinutes)
-            timeString += minutes.ToString("00") + ": ";
+            timeString += minutes.ToString("00") + ":";
 
 
         // Add seconds.
