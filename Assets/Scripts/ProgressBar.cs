@@ -29,7 +29,7 @@ namespace util
         public bool fixedSpeed = false;
 
         // If 'true', time scaled delta time is used for progress bar speed.
-        [Header("If true, timeScaled delta time is used. If false, unscaled deltaTime is used.")]
+        [Tooltip("If true, timeScaled delta time is used. If false, unscaled deltaTime is used.")]
         public bool useTimeScale = false;
 
         // The starting value that's used for animation.
