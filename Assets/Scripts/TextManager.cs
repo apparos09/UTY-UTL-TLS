@@ -26,11 +26,20 @@ public class TextManager : MonoBehaviour
             CustomMath.RotateZ(v, theta, true).ToString());
 
         // Time Test
-        float timeSeconds = 7268.0F;
-        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (HH:MM:SS): " + StringFormatter.FormatTime(timeSeconds));
+        float timeSeconds = 7268.0F; // 2 Hours, 1 Minute, 8 Seconds
+        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (HH:MM:SS:MS): " + StringFormatter.FormatTime(timeSeconds));
 
         timeSeconds = 300.0F; // 5 Minutes
-        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (HH:MM:SS): " + StringFormatter.FormatTime(timeSeconds, false));
+        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (MM:SS:MS): " + StringFormatter.FormatTime(timeSeconds, false));
+
+        timeSeconds = 362.525F; // 6 Minutes, 2 Seconds, 525 Milliseconds
+        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (MM:SS:MS): " + StringFormatter.FormatTime(timeSeconds, false, true));
+
+        timeSeconds = 200.0F; // 3 Minutes, 20 Seconds
+        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (MM:SS): " + StringFormatter.FormatTime(timeSeconds, false, true, false));
+
+        timeSeconds = 6272.2F; // 1 Hours, 44 Minutes, 32 Seconds, 2 Milliseconds
+        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (HH:MM:SS:MS): " + StringFormatter.FormatTime(timeSeconds));
     }
 
     // Update is called once per frame
