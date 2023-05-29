@@ -84,7 +84,7 @@ namespace util
         public void SetValue(float newValue, bool transition = true)
         {
             // If the minimum value is larger than the maximum value they will be swapped.
-            if(minValue > maxValue)
+            if (minValue > maxValue)
             {
                 float temp = minValue;
                 minValue = maxValue;
@@ -94,7 +94,7 @@ namespace util
             // Applies the new value.
             startValue = value;
             value = Mathf.Clamp(newValue, minValue, maxValue);
-            
+
             bar.minValue = minValue;
             bar.maxValue = maxValue;
 
@@ -127,6 +127,12 @@ namespace util
             return Mathf.InverseLerp(minValue, maxValue, value);
         }
 
+        // Sets the value as a percentage.
+        public void SetValueAsPercentage(float newValue, bool transition = true)
+        {
+            SetValue(newValue * maxValue, transition);
+        }
+
         // Gets the value from the slider UI object.
         public float GetSliderValue()
         {
@@ -149,17 +155,17 @@ namespace util
         void Update()
         {
             // If the start value is not equal to the set value.
-            if(transitioning)
+            if (transitioning)
             {
                 // Increases 't' and clamps it. Variable determines of time scale should be used or not.
                 v_t += (useTimeScale ? Time.deltaTime : Time.unscaledDeltaTime) * speed;
                 v_t = Mathf.Clamp01(v_t);
 
                 // Checks if the bar should be moving at a fixed pace.
-                if(fixedSpeed) // Fixed speed.
+                if (fixedSpeed) // Fixed speed.
                 {
                     // If the start value is less than the destination value then the bar is increasing.
-                    if(value > startValue) // Increase
+                    if (value > startValue) // Increase
                     {
                         bar.value = Mathf.Lerp(minValue, maxValue, v_t);
 
@@ -168,8 +174,8 @@ namespace util
                         {
                             v_t = 1.0F;
                             bar.value = value;
-                        }    
-                            
+                        }
+
                     }
                     else // Decrease
                     {
@@ -181,7 +187,7 @@ namespace util
                             v_t = 1.0F;
                             bar.value = value;
                         }
-                            
+
                     }
                 }
                 else // Not moving at a fixed speed.
@@ -208,7 +214,7 @@ namespace util
                 }
             }
 
-            
+
         }
     }
 }

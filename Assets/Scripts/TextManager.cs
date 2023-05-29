@@ -26,8 +26,11 @@ public class TextManager : MonoBehaviour
             CustomMath.RotateZ(v, theta, true).ToString());
 
         // Time Test
-        float time = 7268.0F;
-        Debug.Log("Time (Seconds): " + time + " | Time (HH:MM:SS): " + StringFormatter.FormatTime(time));
+        float timeSeconds = 7268.0F;
+        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (HH:MM:SS): " + StringFormatter.FormatTime(timeSeconds));
+
+        timeSeconds = 300.0F; // 5 Minutes
+        Debug.Log("Time (Seconds): " + timeSeconds + " | Time (HH:MM:SS): " + StringFormatter.FormatTime(timeSeconds, false));
     }
 
     // Update is called once per frame

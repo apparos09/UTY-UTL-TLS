@@ -58,9 +58,23 @@ public class StringFormatter : MonoBehaviour
         if(includeMinutes)
             minutes = Mathf.Floor((timeSeconds - (hours * hourToSec)) / minToSec);
 
-        // Seconds (round up to remove nanoseconds).
+        // Seconds (round up to remove milliseconds).
         seconds = Mathf.Ceil(timeSeconds - (minutes * minToSec) - (hours * hourToSec));
 
+        // NOTE: this has been done to address seconds rounding up to 60 (i.e., a full minute) by Mathf.Ceil.
+        // If the seconds variable now displays a full minute.
+        if(seconds == 60.0F && includeMinutes)
+        {
+            minutes++;
+            seconds = 0;
+        }
+
+        // If the minutes variable now displays a full minute.
+        if(minutes == 60.0F && includeHours)
+        {
+            hours++;
+            minutes = 0;
+        }
 
 
         // The time string.
