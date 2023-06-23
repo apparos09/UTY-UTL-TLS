@@ -180,17 +180,17 @@ namespace util
             // checks which tag to use.
             if (audio.CompareTag(BGM_TAG)) // BGM
             {
-                audio.audioSource.volume = audio.MaxVolume * bgmVolume;
+                audio.SetVolumeAsPercentageOfMax(bgmVolume);
             }
             else if (audio.CompareTag(SFX_TAG)) // SFX
             {
-                audio.audioSource.volume = audio.MaxVolume * sfxVolume;
+                audio.SetVolumeAsPercentageOfMax(sfxVolume);
             }
             else if (audio.CompareTag(VCE_TAG)) // VCE (Voice)
             {
-                audio.audioSource.volume = audio.MaxVolume * vceVolume;
+                audio.SetVolumeAsPercentageOfMax(vceVolume);
             }
-            else // no recognizable tag.
+            else // No recognizable tag.
             {
                 Debug.LogAssertion("No recognizable audio tag has been set, so the audio can't be adjusted.");
             }
