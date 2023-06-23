@@ -297,6 +297,9 @@ namespace util
         {
             // Adjusts all the audio levels.
             AdjustAllAudioLevels(bgmVolume, sfxVolume, vceVolume);
+
+            // Refreshes the game mute, since this caused problems before.
+            Mute = Mute;
         }
 
         // This behaviour is called when the MonoBehaviour will be destroyed.
