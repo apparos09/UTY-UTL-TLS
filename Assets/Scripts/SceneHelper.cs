@@ -72,7 +72,7 @@ namespace util
             Screen.fullScreen = true;
         }
 
-        // Set Screen Size (1080 Resolution - 16:9)
+        // Set Screen Size (1080 Resolution - 16:9 - Full HD (FHD))
         public static void SetScreenSize1920x1080(FullScreenMode mode = FullScreenMode.MaximizedWindow)
         {
             ChangeScreenSize(1920, 1080, mode, false);
@@ -84,7 +84,7 @@ namespace util
             ChangeScreenSize(1440, 1080, mode, false);
         }
 
-        // Set Screen Size (720 Resolution - 16:9)
+        // Set Screen Size (720 Resolution - 16:9 - HD (High Definition))
         public static void SetScreenSize1280x720(FullScreenMode mode = FullScreenMode.Windowed)
         {
             ChangeScreenSize(1280, 720, mode, false);
@@ -94,6 +94,18 @@ namespace util
         public static void SetScreenSize960x720(FullScreenMode mode = FullScreenMode.Windowed)
         {
             ChangeScreenSize(960, 720, mode, false);
+        }
+
+        // Set Screen Size (16:9 - WSVGA (Wide Super Video Graphics Array))
+        public static void SetScreenSize1024x576(FullScreenMode mode = FullScreenMode.Windowed)
+        {
+            ChangeScreenSize(1024, 576, mode, false);
+        }
+
+        // Set Screen Size (4:3 - XGA (Extended Graphics Array))
+        public static void SetScreenSize1024x768(FullScreenMode mode = FullScreenMode.Windowed)
+        {
+            ChangeScreenSize(1024, 768, mode, false);
         }
 
 
