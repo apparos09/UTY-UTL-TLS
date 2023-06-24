@@ -34,23 +34,7 @@ namespace util
             RenderSettings.skybox = newSkybox;
         }
 
-        // Returns 'true' if the game is full screen.
-        public static bool IsFullScreen()
-        {
-            return Screen.fullScreen;
-        }
 
-        // Sets 'full screen' mode
-        public static void SetFullScreen(bool fullScreen)
-        {
-            Screen.fullScreen = fullScreen;
-        }
-
-        // Toggles the full screen.
-        public static void FullScreenToggle()
-        {
-            Screen.fullScreen = !Screen.fullScreen;
-        }
 
         // Called to change the screen size.
         public static void ChangeScreenSize(int width, int height, FullScreenMode mode)
@@ -65,11 +49,25 @@ namespace util
             Screen.fullScreen = fullScreen;
         }
 
-        // Set Screen Size (Full Screen)
-        public static void SetFullScreen()
+
+
+        // Returns 'true' if the game is full screen.
+        public static bool IsFullScreen()
         {
-            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-            Screen.fullScreen = true;
+            return Screen.fullScreen;
+        }
+
+        // Sets 'full screen' mode
+        public static void SetFullScreen(bool fullScreen, FullScreenMode mode = FullScreenMode.FullScreenWindow)
+        {
+            Screen.fullScreenMode = mode;
+            Screen.fullScreen = fullScreen;
+        }
+
+        // Toggles the full screen.
+        public static void FullScreenToggle()
+        {
+            Screen.fullScreen = !Screen.fullScreen;
         }
 
         // Set Screen Size (1080 Resolution - 16:9 - Full HD (FHD))
