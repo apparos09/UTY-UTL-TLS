@@ -103,7 +103,7 @@ namespace util
         }
 
         // Sets the page number text.
-        public virtual void SetPageNumberText()
+        public virtual void UpdatePageNumberText()
         {
             // Updates the page number.
             pageNumberText.text = (creditIndex + 1).ToString() + "/" + audioCredits.GetCreditCount().ToString();
@@ -129,7 +129,7 @@ namespace util
             copyrightText.text = credit.copyright;
 
             // Updates the page number.
-            SetPageNumberText();
+            UpdatePageNumberText();
         }
     }
 }
