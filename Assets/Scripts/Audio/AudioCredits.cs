@@ -12,10 +12,10 @@ namespace util
         public struct AudioCredit
         {
             // The name of the song.
-            public string name;
+            public string title;
 
             // The artist(s) that made the song.
-            public string artist;
+            public string artists;
 
             // The collection the song is part of (album, EP, group, etc.).
             public string collection;
