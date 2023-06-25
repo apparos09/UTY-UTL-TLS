@@ -52,6 +52,18 @@ namespace util
         // Start is called before the first frame update
         void Start()
         {
+            // The audio credits component is not set.
+            if (audioCredits == null)
+            {
+                // If an attempt to grab the component from the gameObject fails, automatically add it.
+                if(!gameObject.TryGetComponent(out audioCredits))
+                {
+                    // Adds the audio credits component.
+                    audioCredits = gameObject.AddComponent<AudioCredits>();
+                }
+                    
+            }
+
             // Loads credit and sets page number.
             UpdateCredit();
         }
@@ -106,7 +118,8 @@ namespace util
         public virtual void UpdatePageNumberText()
         {
             // Updates the page number.
-            pageNumberText.text = (creditIndex + 1).ToString() + "/" + audioCredits.GetCreditCount().ToString();
+            if(pageNumberText != null)
+                pageNumberText.text = (creditIndex + 1).ToString() + "/" + audioCredits.GetCreditCount().ToString();
         }
 
         // Updates the credit.
@@ -119,14 +132,36 @@ namespace util
             // Gets the credit.
             AudioCredits.AudioCredit credit = audioCredits.audioCredits[creditIndex];
 
+            // This checks for each text component since the user may not want to display all info.
+
             // Updates all of the information.
-            songTitleText.text = credit.title;
-            artistsText.text = credit.artists;
-            collectionText.text = credit.collection;
-            sourceText.text = credit.source;
-            link1Text.text = credit.link1;
-            link2Text.text = credit.link2;
-            copyrightText.text = credit.copyright;
+            // Song Title - the song's name.
+            if(songTitleText != null)
+                songTitleText.text = credit.title;
+
+            // Artists - the artist(s) responsible for the audio.
+            if(artistsText != null)
+                artistsText.text = credit.artists;
+
+            // Collection - the album or package the audio came from.
+            if(collectionText != null)
+                collectionText.text = credit.collection;
+
+            // Source  - preferably the publisher or host of the audio (e.g., the free audio website name).
+            if (sourceText != null)
+                sourceText.text = credit.source;
+
+            // Primary Link - preferably the direct source link of where the audio came from (e.g., free audio website).
+            if (link1Text != null)
+                link1Text.text = credit.link1;
+
+            // Secondary Link - preferably the original source link of the audio (e.g., the artist's website).
+            if (link2Text != null)
+                link2Text.text = credit.link2;
+            
+            // Copyright - copyright information. Also include information on composition and arrangement if needed.
+            if(copyrightText != null)
+                copyrightText.text = credit.copyright;
 
             // Updates the page number.
             UpdatePageNumberText();
