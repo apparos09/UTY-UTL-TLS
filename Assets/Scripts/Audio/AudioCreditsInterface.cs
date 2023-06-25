@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace util
 {
+    // The audio credits interface.
     public class AudioCreditsInterface : MonoBehaviour
     {
         // The audio references object.
@@ -16,13 +17,6 @@ namespace util
         // The user interface for the credits menu.
         [Header("UI")]
 
-        // The title text.
-        public TMP_Text titleText;
-
-        // The text for the back button.
-        public TMP_Text backButtonText;
-
-        [Header("UI/Credit")]
         // The name of the song.
         public TMP_Text songTitleText;
 
