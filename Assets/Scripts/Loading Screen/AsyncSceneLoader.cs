@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Transactions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +8,9 @@ namespace util
     // Loads a scene asynchronously, which allows there to be a loading screen.
     public class AsyncSceneLoader : MonoBehaviour
     {
+        // The loading coroutine.
+        private Coroutine coroutine = null;
+
         // the scene that's being loaded.
         private string loadingScene = "";
 
@@ -41,8 +43,14 @@ namespace util
         {
             // TODO: check to see if a scene exists.
 
+            // If a coroutine is running, stop it.
+            if (coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
+
             // Spreads an operation across multiple frames.
-            StartCoroutine(LoadSceneAsync(sceneName));
+            coroutine = StartCoroutine(LoadSceneAsync(sceneName));
         }
 
         // Loads a scene asynchonously.
@@ -69,9 +77,12 @@ namespace util
                 yield return null;
             }
 
-            // the scene has finished loading, so change these values.
+            // The scene has finished loading, so change these values.
             isLoading = false;
             loadingScene = "";
+
+            // Set the coroutine to null to show that it's finished.
+            coroutine = null;
         }
 
 
