@@ -34,7 +34,7 @@ public class AudioSceneManager : MonoBehaviour
     public AudioFader audioFader;
 
     // The audio looper.
-    public AudioSegmentLooper looper;
+    public AudioSourceLooper looper;
 
     // Start is called before the first frame update
     void Start()
