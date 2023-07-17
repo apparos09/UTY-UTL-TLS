@@ -14,19 +14,29 @@ namespace util
         // THe audio for the user inputs.
         public AudioSource audioSource;
 
+        // The audio clip for the toggle.
         public AudioClip audioClip;
 
         // Awake is called when the script instance is being loaded.
         private void Awake()
         {
-            // Moved here in case the button has not been set enabled before the game was closed.
+            // Moved here in case the toggle has not been set enabled before the game was closed.
 
             // Button not set.
             if (toggle == null)
             {
-                // Tries to grab the button from the parent object.
-                gameObject.TryGetComponent<Toggle>(out toggle);
+                // Tries to get the component.
+                toggle = GetComponent<Toggle>();
             }
+
+        }
+
+        // Add OnValueChanged Delegate
+        public void AddOnValueChanged()
+        {
+            // If the toggle isn't set, return.
+            if (toggle == null)
+                return;
 
             // Listener for the tutorial toggle.
             toggle.onValueChanged.AddListener(delegate
@@ -35,24 +45,32 @@ namespace util
             });
         }
 
-        // Start is called before the first frame update
-        void Start()
+        // Remove OnValueChanged Delegate
+        public void RemoveOnValueChanged()
         {
-            // ...
+            // If the toggle isn't set, return.
+            if (toggle == null)
+                return;
+
+            // Remove the listener for onValueChanged if the toggle has been set.
+            if (toggle != null)
+            {
+                toggle.onValueChanged.RemoveListener(OnValueChanged);
+            }
         }
 
 
         // Called when the toggle is clicked.
         private void OnValueChanged(bool isOn)
         {
-            audioSource.PlayOneShot(audioClip);
+            if (audioSource != null && audioClip != null)
+                audioSource.PlayOneShot(audioClip);
         }
 
         // Script is destroyed.
         private void OnDestroy()
         {
-            // Remove the listener for onValueChanged.
-            toggle.onValueChanged.RemoveListener(OnValueChanged);
+            RemoveOnValueChanged();
         }
     }
 }

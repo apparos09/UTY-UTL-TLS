@@ -25,35 +25,51 @@ namespace util
             // Button not set.
             if (button == null)
             {
-                // Tries to grab the button from the parent object.
-                gameObject.TryGetComponent<Button>(out button);
+                // Tries to get the button.
+                button = gameObject.GetComponent<Button>();
             }
 
-            // Listener for the tutorial toggle.
-            button.onClick.AddListener(delegate
-            {
-                OnClick();
-            });
+            // Adds to the OnClick function.
+            AddOnClick();
         }
 
-        // Start is called before the first frame update
-        void Start()
+        // Add OnClick Delegate
+        public void AddOnClick()
         {
-            // ...
+            // If the button has been set.
+            if (button != null)
+            {
+                // Listener for the tutorial toggle.
+                button.onClick.AddListener(delegate
+                {
+                    OnClick();
+                });
+            }
         }
 
+        // Remove OnClick Delegate
+        public void RemoveOnClick()
+        {
+            // Remove the listener for onClick if the button has been set.
+            if (button != null)
+            {
+                button.onClick.RemoveListener(OnClick);
+            }
+        }
 
         // Called when the button is clicked.
         private void OnClick()
         {
-            audioSource.PlayOneShot(audioClip);
+            // If both the audio source and the audio clip are set, play the audio.
+            if (audioSource != null && audioClip != null)
+                audioSource.PlayOneShot(audioClip);
         }
 
         // Script is destroyed.
         private void OnDestroy()
         {
             // Remove the listener for onClick.
-            button.onClick.RemoveListener(OnClick);
+            RemoveOnClick();
         }
     }
 }
