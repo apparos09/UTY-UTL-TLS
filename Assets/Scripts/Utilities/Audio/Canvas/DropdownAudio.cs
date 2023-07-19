@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace util
 {
-    // Plays audio when clicking a toggle.
-    public class ToggleAudio : MonoBehaviour
+    // Adds audio to a dropdown.
+    public class DropdownAudio : MonoBehaviour
     {
-        // The toggle this script is for.
-        public Toggle toggle;
+        // The dropdown this script is for.
+        public Dropdown dropdown;
 
         // THe audio for the user inputs.
         public AudioSource audioSource;
@@ -20,13 +20,13 @@ namespace util
         // Awake is called when the script instance is being loaded.
         private void Awake()
         {
-            // Moved here in case the toggle has not been set enabled before the game was closed.
+            // Moved here in case the dropdown has not been set enabled before the game was closed.
 
             // Button not set.
-            if (toggle == null)
+            if (dropdown == null)
             {
                 // Tries to get the component.
-                toggle = GetComponent<Toggle>();
+                dropdown = GetComponent<Dropdown>();
             }
 
             // Add to the onValueChanged function.
@@ -36,34 +36,34 @@ namespace util
         // Add OnValueChanged Delegate
         public void AddOnValueChanged()
         {
-            // If the toggle isn't set, return.
-            if (toggle == null)
+            // If the dropdown isn't set, return.
+            if (dropdown == null)
                 return;
 
-            // Listener for the toggle.
-            toggle.onValueChanged.AddListener(delegate
+            // Listener for the tutorial toggle.
+            dropdown.onValueChanged.AddListener(delegate
             {
-                OnValueChanged(toggle.isOn);
+                OnValueChanged(dropdown.value);
             });
         }
 
         // Remove OnValueChanged Delegate
         public void RemoveOnValueChanged()
         {
-            // If the toggle isn't set, return.
-            if (toggle == null)
+            // If the dropdown isn't set, return.
+            if (dropdown == null)
                 return;
 
-            // Remove the listener for onValueChanged if the toggle has been set.
-            if (toggle != null)
+            // Remove the listener for onValueChanged if the dropdown has been set.
+            if (dropdown != null)
             {
-                toggle.onValueChanged.RemoveListener(OnValueChanged);
+                dropdown.onValueChanged.RemoveListener(OnValueChanged);
             }
         }
 
 
-        // Called when the toggle is clicked.
-        private void OnValueChanged(bool isOn)
+        // Called when the dropdown has been changed.
+        private void OnValueChanged(int value)
         {
             if (audioSource != null && audioClip != null)
                 audioSource.PlayOneShot(audioClip);
