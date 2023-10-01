@@ -596,6 +596,9 @@ MonoBehaviour:
   applyColor: 1
   bold: 0
   italicize: 1
+  strikethrough: 0
+  subscript: 0
+  superscript: 0
   text: {fileID: 0}
   TMP_text: {fileID: 0}
   substrings:
@@ -789,6 +792,9 @@ MonoBehaviour:
   applyColor: 1
   bold: 1
   italicize: 0
+  strikethrough: 0
+  subscript: 0
+  superscript: 0
   text: {fileID: 0}
   TMP_text: {fileID: 0}
   substrings:

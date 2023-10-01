@@ -38,6 +38,15 @@ public class StringFormatter : MonoBehaviour
     // Italicize the string.
     public bool italicize;
 
+    // Strike through the text.
+    public bool strikethrough;
+
+    // Subscript the string, making the text smaller and putting it towards the bottom of the line.
+    public bool subscript;
+
+    // Superscript the string, making the text larger and putting it towards the top of the screen.
+    public bool superscript;
+
 
     // Formats the time string.
     public static string FormatTime(float timeSeconds, bool includeHours = true, bool includeMinutes = true, bool includeMilliseconds = true)
@@ -253,6 +262,27 @@ public class StringFormatter : MonoBehaviour
         {
             starts.Push("<i>");
             ends.Push("</i>");
+        }
+
+        // Strikethrough
+        if (strikethrough)
+        {
+            starts.Push("<s>");
+            ends.Push("</s>");
+        }
+
+        // Subscript
+        if (subscript)
+        {
+            starts.Push("<sub>");
+            ends.Push("</sub>");
+        }
+
+        // Superscript
+        if(superscript)
+        {
+            starts.Push("<sup>");
+            ends.Push("</sup>");
         }
 
         // The formatted substring.
