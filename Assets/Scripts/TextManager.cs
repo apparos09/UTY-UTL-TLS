@@ -40,6 +40,23 @@ public class TextManager : MonoBehaviour
 
         timeSeconds = 6272.2F; // 1 Hours, 44 Minutes, 32 Seconds, 2 Milliseconds
         Debug.Log("Time (Seconds): " + timeSeconds + " | Time (HH:MM:SS:MS): " + StringFormatter.FormatTime(timeSeconds));
+
+
+
+        //// Singleton Test
+        //// Before creation.
+        //bool singletonIst = false;
+        //singletonIst = Singleton.Instantiated;
+        //Debug.Log("Singleton Instantiated (Not Created): " + singletonIst.ToString());
+
+        //// Create instance and check again.
+        //Singleton singleton = Singleton.Instance;
+        //singletonIst = Singleton.Instantiated;
+        //Debug.Log("Singleton Instantiated (Created): " + singletonIst.ToString());
+
+        //DestroyImmediate(singleton.gameObject); // Makes sure it's destroyed right away so that the check can work.
+        //singletonIst = Singleton.Instantiated;
+        //Debug.Log("Singleton Instantiated (Destroyed): " + singletonIst.ToString());
     }
 
     // Update is called once per frame
