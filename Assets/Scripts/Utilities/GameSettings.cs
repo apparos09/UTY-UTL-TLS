@@ -16,6 +16,9 @@ namespace util
         // If 'true', tutorial elements are used.
         public bool useTutorial = true;
 
+        // If 'true', TextToSpeech is used with text boxes.
+        public bool UseTextToSpeech = false;
+
         // Constructor
         private GameSettings()
         {
