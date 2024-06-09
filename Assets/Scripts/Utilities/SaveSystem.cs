@@ -4,9 +4,8 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine;
-using util;
 
-namespace utils
+namespace util
 {
     // The game data class, which is used to store game data for saving/loading.
     [System.Serializable]
