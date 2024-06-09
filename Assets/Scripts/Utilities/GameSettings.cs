@@ -10,7 +10,7 @@ namespace util
         // The game settings instance.
         private static GameSettings instance;
 
-        // Gets set to 'true' when the singleton is initialized.
+        // Gets set to 'true' when the singleton is instanced.
         private bool initialized = false;
 
         // If 'true', tutorial elements are used.
@@ -81,7 +81,7 @@ namespace util
             }
         }
 
-        // Returns 'true' if the object has been initialized.
+        // Returns 'true' if the object has been instanced.
         public bool Initialized
         {
             get

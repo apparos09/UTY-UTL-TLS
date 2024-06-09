@@ -69,7 +69,7 @@ namespace util
             }
         }
 
-        // Returns 'true' if the object has been initialized.
+        // Returns 'true' if the object has been instanced.
         public static bool Instantiated
         {
             get

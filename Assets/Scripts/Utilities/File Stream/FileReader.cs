@@ -13,14 +13,14 @@ using System.IO;
 
 namespace util
 {
-    // file reader for excel text file exports.
+    // File reader for excel text file exports.
     // NOTE: if the file is in the Assets folder (or a subfolder of the Assets folder), you can just do it from there.
     public abstract class FileReader : MonoBehaviour
     {
-        // file
-        public string file = "";
+        // File Name
+        public string fileName = "";
 
-        // file path
+        // File Path
         public string filePath = "";
 
         // Returns the file with its path.
@@ -32,11 +32,11 @@ namespace util
             string result = "";
 
             // Make sure they're set properly.
-            SetFile(file);
+            SetFile(fileName);
             SetFilePath(filePath);
 
             // Combines the two.
-            result = filePath + file;
+            result = filePath + fileName;
 
             return result;
         }
@@ -44,7 +44,7 @@ namespace util
         // Sets the file.
         public void SetFile(string newFile)
         {
-            file = newFile;
+            fileName = newFile;
         }
 
         // sets the file and the file path.
@@ -83,13 +83,21 @@ namespace util
             SetFile(newFile);
         }
 
+        // Returns 'true' if the provided file exists.
+        public static bool FileExists(string file)
+        {
+            bool result = File.Exists(file);
+
+            return result;
+        }
+
         // Checks if the file exists.
         public bool FileExists()
         {
-            // sets the file and file path to make sure they're formatted properly.
-            SetFile(file, filePath);
+            // Sets the file and file path to make sure they're formatted properly.
+            SetFile(fileName, filePath);
 
-            // returns true if the file exists.
+            // Returns true if the file exists.
             bool result = File.Exists(GetFileWithPath());
 
             return result;
@@ -111,6 +119,14 @@ namespace util
             }
         }
 
+        // Returns 'true' if the provided file path exists.
+        public static bool FilePathExists(string filePath)
+        {
+            bool result = Directory.Exists(filePath);
+
+            return result;
+        }
+
         // Checks if a file path exists.
         public bool FilePathExists()
         {
@@ -119,24 +135,38 @@ namespace util
             return result;
         }
 
-        // Makes the file directory. Returns false if it fails, or if the directory already exists.
-        public bool MakeFileDirectory()
+        // Makes the provided file directory.
+        public static bool CreateFilePath(string filePath)
         {
             // Checks if the file path already exists.
-            if (FilePathExists())
+            if (FilePathExists(filePath))
             {
                 Debug.LogWarning("File directory already exists.");
                 return false;
             }
             else
             {
-                // Genrate the directory.
+                // Genrate the filePath.
                 DirectoryInfo direcInfo = Directory.CreateDirectory(filePath);
 
                 // Checks if it was successful.
                 bool result = direcInfo.Exists;
                 return result;
             }
+        }
+
+        // Makes the file filePath. Returns false if it fails, or if the filePath already exists.
+        public bool CreateFilePath()
+        {
+            // If there is no file path, return false.
+            if (filePath == string.Empty)
+            {
+                return false;
+            }
+            else // There's a file path set, so try to create it.
+            {
+                return CreateFilePath(filePath);
+            }             
         }
 
 

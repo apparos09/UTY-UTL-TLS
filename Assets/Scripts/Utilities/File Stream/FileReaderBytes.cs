@@ -24,7 +24,7 @@ namespace util
             bytes = null;
 
             // Gets all the bytes from the file (@ specifies where the path is relative to - may not be needed).
-            string f = filePath + file;
+            string f = filePath + fileName;
             bytes = File.ReadAllBytes(@f);
         }
     }

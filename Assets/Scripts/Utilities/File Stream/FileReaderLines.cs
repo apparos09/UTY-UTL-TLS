@@ -24,7 +24,7 @@ namespace util
             lines = null;
 
             // Gets all the lines from the file (@ specifies where the path is relative to - may not be needed).
-            string f = filePath + file;
+            string f = filePath + fileName;
             lines = File.ReadAllLines(@f);
         }
     }
