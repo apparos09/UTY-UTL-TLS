@@ -22,7 +22,7 @@ namespace util
         private static SaveSystem instance;
 
         // Becomes 'true' when the save system is instanced.
-        private bool instanced = false;
+        private static bool instanced = false;
 
         // If set to 'true', the game allows the player to save and load data.
         public bool allowSaveLoad = true;
@@ -110,10 +110,40 @@ namespace util
             // ...
         }
 
-        // Checks if the save system has been instanced.
-        public bool Instanced
+        // Gets the instance.
+        public static SaveSystem Instance
         {
-            get { return instanced; }
+            get
+            {
+                // Checks if the instance exists.
+                if (instance == null)
+                {
+                    // Tries to find the instance.
+                    instance = FindObjectOfType<SaveSystem>(true);
+
+
+                    // The instance doesn't already exist.
+                    if (instance == null)
+                    {
+                        // Generate the instance.
+                        GameObject go = new GameObject("Save System (singleton)");
+                        instance = go.AddComponent<SaveSystem>();
+                    }
+
+                }
+
+                // Return the instance.
+                return instance;
+            }
+        }
+
+        // Returns 'true' if the object has been instanced.
+        public static bool Instantiated
+        {
+            get
+            {
+                return instanced;
+            }
         }
 
         // Set save and load operations.
@@ -173,7 +203,7 @@ namespace util
         }
 
         // Checks if the game manager has been set.
-        private bool IsGameManagerSet()
+        private bool IsGameplayManagerSet()
         {
             // TODO: check that the game manager is set so that the game data can be pulled from it.
 
@@ -246,9 +276,9 @@ namespace util
             // TODO: replace this with a check for whatever class or object is expected to have the save data.
             // The game manager does not exist if false.
             // This is done because the game manager holds the save data.
-            // if (!IsGameManagerSet())
+            // if (!IsGameplayManagerSet())
             // {
-            //     Debug.LogWarning("The Game Manager couldn't be found.");
+            //     Debug.LogWarning("The GameplayManager object couldn't be found. Saving is unavailable.");
             //     return false;
             // }
 
