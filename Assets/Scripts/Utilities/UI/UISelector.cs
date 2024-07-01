@@ -10,6 +10,10 @@ namespace util
         // The selected button.
         public UISelectorElement selectedElement;
 
+        // If 'true', the default element is highlighted.
+        [Tooltip("If true, the default selected element is highlighted.")]
+        public bool highlightOnStart = true;
+
         // If 'true', inputs are allowed through the selector.
         public bool allowInput = true;
 

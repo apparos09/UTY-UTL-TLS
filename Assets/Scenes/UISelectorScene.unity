@@ -1219,6 +1219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedElement: {fileID: 1960639371}
+  highlightOnStart: 1
   allowInput: 1
   includeInactive: 1
 --- !u!1 &1880233983
@@ -1416,8 +1417,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selector: {fileID: 1840238710}
-  selectable: {fileID: 0}
-  uiImage: {fileID: 0}
+  selectable: {fileID: 1960639372}
+  uiImage: {fileID: 1960639373}
   autoSetColors: 1
   normalColor: {r: 0, g: 0, b: 0, a: 0}
   highlightedColor: {r: 0, g: 0, b: 0, a: 0}

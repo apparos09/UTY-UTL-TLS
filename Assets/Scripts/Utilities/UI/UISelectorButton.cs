@@ -21,6 +21,13 @@ namespace util
             // Tries to auto grab the component.
             if(button == null)
                 button = GetComponent<Button>();
+
+            // If the UI image has not been set, try to set it.
+            if (uiImage == null)
+            {
+                // Tries to grab the image component.
+                uiImage = GetComponent<Image>();
+            }
         }
 
     }

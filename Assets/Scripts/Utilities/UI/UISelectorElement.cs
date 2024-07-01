@@ -40,30 +40,27 @@ namespace util
         public UISelectorElement bottomMiddleElement;
         public UISelectorElement bottomRightElement;
 
-        // Start is called before the first frame update
-        protected virtual void Start()
+        // Awake is called when the script instance is being loaded.
+        protected virtual void Awake()
         {
             // Tries to get the component.
-            if(selectable == null)
+            if (selectable == null)
                 selectable = GetComponent<Selectable>();
 
-            // If the UI image has not been set.
-            if(uiImage == null)
-            {
-                // Tries to grab the component.
-                if(!TryGetComponent<Image>(out uiImage))
-                {
-                    // Sets to selectable if failed.
-                    uiImage = selectable.image;
-                }
-            }
-
             // If colours should be automatically set.
-            if (autoSetColors)
+            // This was moved here so that these colours are grabbed before...
+            // The program tries to highlight the element that's selected by default.
+            if (autoSetColors && selectable != null)
             {
                 normalColor = selectable.colors.normalColor;
                 highlightedColor = selectable.colors.highlightedColor;
             }
+        }
+
+        // Start is called before the first frame update
+        protected virtual void Start()
+        {
+            // ...
         }
 
         // Selects a button based on the provided directions. If null is returned, no button exists at that location.
@@ -97,13 +94,15 @@ namespace util
         // Called when an element has been highlighted, but not selected.
         public virtual void HighlightElement()
         {
-            uiImage.color = highlightedColor;
+            if(uiImage != null)
+                uiImage.color = highlightedColor;
         }
 
         // Called when an element has been unhilighted.
         public virtual void UnhighlightElement()
         {
-            uiImage.color = normalColor;
+            if (uiImage != null)
+                uiImage.color = normalColor;
         }
 
         // Triggers the UI element.
