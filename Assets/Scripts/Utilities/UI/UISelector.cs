@@ -10,6 +10,9 @@ namespace util
         // The selected button.
         public UISelectorElement selectedElement;
 
+        // The key used to select the highlighted element.
+        public KeyCode selectKey = KeyCode.Space;
+
         // If 'true', the default element is highlighted.
         [Tooltip("If true, the default selected element is highlighted.")]
         public bool highlightOnStart = true;
@@ -90,7 +93,7 @@ namespace util
                 }
 
                 // If the player has selected the space bar.
-                if(Input.GetKeyDown(KeyCode.Space))
+                if(Input.GetKeyDown(selectKey))
                 {
                     // If the selected element has been set.
                     if(selectedElement != null)
