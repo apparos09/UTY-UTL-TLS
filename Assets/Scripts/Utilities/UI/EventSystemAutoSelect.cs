@@ -38,6 +38,9 @@ namespace util
         // This function is called when the object becomes enabled and active.
         private void OnEnable()
         {
+            // Refreshes the first selected object.
+            eventSystem.firstSelectedGameObject = firstSelected;
+
             // Checks if the last selected object should be used...
             // Or the first selected object. Only works if last selected is set.
             if (setToLastOnEnable && lastSelected != null)
