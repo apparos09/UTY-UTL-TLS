@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace util
 {
+    // NOTE: this is a custom way to use a UI menu with the keyboard.
+    // Unity has a built-in method for doing this, and that should be used instead.
+
     // A script used for selecting elements in the UI.
     public class UISelector : MonoBehaviour
     {
@@ -30,7 +33,7 @@ namespace util
             // Highlight this element by default.
             if(selectedElement != null)
             {
-                selectedElement.HighlightElement();
+                selectedElement.SelectElement();
             }
         }
 
@@ -86,7 +89,7 @@ namespace util
                         {
                             selectedElement.UnhighlightElement();
                             selectedElement = newElement;
-                            selectedElement.HighlightElement();
+                            selectedElement.SelectElement();
                         }
                             
                     }

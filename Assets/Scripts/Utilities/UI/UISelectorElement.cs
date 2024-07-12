@@ -22,9 +22,9 @@ namespace util
         // If 'true', the colours for the button are automatically set.
         public bool autoSetColors = true;
 
-        // The normal and highlighted colours.
+        // The normal and selected colours.
         public Color normalColor;
-        public Color highlightedColor;
+        public Color selectedColor;
 
         [Header("Top")]
         public UISelectorElement topLeftElement;
@@ -49,11 +49,11 @@ namespace util
 
             // If colours should be automatically set.
             // This was moved here so that these colours are grabbed before...
-            // The program tries to highlight the element that's selected by default.
+            // The program tries to select the element that's selected by default.
             if (autoSetColors && selectable != null)
             {
                 normalColor = selectable.colors.normalColor;
-                highlightedColor = selectable.colors.highlightedColor;
+                selectedColor = selectable.colors.selectedColor;
             }
         }
 
@@ -91,14 +91,14 @@ namespace util
             return element;
         }
 
-        // Called when an element has been highlighted, but not selected.
-        public virtual void HighlightElement()
+        // Called when an element has been selected, but not triggered.
+        public virtual void SelectElement()
         {
             if(uiImage != null)
-                uiImage.color = highlightedColor;
+                uiImage.color = selectedColor;
         }
 
-        // Called when an element has been unhilighted.
+        // Called when an element has been unselected.
         public virtual void UnhighlightElement()
         {
             if (uiImage != null)
