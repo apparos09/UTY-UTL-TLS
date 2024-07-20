@@ -62,8 +62,14 @@ namespace util
             UpdateCredit();
         }
 
-        // Sets the index of the page.
-        public void SetPageIndex(int newIndex)
+        // Returns the credit index.
+        public int GetCreditIndex()
+        {
+            return creditIndex;
+        }
+
+        // Sets the index of the credit.
+        public void SetCreditIndex(int newIndex)
         {
             // The reference count.
             int refCount = audioCredits.GetCreditCount();
@@ -82,8 +88,18 @@ namespace util
             UpdateCredit();
         }
 
-        // Goes to the previous page.
-        public void PreviousPage()
+        // Gets the current credit.
+        public AudioCredits.AudioCredit GetCurrentCredit()
+        {
+            // Gets the current credit.
+            AudioCredits.AudioCredit credit = audioCredits.audioCredits[creditIndex];
+
+            // Returns the credit.
+            return credit;
+        }
+
+        // Goes to the previous credit.
+        public void PreviousCredit()
         {
             // Generates the new index.
             int newIndex = creditIndex - 1;
@@ -92,11 +108,11 @@ namespace util
             if (!audioCredits.IndexInBounds(newIndex))
                 newIndex = audioCredits.GetCreditCount() - 1;
 
-            SetPageIndex(newIndex);
+            SetCreditIndex(newIndex);
         }
 
-        // Goes to the next page.
-        public void NextPage()
+        // Goes to the next credit.
+        public void NextCredit()
         {
             // Generates the new index.
             int newIndex = creditIndex + 1;
@@ -105,11 +121,11 @@ namespace util
             if (!audioCredits.IndexInBounds(newIndex))
                 newIndex = 0;
 
-            SetPageIndex(newIndex);
+            SetCreditIndex(newIndex);
         }
 
-        // Sets the page number text.
-        public virtual void UpdatePageNumberText()
+        // Sets the credit number text.
+        public virtual void UpdateCreditNumberText()
         {
             // Updates the page number.
             if(pageNumberText != null)
@@ -158,7 +174,7 @@ namespace util
                 copyrightText.text = credit.copyright;
 
             // Updates the page number.
-            UpdatePageNumberText();
+            UpdateCreditNumberText();
         }
     }
 }
