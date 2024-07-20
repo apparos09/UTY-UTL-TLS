@@ -63,7 +63,7 @@ namespace util
         }
 
         // Returns the credit index.
-        public int GetCreditIndex()
+        public int GetCurrentCreditIndex()
         {
             return creditIndex;
         }
