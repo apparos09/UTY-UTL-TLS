@@ -17,8 +17,8 @@ namespace util
         // The user interface for the credits menu.
         [Header("UI")]
 
-        // The name of the song.
-        public TMP_Text songTitleText;
+        // The name of the audio.
+        public TMP_Text audioTitleText;
 
         // The name of the artist.
         public TMP_Text artistText;
@@ -130,8 +130,8 @@ namespace util
 
             // Updates all of the information.
             // Song Title - the song's name.
-            if(songTitleText != null)
-                songTitleText.text = credit.title;
+            if(audioTitleText != null)
+                audioTitleText.text = credit.title;
 
             // Artists - the artist(s) responsible for the audio.
             if(artistText != null)

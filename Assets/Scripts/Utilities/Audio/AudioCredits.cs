@@ -11,7 +11,7 @@ namespace util
         // An audio credit struct.
         public struct AudioCredit
         {
-            // The name of the song.
+            // The title of the audio.
             public string title;
 
             // The artist that made the song.
