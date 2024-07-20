@@ -38,8 +38,8 @@ namespace util
         // The text for the copyright information.
         public TMP_Text copyrightText;
 
-        // The page number text, which is a fraction (000/000)
-        public TMP_Text pageNumberText;
+        // The credit number text, which is a fraction (000/000)
+        public TMP_Text creditNumberText;
 
 
 
@@ -128,8 +128,8 @@ namespace util
         public virtual void UpdateCreditNumberText()
         {
             // Updates the page number.
-            if(pageNumberText != null)
-                pageNumberText.text = (creditIndex + 1).ToString() + "/" + audioCredits.GetCreditCount().ToString();
+            if(creditNumberText != null)
+                creditNumberText.text = (creditIndex + 1).ToString() + "/" + audioCredits.GetCreditCount().ToString();
         }
 
         // Updates the credit.
