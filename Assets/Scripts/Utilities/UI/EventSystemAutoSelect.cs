@@ -31,6 +31,10 @@ namespace util
         // Start is called before the first frame update
         void Start()
         {
+            // If the event system is not set, try to find it.
+            if (eventSystem == null)
+                eventSystem = FindObjectOfType<EventSystem>();
+
             // Sets this to the default selected element.
             eventSystem.firstSelectedGameObject = firstSelected;
         }
