@@ -37,15 +37,15 @@ namespace util
 
 
         // Called to change the screen size.
-        public static void ChangeScreenSize(int width, int height, FullScreenMode mode)
+        public static void SetScreenSize(int width, int height, FullScreenMode mode)
         {
             Screen.SetResolution(width, height, mode);
         }
 
         // Called to change the screen size.
-        public static void ChangeScreenSize(int width, int height, FullScreenMode mode, bool fullScreen)
+        public static void SetScreenSize(int width, int height, FullScreenMode mode, bool fullScreen)
         {
-            ChangeScreenSize(width, height, mode);
+            SetScreenSize(width, height, mode);
             Screen.fullScreen = fullScreen;
         }
 
@@ -73,37 +73,37 @@ namespace util
         // Set Screen Size (1080 Resolution - 16:9 - Full HD (FHD))
         public static void SetScreenSize1920x1080(FullScreenMode mode = FullScreenMode.MaximizedWindow)
         {
-            ChangeScreenSize(1920, 1080, mode, false);
+            SetScreenSize(1920, 1080, mode, false);
         }
 
         // Set Screen Size (1080 Resolution - 4:3)
         public static void SetScreenSize1440x1080(FullScreenMode mode = FullScreenMode.Windowed)
         {
-            ChangeScreenSize(1440, 1080, mode, false);
+            SetScreenSize(1440, 1080, mode, false);
         }
 
         // Set Screen Size (720 Resolution - 16:9 - HD (High Definition))
         public static void SetScreenSize1280x720(FullScreenMode mode = FullScreenMode.Windowed)
         {
-            ChangeScreenSize(1280, 720, mode, false);
+            SetScreenSize(1280, 720, mode, false);
         }
 
         // Set Screen Size (720 Resolution - 4:3)
         public static void SetScreenSize960x720(FullScreenMode mode = FullScreenMode.Windowed)
         {
-            ChangeScreenSize(960, 720, mode, false);
+            SetScreenSize(960, 720, mode, false);
         }
 
         // Set Screen Size (16:9 - WSVGA (Wide Super Video Graphics Array))
         public static void SetScreenSize1024x576(FullScreenMode mode = FullScreenMode.Windowed)
         {
-            ChangeScreenSize(1024, 576, mode, false);
+            SetScreenSize(1024, 576, mode, false);
         }
 
         // Set Screen Size (4:3 - XGA (Extended Graphics Array))
         public static void SetScreenSize1024x768(FullScreenMode mode = FullScreenMode.Windowed)
         {
-            ChangeScreenSize(1024, 768, mode, false);
+            SetScreenSize(1024, 768, mode, false);
         }
 
 
