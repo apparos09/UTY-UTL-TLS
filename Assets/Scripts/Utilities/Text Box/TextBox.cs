@@ -620,9 +620,10 @@ namespace util
             // Set the time to the max.
             autoNextTimer = autoNextTimerMax;
 
-            // Adds the extra time for TTS reading.
-            if (addTtsExtraTime && GameSettings.Instance.UseTextToSpeech)
-                autoNextTimer += ttsExtraTime;
+            // This has been commented out so that programs that don't use utils GameSettings can still use this.
+            // // Adds the extra time for TTS reading.
+            // if (addTtsExtraTime && GameSettings.Instance.UseTextToSpeech)
+            //     autoNextTimer += ttsExtraTime;
         }
 
         
