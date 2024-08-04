@@ -60,6 +60,9 @@ namespace util
         
         // The function being called to get feedback on the save progress.
         private Coroutine feedbackFunction;
+
+        // An object that gets displayed when showing feedback on saving.
+        public GameObject feedbackObject;
         
         // The text for providing feedback on the saving.
         public TMP_Text feedbackText;
@@ -327,8 +330,16 @@ namespace util
         }
 
         // Refreshes the feedback text.
-        public void RefreshFeedbackText()
+        public void RefreshFeedbackElements()
         {
+            // If the object exists, turn it on as needed.
+            if(feedbackObject != null)
+            {
+                // If a save is in progress, turn the object on.
+                // If no save is in progress, turn the object off.
+                feedbackObject.SetActive(saveInProgress);
+            }
+
             // If the text exists, set it.
             if (feedbackText != null)
             {
@@ -390,7 +401,7 @@ namespace util
             saveInProgress = true;
 
             // Show saving text.
-            RefreshFeedbackText();
+            RefreshFeedbackElements();
 
             // Gets the file.
             string file = fileReader.GetFileWithPath();
@@ -402,7 +413,7 @@ namespace util
             yield return null;
 
             // Show saving text in case the scene has changed.
-            RefreshFeedbackText();
+            RefreshFeedbackElements();
 
             // Opens the file in the file stream.
             FileStream fs = File.OpenWrite(file);
@@ -439,7 +450,7 @@ namespace util
             yield return feedbackTimer;
 
             // Show saving text in case scene has changed.
-            RefreshFeedbackText();
+            RefreshFeedbackElements();
 
             // Close the file stream.
             fs.Close();
@@ -448,7 +459,7 @@ namespace util
             saveInProgress = false;
 
             // Hide feedback text now that the save is done.
-            RefreshFeedbackText();
+            RefreshFeedbackElements();
 
             // Save is complete, so set the method to null.
             if (feedbackFunction != null)
