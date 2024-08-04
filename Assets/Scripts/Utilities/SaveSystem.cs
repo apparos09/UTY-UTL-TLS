@@ -329,7 +329,7 @@ namespace util
             feedbackString = FEEDBACK_STRING_DEFAULT;
         }
 
-        // Refreshes the feedback text.
+        // Refreshes the feedback elements.
         public void RefreshFeedbackElements()
         {
             // If the object exists, turn it on as needed.
