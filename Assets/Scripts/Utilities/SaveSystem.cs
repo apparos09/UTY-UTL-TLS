@@ -55,9 +55,9 @@ namespace util
 
 
         // FEEDBACK //
-        // The timer for getting feedback from saving.
-        private WaitForSeconds feedbackTimer = new WaitForSeconds(2);
-        
+        // The timer for getting feedback from saving (uses unscaled time).
+        private WaitForSecondsRealtime feedbackTimer = new WaitForSecondsRealtime(2);
+
         // The function being called to get feedback on the save progress.
         private Coroutine feedbackFunction;
 
