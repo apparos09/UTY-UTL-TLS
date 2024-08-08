@@ -6,19 +6,13 @@ using UnityEngine.UI;
 namespace util
 {
     // The audio for clicking a button.
-    public class ButtonAudio : MonoBehaviour
+    public class ButtonAudio : UIElementAudio
     {
         // The button this script is for.
         public Button button;
 
-        // THe audio for the user inputs.
-        public AudioSource audioSource;
-
-        // The button sound effect.
-        public AudioClip audioClip;
-
         // Awake is called when the script instance is being loaded.
-        private void Awake()
+        protected override void Awake()
         {
             // Moved here in case the button has not been set enabled before the game was closed.
 
@@ -29,7 +23,12 @@ namespace util
                 button = gameObject.GetComponent<Button>();
             }
 
-            // Adds to the OnClick function.
+            base.Awake();
+        }
+
+        // Add OnValueChanged Delegate
+        public override void AddOnValueChanged()
+        {
             AddOnClick();
         }
 
@@ -45,6 +44,12 @@ namespace util
                     OnClick();
                 });
             }
+        }
+
+        // Remove OnValueChanged Delegate
+        public override void RemoveOnValueChanged()
+        {
+            RemoveOnClick();
         }
 
         // Remove OnClick Delegate
@@ -65,11 +70,5 @@ namespace util
                 audioSource.PlayOneShot(audioClip);
         }
 
-        // Script is destroyed.
-        private void OnDestroy()
-        {
-            // Remove the listener for onClick.
-            RemoveOnClick();
-        }
     }
 }
