@@ -191,14 +191,6 @@ namespace util
             // Calls the callbacks for closing the textbox.
             if (closedCallback != null)
                 closedCallback();
-
-
-            // Tells the page to stop reading the text if it is being read.
-            // Since the TTS is overwritten when a new page is opened...
-            // This is only called when the textbox is being closed.
-            // NOTE: for some reason the current page index was out of range sometimes, so this is a quick fix.
-            if(currPageIndex >= 0 && currPageIndex < pages.Count)
-                pages[currPageIndex].StopSpeakingPage();
         }
 
         // Shows the textbox. This does NOT call the Open callbacks.
