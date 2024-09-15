@@ -214,6 +214,12 @@ namespace util
             return boxObject.activeSelf;
         }
 
+        // Checks if the textbox is visible in the hierarchy.
+        public bool IsVisibleInHierachy()
+        {
+            return boxObject.activeInHierarchy;
+        }
+
         // Gets the page count.
         public int GetPageCount()
         {
