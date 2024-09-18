@@ -7,6 +7,52 @@ namespace util
     // Calculations for custom math.
     public class CustomMath
     {
+        // ROUND //
+        // Rounds to the provided number of decimal places.
+        public static float Round(float value, int decimalPlaces)
+        {
+            // Calculates the factor.
+            float factor = Mathf.Pow(10, decimalPlaces);
+
+            // If the factor is less than or equal to 0, make it 1 (no effect).
+            if (factor <= 0)
+                factor = 1;
+
+            // Calculates the result.
+            float result = (Mathf.Round(value * factor)) / factor;
+            return result;
+        }
+
+        // Ceiling rounds to the provided number of decimal places.
+        public static float Ceil(float value, int decimalPlaces)
+        {
+            // Calculates the factor.
+            float factor = Mathf.Pow(10, decimalPlaces);
+
+            // If the factor is less than or equal to 0, make it 1 (no effect).
+            if (factor <= 0)
+                factor = 1;
+
+            // Calculates the result.
+            float result = (Mathf.Ceil(value * factor)) / factor;
+            return result;
+        }
+
+        // Floor rounds to the provided number of decimal places.
+        public static float Floor(float value, int decimalPlaces)
+        {
+            // Calculates the factor.
+            float factor = Mathf.Pow(10, decimalPlaces);
+
+            // If the factor is less than or equal to 0, make it 1 (no effect).
+            if (factor <= 0)
+                factor = 1;
+
+            // Calculates the result.
+            float result = (Mathf.Floor(value * factor)) / factor;
+            return result;
+        }
+
         // ROTATE //
 
         // Rotates the 2D vector (around its z-axis).
