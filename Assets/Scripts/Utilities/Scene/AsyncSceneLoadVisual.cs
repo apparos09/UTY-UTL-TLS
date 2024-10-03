@@ -17,21 +17,20 @@ namespace util
         // Start is called before the first frame update
         void Start()
         {
-            // tries to find the load operation.
-            if (loader == null)
-                loader = FindObjectOfType<AsyncSceneLoader>();
-
-            // loader.LoadScene("TitleScene");
+            // ...
         }
 
         // Update is called once per frame
         void Update()
         {
-            // if the load operation is going on.
+            // Checks if the loader is loading.
             if (loader.IsLoading)
             {
-                // changes the slider.
-                slider.value = Mathf.Lerp(slider.minValue, slider.maxValue, loader.GetProgressLoading());
+                // Changes the slider.
+                if(slider != null)
+                {
+                    slider.value = Mathf.Lerp(slider.minValue, slider.maxValue, loader.GetProgressLoading());
+                }
             }
         }
     }
