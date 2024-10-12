@@ -87,6 +87,12 @@ namespace util
 
         }
 
+        // Plays the background music with the provided delay.
+        public void PlayBackgroundMusic(AudioClip bgmClip, float delay)
+        {
+            PlayBackgroundMusic(bgmClip, 0, bgmClip.length, delay);
+        }
+
         // Plays the background music (clipStart and clipEnd are autoset to the start and end of the audio).
         // The audio also plays instantly.
         public void PlayBackgroundMusic(AudioClip bgmClip)
@@ -98,12 +104,14 @@ namespace util
         // If 'stopAudio' is 'true', then the BGM is stopped before playing the one shot.
         public void PlayBackgroundMusicOneShot(AudioClip bgmClip, bool stopCurrAudio = true)
         {
+            // The BGM source is set.
             if(bgmSource != null)
             {
                 // If the current audio should be stopped.
                 if (stopCurrAudio)
                     bgmSource.Stop();
 
+                // Play one shot.
                 bgmSource.PlayOneShot(bgmClip);
             }
             
