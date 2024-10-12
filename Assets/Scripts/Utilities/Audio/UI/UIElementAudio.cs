@@ -65,7 +65,7 @@ namespace util
         }
 
         // Returns 'true' if the audio can play. If the audio object is unusable, this returns false.
-        public virtual bool CanPlay()
+        public virtual bool IsPlayable()
         {
             // First checks if playing is safe.
             bool result = IsPlaySafe();
