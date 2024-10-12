@@ -39,7 +39,7 @@ namespace util
         // BACKGROUND MUSIC
         // Plays the provided background music.
         // The arguments 'clipStart' and 'clipEnd' are used for the BGM looper.
-        public void PlayBackgroundMusic(AudioClip bgmClip, float clipStart, float clipEnd)
+        public void PlayBackgroundMusic(AudioClip bgmClip, float clipStart, float clipEnd, float delay)
         {
             if (bgmSource != null)
             {
@@ -54,8 +54,8 @@ namespace util
                     bgmLooper.clipStart = clipStart;
                     bgmLooper.clipEnd = clipEnd;
 
-                    // Play the BGM through the looper
-                    bgmLooper.PlayAudio(true);
+                    // Play the BGM through the looper, providing the delay.
+                    bgmLooper.PlayAudio(true, delay);
                 }
                 else // No looper, so change settings normally.
                 {
@@ -64,13 +64,31 @@ namespace util
                     bgmSource.clip = bgmClip;
 
                     // Play the BGM with the normal settings.
-                    bgmSource.Play();
+                    // If a delay has been provided, play delay is used.
+                    if(delay > 0)
+                    {
+                        bgmSource.PlayDelayed(delay);
+                    }
+                    else
+                    {
+                        bgmSource.Play();
+                    }
+                    
                 }
             }    
 
         }
 
+        // Plays background music with the provided clip start and end.
+        // This has the audio play instantly.
+        public void PlayBackgroundMusic(AudioClip bgmClip, float clipStart, float clipEnd)
+        {
+            PlayBackgroundMusic(bgmClip, clipStart, clipEnd, 0);
+
+        }
+
         // Plays the background music (clipStart and clipEnd are autoset to the start and end of the audio).
+        // The audio also plays instantly.
         public void PlayBackgroundMusic(AudioClip bgmClip)
         {
             PlayBackgroundMusic(bgmClip, 0, bgmClip.length);
