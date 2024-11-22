@@ -207,7 +207,7 @@ namespace util
         }
 
         // Checks if the mouse is over the UI.
-        public bool IsMouseOverUI()
+        public static bool IsMouseOverUI()
         {
             // Checks if the event system exists.
             if(EventSystem.current != null)
@@ -262,7 +262,7 @@ namespace util
         }
 
         // Returns the mouse UI raycast results.
-        public List<RaycastResult> GetMouseUIRaycastResults()
+        public static List<RaycastResult> GetMouseUIRaycastResults()
         {
             PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
             pointerEventData.position = Input.mousePosition;
