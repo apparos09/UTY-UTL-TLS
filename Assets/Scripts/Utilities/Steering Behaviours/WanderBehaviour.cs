@@ -91,7 +91,7 @@ namespace util
         // Runs the flee behaviour.
         public override void RunBehaviour()
         {
-            // TODO: change this to use the Random.insideUnitSphere function.
+            // TODO: change this to use the Random.insideUnitSphere or Random.onUnitSphere function?
 
             // Go in the current direction.
             Vector3 distVec = transform.forward;
