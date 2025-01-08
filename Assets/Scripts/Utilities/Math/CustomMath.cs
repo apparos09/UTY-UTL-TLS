@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace util
@@ -219,6 +220,62 @@ namespace util
             mx.SetRow(3, new Vector4(value * m.m30, value * m.m31, value * m.m32, value * m.m33));
 
             return mx;
+        }
+
+
+        // STRING MATH CALCULATION
+        // Performs a BEDMAS calculation on a string. If an empty string is returned, the calculation failed.
+        public static string CalculateString(string equation)
+        {
+            /*
+             * Rules/Checks:
+             * Decimal Point: 
+             *  - A number can only have one decimal point. If there's a decimal point at the end of a number...
+             *  - Treat it as the number ending it as a zero.
+             * Brackets (B):
+             *  - A quick check can be done with the number of left brackets and right brackets to see if an equation might be valid.
+             *  - You can check the bracket count to catch brackets that are placed within brackets.
+             * Exponents (E):
+             *  - Represented by "^".
+             * Division (D):
+             *  - Represented by the "/" symbol.
+             *  - If the user attempts to divide by 0 (x / 0), then return an empty string by default.
+             * Multiplication (M):
+             *  - Represented by the "*" symbol.
+             * Addition (A):
+             *  - A plus sign (+) may be used to indicate that a number is positive.
+             * Subtraction (S):
+             *  - A minus sign (-) may be used to indicate that a number is negative.
+             * Other:
+             *  - Return an empty string if the operation is invalid.
+             */
+
+            // First, check that the number of left and right brackets are equal.
+            {
+                int leftBrackets = StringHelper.GetSubstringCount(equation, "(");
+                int rightBrackets = StringHelper.GetSubstringCount(equation, ")");
+
+                // The bracket counts don't match, meaning the equation is invalid.
+                // Return an empty string.
+                if(leftBrackets != rightBrackets)
+                {
+                    return "";
+                }
+            }
+
+            // equation.Count()
+
+            // Run the recursive caculation.
+            string result = RunCalculationRecursive(equation);
+
+            // Return the result.
+            return result;
+        }
+
+        // A recursion string.
+        private static string RunCalculationRecursive(string equation)
+        {
+            return "";
         }
     }
 }
