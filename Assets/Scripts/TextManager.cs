@@ -86,9 +86,26 @@ public class TextManager : MonoBehaviour
     // Runs the string equation tests.
     public void RunStringEquationTests()
     {
-        string eq0 = "((1))";
+        // Equation array.
+        string[] eqArr = new string[]
+        {
+            "4+3", // = 7
+            "5 - 6", // = 1
+            "2^4", // = 16
+            "12 / 4", // = 3
+            "3*3", // = 9
+            "3.24", // = 3.24
+            "5.", // = 5.0
+            "+-/*", // Invalid
+            "8 / 0", // Invalid
+            "2 ^ 2 * 3 / 2 + 4 - 3" // = 7
+        };
 
-        Debug.Log(eq0 + " = " + CustomMath.CalculateString(eq0));
+        // Goes through the array, calculating every result.
+        foreach(string eq in eqArr)
+        {
+            Debug.Log(eq + " = " + CustomMath.CalculateMathString(eq));
+        }
 
     }
 
