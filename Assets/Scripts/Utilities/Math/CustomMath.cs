@@ -451,37 +451,56 @@ namespace util
                                     // If the index is at the start of the string.
                                     if (prevOpIndex == 0)
                                     {
-                                        // Checks if a symbol was added.
-                                        bool added = false;
+                                        // OLD - Checking for (+) and (-)
+                                        // // Checks if a symbol was added.
+                                        // bool added = false;
+                                        // 
+                                        // // These checks add back the number's sign if it should be treated as a signifier...
+                                        // // And not an operation (e.g., +4 or -5). 
+                                        // // Probably a better way to make this. It's kind of redundant to remove the symbol...
+                                        // // Only to add it back.
+                                        // 
+                                        // // If it's a plus or minus sign, add it to the left number.
+                                        // switch (leftSide[prevOpIndex])
+                                        // {
+                                        //     case '+':
+                                        //         leftNumber = "+" + leftNumber;
+                                        //         added = true;
+                                        //         break;
+                                        // 
+                                        //     case '-':
+                                        //         leftNumber = "-" + leftNumber;
+                                        //         added = true;
+                                        //         break;
+                                        // }
+                                        // 
+                                        // // If a symbol was added to the left number.
+                                        // if (added) // Valid
+                                        // {
+                                        //     // Blank out the left side since there should be no other operations.
+                                        //     leftSide = "";
+                                        // }
+                                        // else // Invalid
+                                        // {
+                                        //     // If nothing was added, then there's something wrong.
+                                        //     leftNumber = "";
+                                        //     leftSide = "";
+                                        // }
 
-                                        // These checks add back the number's sign if it should be treated as a signifier...
-                                        // And not an operation (e.g., +4 or -5). 
-                                        // Probably a better way to make this. It's kind of redundant to remove the symbol...
-                                        // Only to add it back.
+                                        // NEW - Float Parsing
+                                        // A temporary value that's used for parsing.
+                                        float tempValue;
 
-                                        // If it's a plus or minus sign, add it to the left number.
-                                        switch (leftSide[prevOpIndex])
+                                        // Tries to parse the left side.
+                                        // If the conversion is successful, it means the operation is a +/- symbol.
+                                        // If so, just copy over the whole value.
+                                        if(float.TryParse(leftSide, out tempValue))
                                         {
-                                            case '+':
-                                                leftNumber = "+" + leftNumber;
-                                                added = true;
-                                                break;
-
-                                            case '-':
-                                                leftNumber = "-" + leftNumber;
-                                                added = true;
-                                                break;
-                                        }
-
-                                        // If a symbol was added to the left number.
-                                        if (added) // Valid
-                                        {
-                                            // Blank out the left side since there should be no other operations.
+                                            leftNumber = leftSide;
                                             leftSide = "";
                                         }
-                                        else // Invalid
+                                        else // Parse failed, meaning there's something wrong with the left side.
                                         {
-                                            // If nothing was added, then there's something wrong.
                                             leftNumber = "";
                                             leftSide = "";
                                         }
