@@ -287,6 +287,25 @@ namespace util
             if (equation == "")
                 return string.Empty;
 
+
+            // Initial check to see if the value is a positive or negative number.
+            // e.g., +2, -5
+            {
+                // The value that's gotten by parsing.
+                float value;
+
+                // The value string.
+                string valueStr;
+
+                // Tries to turn the equation into a float.
+                if (float.TryParse(equation, out value)) // Success
+                {
+                    // Return the value as a string.
+                    valueStr = value.ToString();
+                    return valueStr;
+                }
+            }
+
             // Checks if the equation contains a math operation.
             if(ContainsMathOperationSymbol(equation)) // Has operations.
             {
@@ -295,27 +314,81 @@ namespace util
 
                 // TODO: account for brackets.
 
+                // Under BEDMAS rules, DM and AS are interchangable.
+                // e.g., if a multiplication operation comes before a division operation, you do the multiplication.
+                // Checks are needed to make sure operations are done in the right order.
+
                 // Checks what operation to use.
                 if(equation.Contains("^")) // Exponent
                 {
                     operation = "^";
                 }
-                else if(equation.Contains("/")) // Division
+                else if(equation.Contains("/") || equation.Contains("*")) // Division/Multiplication
                 {
-                    operation = "/";
+                    // The division index and the multiplication index.
+                    // Defaults to greater than the length of the equation.
+                    int divIndex = equation.Length + 1;
+                    int mltIndex = equation.Length + 1;
+
+                    // Gets the division symbol location.
+                    if (equation.Contains("/"))
+                        divIndex = equation.IndexOf("/");
+
+                    // Gets the multiplication symbol location.
+                    if(equation.Contains("*"))
+                        mltIndex = equation.IndexOf("*");
+
+                    // If the divison index comes first, use that.
+                    if(divIndex < mltIndex)
+                    {
+                        operation = "/";
+                    }
+                    // If the multiplication index comes first, use that.
+                    else if(divIndex > mltIndex)
+                    {
+                        operation = "*";
+                    }
+
+                    
                 }
-                else if(equation.Contains("*")) // Multiplication
+                else if(equation.Contains("+") || equation.Contains("-")) // Addition/Subtraction
                 {
-                    operation = "*";
+                    // The addition and subtraction indexes.
+                    // Defaults to greater than the length of the equation.
+                    int addIndex = equation.Length + 1;
+                    int subIndex = equation.Length + 1;
+
+                    // Gets the addition symbol location.
+                    if (equation.Contains("+"))
+                        addIndex = equation.IndexOf("+");
+
+                    // Gets the subtreaction symbol location.
+                    if (equation.Contains("-"))
+                        subIndex = equation.IndexOf("-");
+
+                    // Since plus can indicate positive numbers and minus can indicate negative numbers...
+                    // Said symbols are ignored if they're at the start of the equation.
+
+                    // If the addition index comes first, use that.
+                    if (addIndex < subIndex && addIndex != 0)
+                    {
+                        operation = "+";
+                    }
+                    // If the subtraction index comes first, use that.
+                    else if (addIndex > subIndex && subIndex != 0)
+                    {
+                        operation = "-";
+                    }
+                    else if(addIndex != 0) // Former checks failed, so just use addition if it's a proper operation.
+                    {
+                        operation = "+";
+                    }
+                    else if(subIndex != 0) // Former checks failed, so just use subtraction if it's a proper operation.
+                    {
+                        operation = "-";
+                    }
                 }
-                else if(equation.Contains("+")) // Addition
-                {
-                    operation = "+";
-                }
-                else if(equation.Contains("-")) // Subtraction
-                {
-                    operation = "-";
-                }
+
 
                 // Gets the index of the operation.
                 int opIndex = equation.IndexOf(operation);
@@ -354,11 +427,6 @@ namespace util
                             if(IsMathOperationSymbol(leftSide[i]))
                             {
                                 prevOpIndex = i;
-                            }
-
-                            // If an operation symbol has been found, break the loop.
-                            if(prevOpIndex != -1)
-                            {
                                 break;
                             }
                         }
@@ -367,10 +435,10 @@ namespace util
                         if(prevOpIndex != -1)
                         {
                             // Checks that there is a number to pull.
-                            if (opIndex + 1 < leftSide.Length) // Safe
+                            if (prevOpIndex + 1 < leftSide.Length) // Safe
                             {
                                 // Gets the left number.
-                                leftNumber = leftSide.Substring(opIndex + 1);
+                                leftNumber = leftSide.Substring(prevOpIndex + 1);
 
                                 // If there is no number, just set it as the left side.
                                 if (leftNumber == "")
@@ -385,6 +453,11 @@ namespace util
                                     {
                                         // Checks if a symbol was added.
                                         bool added = false;
+
+                                        // These checks add back the number's sign if it should be treated as a signifier...
+                                        // And not an operation (e.g., +4 or -5). 
+                                        // Probably a better way to make this. It's kind of redundant to remove the symbol...
+                                        // Only to add it back.
 
                                         // If it's a plus or minus sign, add it to the left number.
                                         switch (leftSide[prevOpIndex])
@@ -401,12 +474,12 @@ namespace util
                                         }
 
                                         // If a symbol was added to the left number.
-                                        if (added)
+                                        if (added) // Valid
                                         {
-                                            // Removes the left side number and its attached symbol.
-                                            leftSide = leftSide.Remove(prevOpIndex);
+                                            // Blank out the left side since there should be no other operations.
+                                            leftSide = "";
                                         }
-                                        else
+                                        else // Invalid
                                         {
                                             // If nothing was added, then there's something wrong.
                                             leftNumber = "";
@@ -625,24 +698,10 @@ namespace util
             }
             else // No operations.
             {
-                // The value that's gotten by parsing.
-                float value;
+                // Originally, this tried to parse the string as a float.
+                // Since that has already been done, just return an empty string.
 
-                // The value string.
-                string valueStr;
-
-                // Tries to turn the equation into a float.
-                if(float.TryParse(equation, out value)) // Success
-                {
-                    valueStr = value.ToString();
-                }
-                else // Failure
-                {
-                    valueStr = string.Empty; // Empty string.
-                }
-
-                // Returns the string.
-                return valueStr;
+                return string.Empty;
             }
         }
 

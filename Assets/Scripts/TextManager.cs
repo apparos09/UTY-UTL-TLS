@@ -92,19 +92,29 @@ public class TextManager : MonoBehaviour
             "4+3", // = 7
             "5 - 6", // = 1
             "2^4", // = 16
+            "-3 + 12", // = 9
+            "+4 - 6", // = -2
             "12 / 4", // = 3
             "3*3", // = 9
             "3.24", // = 3.24
             "5.", // = 5.0
             "+-/*", // Invalid
             "8 / 0", // Invalid
-            "2 ^ 2 * 3 / 2 + 4 - 3" // = 7
+            "3 - 2 ^ 3 * 8 / 2 + 7" // = -22
         };
 
         // Goes through the array, calculating every result.
         foreach(string eq in eqArr)
         {
-            Debug.Log(eq + " = " + CustomMath.CalculateMathString(eq));
+            // Calculates the math string.
+            string result = CustomMath.CalculateMathString(eq);
+
+            // If the result is empty, show it as an error.
+            if (result == string.Empty)
+                result = "Error";
+
+            // Print the result.
+            Debug.Log(eq + " = " + result);
         }
 
     }
