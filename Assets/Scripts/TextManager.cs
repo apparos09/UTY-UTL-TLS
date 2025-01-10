@@ -109,6 +109,7 @@ public class TextManager : MonoBehaviour
             "(3)(2)(10)", // = 60
             "(9 + 6) * 2", // = 30 
             "8^(1+1)", // = 64
+            "*8+4/7", // Invalid
             "5+(-(10))", // = -5 (Invalid, see note 2)
             "10/(5-2)"  // = 3.3333~
         };
