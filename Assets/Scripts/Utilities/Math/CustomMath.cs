@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using UnityEngine;
 
 namespace util
@@ -256,8 +257,8 @@ namespace util
 
             // Second, check that the number of left and right brackets are equal.
             {
-                int leftBrackets = StringHelper.GetSubstringCount(equation, "(");
-                int rightBrackets = StringHelper.GetSubstringCount(equation, ")");
+                int leftBrackets = StringHelper.GetSubstringCount(equationAdjusted, "(");
+                int rightBrackets = StringHelper.GetSubstringCount(equationAdjusted, ")");
 
                 // The bracket counts don't match, meaning the equation is invalid.
                 // Return an empty string.
@@ -273,7 +274,7 @@ namespace util
             // equation.Count()
 
             // Run the recursive caculation.
-            string result = RunStringMathCalculationRecursive(equation);
+            string result = RunStringMathCalculationRecursive(equationAdjusted);
 
             // Return the result.
             return result;
@@ -328,14 +329,119 @@ namespace util
                 // TODO: does not handle multiple operations in one equation correctly.
 
                 // LEFT SIDE
-                // Gets the left side of the equation.
-                string leftSide;
+                // The left number.
+                string leftNumber = "";
 
-                // If the operation is at the start of the string.
-                if(opIndex > 0) // Valid operation.
+                // The left side of the equation. The left number will be removed.
+                string leftSide = "";
+                
+                // Gets the left side of the equation.
+                leftSide = equation.Substring(0, opIndex);
+
+                // If the operation is NOT at the start of the string.
+                if (opIndex > 0) // Valid operation.
                 {
-                    // Gets the left side.
-                    leftSide = equation.Substring(0, opIndex);
+                    // If there is a math operation symbol on the left side, ignore it.
+                    if(ContainsMathOperationSymbol(leftSide))
+                    {
+                        // The index is -1 by default.
+                        int prevOpIndex = -1;
+
+                        // Goes from the end to the beginning, finding the next operation.
+                        for(int i = leftSide.Length - 1;  i >= 0; i--)
+                        {
+                            // If the character is a math operation symbol.
+                            if(IsMathOperationSymbol(leftSide[i]))
+                            {
+                                prevOpIndex = i;
+                            }
+
+                            // If an operation symbol has been found, break the loop.
+                            if(prevOpIndex != -1)
+                            {
+                                break;
+                            }
+                        }
+
+                        // An index has been found.
+                        if(prevOpIndex != -1)
+                        {
+                            // Checks that there is a number to pull.
+                            if (opIndex + 1 < leftSide.Length) // Safe
+                            {
+                                // Gets the left number.
+                                leftNumber = leftSide.Substring(opIndex + 1);
+
+                                // If there is no number, just set it as the left side.
+                                if (leftNumber == "")
+                                {
+                                    leftNumber = leftSide;
+                                    leftSide = "";
+                                }
+                                else
+                                {
+                                    // If the index is at the start of the string.
+                                    if (prevOpIndex == 0)
+                                    {
+                                        // Checks if a symbol was added.
+                                        bool added = false;
+
+                                        // If it's a plus or minus sign, add it to the left number.
+                                        switch (leftSide[prevOpIndex])
+                                        {
+                                            case '+':
+                                                leftNumber = "+" + leftNumber;
+                                                added = true;
+                                                break;
+
+                                            case '-':
+                                                leftNumber = "-" + leftNumber;
+                                                added = true;
+                                                break;
+                                        }
+
+                                        // If a symbol was added to the left number.
+                                        if (added)
+                                        {
+                                            // Removes the left side number and its attached symbol.
+                                            leftSide = leftSide.Remove(prevOpIndex);
+                                        }
+                                        else
+                                        {
+                                            // If nothing was added, then there's something wrong.
+                                            leftNumber = "";
+                                            leftSide = "";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Removes the left side number.
+                                        leftSide = leftSide.Remove(prevOpIndex + 1);
+                                    }
+                                }
+                            }
+                            else // Unsafe - equation is not formated properly.
+                            {
+                                leftNumber = "";
+                                leftSide = "";
+                            }
+                            
+                            
+                        }
+                        else
+                        {
+                            // If no previous operation was found, just set the left number to be the left side.
+                            leftNumber = leftSide;
+                            leftSide = "";
+                        }
+
+                    }
+                    else
+                    {
+                        // Set the left number as the left side, and let the left side be blank.
+                        leftNumber = leftSide;
+                        leftSide = "";
+                    }
                 }
                 else
                 {
@@ -343,32 +449,89 @@ namespace util
                     // Just put a 0 on the left side.
                     if(operation == "+" || operation == "-")
                     {
-                        leftSide = "0";
+                        leftNumber = "0";
                     }
                     else // Invalid, so leave left side blank.
                     {
-                        leftSide = "";
+                        leftNumber = "";
                     }
+
+                    // The left side is blank.
+                    leftSide = "";
                 }
 
                 // RIGHT SIDE
-                // Gets the right side of the equation.
-                string rightSide;
+                // Gets the right number of the equation.
+                string rightNumber = "";
+
+                // The right side of the equation. Will have right number removed.
+                string rightSide = "";
 
                 // If the operation is at the end of the string.
                 if (opIndex < equation.Length) // Valid operation.
                 {
                     // Gets the right side after the operation.
                     rightSide = equation.Substring(opIndex + 1);
+
+                    // If the right side has a math symbol...
+                    if(ContainsMathOperationSymbol(rightSide))
+                    {
+                        // The next operation index.
+                        int nextOpIndex = -1;
+
+                        // Goes through the right side.
+                        for(int i = 0; i < rightSide.Length; i++)
+                        {
+                            // If a math symbol is found.
+                            if (IsMathOperationSymbol(rightSide[i]))
+                            {
+                                nextOpIndex = i;
+                                break;
+                            }
+                        }
+
+                        // Valid index.
+                        if(nextOpIndex != -1)
+                        {
+                            // If the operation is at the end of the right side, it's an invalid equation.
+                            if(nextOpIndex < rightSide.Length) // Valid index.
+                            {
+                                // Set the right number.
+                                rightNumber = rightSide.Substring(0, nextOpIndex);
+
+                                // Remove the right number from the right side.
+                                rightSide = rightSide.Remove(0, rightNumber.Length);
+
+                                
+                            }
+                            else // Invalid index.
+                            {
+                                rightNumber = "";
+                                rightSide = "";
+                            }
+                        }
+                        else // Failure.
+                        {
+                            rightNumber = "";
+                            rightSide = "";
+                        }
+                    }
+                    else // No symbol.
+                    {
+                        // The right number is set as the right side since there are no operations.
+                        rightNumber = rightSide;
+                        rightSide = "";
+                    }
                 }
                 else
                 {
                     // If the operation is at the end of the string, it is invalid.
+                    rightNumber = "";
                     rightSide = "";
                 }
 
                 // If either of the strings are empty, then the equation is invalid.
-                if(leftSide == string.Empty || rightSide == string.Empty)
+                if(leftNumber == string.Empty || rightNumber == string.Empty)
                 {
                     // Return an empty string.
                     return string.Empty;
@@ -376,18 +539,18 @@ namespace util
                 else // Equation may be valid.
                 {
                     // Recursively call the function to see if the numbers are valid.
-                    leftSide = RunStringMathCalculationRecursive(leftSide);
-                    rightSide = RunStringMathCalculationRecursive(rightSide);
+                    leftNumber = RunStringMathCalculationRecursive(leftNumber);
+                    rightNumber = RunStringMathCalculationRecursive(rightNumber);
 
                     // If both are valid, perform the calculation and return the result.
-                    if(leftSide != string.Empty && rightSide != string.Empty)
+                    if(leftNumber != string.Empty && rightNumber != string.Empty)
                     {
                         // The values.
                         float value1;
                         float value2;
 
                         // Tries to parse both values.
-                        if(float.TryParse(leftSide, out value1) && float.TryParse(rightSide, out value2))
+                        if(float.TryParse(leftNumber, out value1) && float.TryParse(rightNumber, out value2))
                         {
                             // Converts the operation to a char for ease of checking.
                             char opChar = operation[0];
@@ -432,7 +595,22 @@ namespace util
 
                             // Returns the result as a string.
                             string resultStr = result.ToString();
-                            return resultStr;
+
+                            // Adds the left side and right side to the result string.
+                            // If there's nothing there, then the string doesn't change.
+                            // For soem reason, the left and right side need to be checked to see if there's any operations left...
+                            // If there aren't, just return the result string.
+                            if(leftSide != "" || rightSide != "")
+                            {
+                                // Run the recursive operation on the result.
+                                resultStr = leftSide + resultStr + rightSide;
+                                return RunStringMathCalculationRecursive(resultStr);
+                            }
+                            else 
+                            {
+                                return resultStr;
+                            }
+                            
                         }
                         else // Parsing failed.
                         {
@@ -484,6 +662,33 @@ namespace util
             else
             {
                 result = false;
+            }
+
+            return result;
+        }
+
+        // Checks if this is a math operation symbol (BEDMAS).
+        private static bool IsMathOperationSymbol(char symbol)
+        {
+            // The result.
+            bool result;
+
+            // Checks if the char is a valid BEDMAS symbol.
+            switch(symbol)
+            {
+                case '(':
+                case ')':
+                case '^':
+                case '/':
+                case '*':
+                case '+':
+                case '-':
+                    result = true;
+                    break;
+
+                default:
+                    result = false;
+                    break;
             }
 
             return result;
