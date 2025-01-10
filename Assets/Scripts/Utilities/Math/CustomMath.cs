@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Net.Http.Headers;
 using UnityEngine;
@@ -232,7 +233,7 @@ namespace util
              * Rules/Checks:
              * Decimal Point: 
              *  - A number can only have one decimal point. If there's a decimal point at the end of a number...
-             *  - Treat it as the number ending it as a zero.
+             *  - Treat it as the number ending it as a zero (e.g., 5. = 5.0). C# does this by default.
              * Brackets (B):
              *  - A quick check can be done with the number of left brackets and right brackets to see if an equation might be valid.
              *  - You can check the bracket count to catch brackets that are placed within brackets.
@@ -268,20 +269,58 @@ namespace util
                 }
             }
 
+            // Third, insert multiplication symbols where there are numbers directly outside of brackets...
+            // Instead of math operations (e.g., 3(4) = 3 * 4, so the program makes it 3*(4)).
+
             // TODO: add in multiplication symbols in cases where a bracket is next to a number.
             // Also check for decimals with no numbers after the decimal point.
+            for(int i = 0; i < equationAdjusted.Length; i++)
+            {
+                // Checks for brackets.
+                switch(equationAdjusted[i])
+                {
+                    case '(': // Left
+                        // See if the prior index has a math operation.
+                        if(i - 1 > 0)
+                        {
+                            // If the char at the index is NOT a math operation symbol, add it.
+                            // Also does this if the previous character is a right bracket.
+                            if(!IsMathOperationSymbol(equationAdjusted[i - 1]) || equationAdjusted[i - 1] == ')')
+                            {
+                                equationAdjusted = equationAdjusted.Insert(i, "*");
+                            }
+                        }
+
+                        break;
+
+                    case ')': // Right
+                        // See if the next index has a math operation.
+                        if (i + 1 < equationAdjusted.Length)
+                        {
+                            // If the char at the index is NOT math operation symbol, add it.
+                            // Also does this if the next character is a left bracket.
+                            if (!IsMathOperationSymbol(equationAdjusted[i + 1]) || equationAdjusted[i + 1] == '(')
+                            {
+                                equationAdjusted = equationAdjusted.Insert(i + 1, "*");
+                            }
+                        }
+                        break;
+                }
+
+            }
+
 
             // equation.Count()
 
             // Run the recursive caculation.
-            string result = RunStringMathCalculationRecursive(equationAdjusted);
+            string result = RunMathStringCalculation(equationAdjusted);
 
             // Return the result.
             return result;
         }
 
-        // A recursion string.
-        private static string RunStringMathCalculationRecursive(string equation)
+        // Runs the math string calculation. This function is recursive.
+        private static string RunMathStringCalculation(string equation)
         {
             // If the string is empty, return an empty string.
             if (equation == "")
@@ -319,7 +358,80 @@ namespace util
                 // Checks are needed to make sure operations are done in the right order.
 
                 // Checks what operation to use.
-                if(equation.Contains("^")) // Exponent
+                if(equation.Contains("(") || equation.Contains(")")) // Brackets
+                {
+                    // If there is no left bracket, return an empty string. Something is wrong.
+                    if(!equation.Contains("("))
+                    {
+                        return "";
+                    }
+
+                    // The left and right bracket indexes.
+                    int leftBracketIndex = equation.IndexOf("(");
+                    int rightBracketIndex = -1;
+
+                    // The currnet bracket set the search is in.
+                    // Since the loop starts at the first bracket, it's 0 by default...
+                    // And increased by 1 on the first loop.
+                    int bracketSet = 0;
+
+                    // Looks for the right bracket.
+                    for(int i = leftBracketIndex; i < equation.Length; i++)
+                    {
+                        // Checks for the bracket.
+                        if (equation[i] == '(') // Beginning bracket.
+                        {
+                            bracketSet++;
+                        }
+                        else if (equation[i] == ')') // Ending bracket.
+                        {
+                            bracketSet--;
+                        }
+
+                        // If the bracket set has fallen to 0, then the right bracket has been found.
+                        // As such, save the index.
+                        if(bracketSet == 0)
+                        {
+                            rightBracketIndex = i;
+                            break;
+                        }
+                    }
+
+                    // If either of the indexes are -1, that means the connected brackets could not be found.
+                    // As such, return an empty string.
+                    if(leftBracketIndex == -1 || rightBracketIndex == -1)
+                    {
+                        return string.Empty;
+                    }
+
+                    // Gets the substring without the brackets.
+                    string bracketEquation = equation.Substring(leftBracketIndex + 1, rightBracketIndex - leftBracketIndex - 1);
+                    
+                    // Gets the result.
+                    string bracketResult = RunMathStringCalculation(bracketEquation);
+        
+                    // If the bracket result is empty, return an empy string.
+                    if (bracketResult == "")
+                        return string.Empty;
+
+                    // Start off by removing the bracket equation from the main equation.
+                    string newEquation = equation.Remove(leftBracketIndex, rightBracketIndex - leftBracketIndex + 1);
+
+                    // Now, isnert the bracket result where the left bracket was.
+                    newEquation = newEquation.Insert(leftBracketIndex, bracketResult);
+
+                    // If the new equation exists, run the calculation.
+                    if(newEquation != "")
+                    {
+                        // Run the math string calculation with the new equation.
+                        return RunMathStringCalculation(newEquation);
+                    }
+                    else // Doesn't exist, so return an empty string.
+                    {
+                        return string.Empty;
+                    }
+                }
+                else if(equation.Contains("^")) // Exponent
                 {
                     operation = "^";
                 }
@@ -631,8 +743,8 @@ namespace util
                 else // Equation may be valid.
                 {
                     // Recursively call the function to see if the numbers are valid.
-                    leftNumber = RunStringMathCalculationRecursive(leftNumber);
-                    rightNumber = RunStringMathCalculationRecursive(rightNumber);
+                    leftNumber = RunMathStringCalculation(leftNumber);
+                    rightNumber = RunMathStringCalculation(rightNumber);
 
                     // If both are valid, perform the calculation and return the result.
                     if(leftNumber != string.Empty && rightNumber != string.Empty)
@@ -696,7 +808,7 @@ namespace util
                             {
                                 // Run the recursive operation on the result.
                                 resultStr = leftSide + resultStr + rightSide;
-                                return RunStringMathCalculationRecursive(resultStr);
+                                return RunMathStringCalculation(resultStr);
                             }
                             else 
                             {

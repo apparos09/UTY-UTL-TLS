@@ -99,9 +99,32 @@ public class TextManager : MonoBehaviour
             "3.24", // = 3.24
             "5.", // = 5.0
             "+-/*", // Invalid
+            "8+-5", // 3 (Invalid, see note 1)
             "8 / 0", // Invalid
-            "3 - 2 ^ 3 * 8 / 2 + 7" // = -22
+            "3 - 2 ^ 3 * 8 / 2 + 7", // = -22
+            "4 * (2 + 5)", // = 28
+            "4 ) 5 + (3", // Invalid
+            "4 + ((10)) - 1", // = 13
+            "2 * (3 + (10 - 1))", // = 24
+            "(3)(2)(10)", // = 60
+            "(9 + 6) * 2", // = 30 
+            "8^(1+1)", // = 64
+            "5+(-(10))", // = -5 (Invalid, see note 2)
+            "10/(5-2)"  // = 3.3333~
         };
+
+        // NOTE 1: the program can't handle having + and - next to each other, even if they logically can be in some cases.
+        // It isn't necessary to fix for now, but it should be fixed at some point.
+        // TODO: fix the +- error.
+
+        // NOTE 2: the program marks (+) and (-) outside of brackets with no other numbers as invalid.
+        // e.g., "5+(-(10))" should evaluate as 5+(-10) or simply 5-10. However, the program can't handle such cases.
+        // As such, these cases cause an error.
+        // At this time, it is not necessary to fix this error, but it SHOULD be fixed at some point.
+        
+        
+        // TODO: fix the brackets and plus/minus symbol errors.
+
 
         // Goes through the array, calculating every result.
         foreach(string eq in eqArr)
