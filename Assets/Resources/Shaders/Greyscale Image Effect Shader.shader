@@ -44,13 +44,13 @@ Shader "Hidden/Greyscale Image Effect Shader"
                 fixed4 col = tex2D(_MainTex, i.uv);
                 
                 // average out the colour for greyscale
-                fixed4 clr;
-                clr.x = (col.r + col.g + col.b) / 3;
-                clr.y = clr.x;
-                clr.z = clr.x;
-                clr.w = col.a;
+                fixed4 bw;
+                bw.x = (col.r + col.g + col.b) / 3;
+                bw.y = bw.x;
+                bw.z = bw.x;
+                bw.w = col.a;
 
-                return clr;
+                return bw;
             }
             ENDCG
         }

@@ -1,4 +1,4 @@
-Shader "Hidden/Debug Camera Shader"
+Shader "Hidden/Invert Image Effect Shader"
 {
     Properties
     {

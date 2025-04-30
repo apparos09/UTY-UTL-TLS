@@ -11,10 +11,13 @@ using UnityEngine;
  *  - https://docs.unity3d.com/ScriptReference/RenderTexture.html
  *  - https://docs.unity3d.com/6000.0/Documentation/ScriptReference/RenderTexture.GetTemporary.html
  *  - https://docs.unity3d.com/540/Documentation/Manual/WritingImageEffects.html
+ * - https://docs.unity3d.com/es/530/Manual/SL-DataTypesAndPrecision.html
  */
 
 namespace util
 {
+    // If 'true', the effects are executed in edit mode and scene view.
+    // [ExecuteInEditMode, ImageEffectAllowedInSceneView]
     public class CameraPostProcessor : MonoBehaviour
     {
         // The camera the post processor is attached to.
@@ -24,12 +27,13 @@ namespace util
         public Shader postShader;
 
         // The material for the post processor.
-        private Material postMaterial;
+        protected Material postMaterial;
 
         // Awake is called when the script instance is being loaded
         protected virtual void Awake()
         {
             TrySetCamera();
+            TryCreateMaterial();
         }
 
         // Start is called before the first frame update
@@ -46,11 +50,8 @@ namespace util
         // OnRenderImage is called after all rendering is complete to render image
         protected virtual void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
-            // If the material does not exist, make a material using the shader.
-            if (postMaterial == null)
-            {
-                postMaterial = new Material(postShader);
-            }
+            // Tries to create the material if it doesn't exist yet.
+            TryCreateMaterial();
 
             // You can make a new render texture, but it's better to make a temporary one...
             // Since it automatically gets deleted.
@@ -67,6 +68,8 @@ namespace util
 
             // Blits the source to the render texture...
             // Then blits it to the destination.
+            // These functions default the pass to -1, which makes it draw all saved passes.
+            // You can manually set it to only do a certain pass.
             Graphics.Blit(source, renderTexture, postMaterial);
             Graphics.Blit(renderTexture, destination);
 
@@ -100,6 +103,35 @@ namespace util
             }
 
             return result;
+        }
+
+        // Tries to create the material that will be used.
+        protected bool TryCreateMaterial()
+        {
+            // If the material does not exist, make a material using the shader.
+            if (postMaterial == null)
+            {
+                // // If there is no shader, don't allow the creation of the material.
+                // if (postShader == null)
+                //     return false;
+
+                // Creates the material.
+                postMaterial = new Material(postShader);
+                return true;
+            }
+            else
+            {
+                // The material exists, so nothing to create.
+                return false;
+            }
+        }
+
+        // Destroys the saved material if it exists.
+        // Call this if the shader has been replaced so that the material is remade.
+        public void DestroyMaterial()
+        {
+            if(postMaterial != null)
+                Destroy(postMaterial);
         }
 
         // Update is called once per frame
