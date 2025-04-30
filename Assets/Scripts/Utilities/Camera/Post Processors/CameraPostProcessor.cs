@@ -11,7 +11,10 @@ using UnityEngine;
  *  - https://docs.unity3d.com/ScriptReference/RenderTexture.html
  *  - https://docs.unity3d.com/6000.0/Documentation/ScriptReference/RenderTexture.GetTemporary.html
  *  - https://docs.unity3d.com/540/Documentation/Manual/WritingImageEffects.html
- * - https://docs.unity3d.com/es/530/Manual/SL-DataTypesAndPrecision.html
+ *  - https://docs.unity3d.com/540/Documentation/Manual/SL-CameraDepthTexture.html
+ *  - https://docs.unity3d.com/es/530/Manual/SL-DataTypesAndPrecision.html
+ *  - https://docs.unity3d.com/Manual/shader-writing.html
+ *  - https://docs.unity3d.com/Manual/built-in-shader-examples.html
  */
 
 namespace util
