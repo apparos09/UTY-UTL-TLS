@@ -771,9 +771,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
   postShader: {fileID: 4800000, guid: 8000205fb129971429af91862731b60d, type: 3}
-  kernelRow0: {x: -2, y: -1, z: 0}
-  kernelRow1: {x: -1, y: 1, z: 1}
-  kernelRow2: {x: 0, y: 1, z: 2}
+  kernelRow0: {x: 0, y: 0, z: 0}
+  kernelRow1: {x: 0, y: 1, z: 0}
+  kernelRow2: {x: 0, y: 0, z: 0}
 --- !u!114 &2140499245
 MonoBehaviour:
   m_ObjectHideFlags: 0

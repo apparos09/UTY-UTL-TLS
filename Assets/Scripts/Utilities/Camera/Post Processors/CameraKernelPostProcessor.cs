@@ -5,6 +5,8 @@ using UnityEngine.Networking.Types;
 
 /*
  * Sources:
+ * - https://setosa.io/ev/image-kernels/
+ * - https://www.aforgenet.com/framework/features/convolution_filters/
  * - https://discussions.unity.com/t/faster-way-to-alter-a-texture2d-besides-texture2d-apply/787780/4
  * - https://docs.unity3d.com/es/530/Manual/SL-DataTypesAndPrecision.html
  */
@@ -12,6 +14,7 @@ using UnityEngine.Networking.Types;
 namespace util
 {
     // The kernel post processor for the camera.
+    // This does not effect the UI layer.
     public class CameraKernelPostProcessor : CameraPostProcessor
     {
         // The saved post process state state. The shader should only be updated if the state has changed.
@@ -75,6 +78,22 @@ namespace util
             { 0, -1, 0 }
         };
 
+        // An emboss kernel.
+        public static float[,] embossKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { -2, -1, 0 },
+            { -1, 1, 1 },
+            { 0, 1, 2 }
+        };
+
+        // An edge kernel.
+        public static float[,] edgeKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { 0, -1, 0 },
+            { -1, 4, -1 },
+            { 0, -1, 0 }
+        };
+
         // An outline kernel.
         public static float[,] outlineKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
         {
@@ -82,6 +101,39 @@ namespace util
             { -1, 8, -1 },
             { -1, -1, -1 }
         };
+
+        // A left sobel kernel.
+        public static float[,] leftSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { 1, 0, -1 },
+            { 2, 0, -2 },
+            { 1, 0, -1 }
+        };
+
+        // A right sobel kernel.
+        public static float[,] rightSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { -1, 0, 1 },
+            { -2, 0, 2 },
+            { -1, 0, 1}
+        };
+
+        // A top sobel kernel.
+        public static float[,] topSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { 1, 2, 1 },
+            { 0, 0, 0 },
+            { -1, -2, -1}
+        };
+
+        // A bottom sobel kernel.
+        public static float[,] bottomSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { -1, -2, -1 },
+            { 0, 0, 0 },
+            { 1, 2, 1 }
+        };
+
 
         // Awake is called when the script instance is being loaded
         protected override void Awake()
@@ -103,7 +155,14 @@ namespace util
 
             // Testing...
             // SetKernels(blurKernel);
-            SetKernels(sharpenKernel);
+            // SetKernels(sharpenKernel);
+            // SetKernels(embossKernel);
+            SetKernels(edgeKernel);
+            // SetKernels(outlineKernel);
+            // SetKernels(leftSobelKernel);
+            // SetKernels(rightSobelKernel);
+            // SetKernels(topSobelKernel);
+            // SetKernels(bottomSobelKernel);
         }
 
         // OnRenderImage is called after all rendering is complete to render image

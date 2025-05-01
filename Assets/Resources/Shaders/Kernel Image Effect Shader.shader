@@ -101,6 +101,11 @@ Shader "Hidden/Kernel Image Effect Shader"
                     fixed mult;
 
                     // Gets the UV value of the related pixel.
+                    // Even though this is a decimal value, the switch statement works with whole numbers.
+                    // Usuing decimals with a switch statement isn't allowed.
+                    // In Unity, floats and doubles can't use switch statements, but it appears that...
+                    // Fixed values can be used in the shader as long as they're whole numbers.
+                    // The shader should be able to run on other platforms as it is.
                     switch(n)
                     {
                         default: // Invalid
