@@ -23,21 +23,19 @@ namespace util
         // 3x3 convolutions are more efficient than 5x5 and 7x7.
         // Even kernels are not used since they lack a centre.
 
+        [Header("Kernel")]
+        // The three kernel rows (defaults to identity).
+        // These use vectors to restrict the size and allow editing in the inspector.
+        public Vector3 kernelRow0 = new Vector3(0, 0, 0);
+        public Vector3 kernelRow1 = new Vector3(0, 1, 0);
+        public Vector3 kernelRow2 = new Vector3(0, 0, 0);
+
         // The row and colum count for the kernels.
         public const int KERNEL_ROW_COUNT = 3;
         public const int KERNEL_COLUMN_COUNT = 3;
 
-        // The kernel for the camera render image.
-        // This defaults to the identity array, which means no change.
-        public float[,] kernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT] 
-        {
-            { 0, 0, 0 },
-            { 0, 1, 0 },
-            { 0, 0, 0 }
-        };
-
         // The identity kernel (no changes)
-        public static float[,] identityKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        public static float[,] identityKernel = new float[3, 3]
         {
             { 0, 0, 0 },
             { 0, 1, 0 },
@@ -60,6 +58,22 @@ namespace util
             { 0, -1, 0 }
         };
 
+        // An emboss kernel.
+        public static float[,] embossKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { -2, -1, 0 },
+            { -1, 1, 1 },
+            { 0, 1, 2 }
+        };
+
+        // An edge kernel.
+        public static float[,] edgeKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { 0, -1, 0 },
+            { -1, 4, -1 },
+            { 0, -1, 0 }
+        };
+
         // An outline kernel.
         public static float[,] outlineKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
         {
@@ -68,14 +82,53 @@ namespace util
             { -1, -1, -1 }
         };
 
+        // A left sobel kernel.
+        public static float[,] leftSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { 1, 0, -1 },
+            { 2, 0, -2 },
+            { 1, 0, -1 }
+        };
+
+        // A right sobel kernel.
+        public static float[,] rightSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { -1, 0, 1 },
+            { -2, 0, 2 },
+            { -1, 0, 1}
+        };
+
+        // A top sobel kernel.
+        public static float[,] topSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { 1, 2, 1 },
+            { 0, 0, 0 },
+            { -1, -2, -1}
+        };
+
+        // A bottom sobel kernel.
+        public static float[,] bottomSobelKernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+        {
+            { -1, -2, -1 },
+            { 0, 0, 0 },
+            { 1, 2, 1 }
+        };
+
         // Start is called before the first frame update
         protected override void Start()
         {
             base.Start();
 
-            // Test kernel.
-            // kernel = blurKernel;
-            kernel = outlineKernel;
+            // Testing the script using preset kernels.
+            // SetKernels(blurKernel);
+            // SetKernels(sharpenKernel);
+            // SetKernels(embossKernel);
+            // SetKernel(edgeKernel);
+            // SetKernels(outlineKernel);
+            // SetKernels(leftSobelKernel);
+            // SetKernels(rightSobelKernel);
+            // SetKernels(topSobelKernel);
+            // SetKernels(bottomSobelKernel);
         }
 
 
@@ -83,6 +136,14 @@ namespace util
         // Remember to apply the changed pixels to the texture2D after you're done.
         public override Texture2D FilterRenderAsTexture2D(Texture2D texture2D)
         {
+            // Creates the kernel array from the vectors.
+            float[,] kernel = new float[KERNEL_ROW_COUNT, KERNEL_COLUMN_COUNT]
+            {
+                { kernelRow0.x, kernelRow0.y, kernelRow0.z },
+                { kernelRow1.x, kernelRow1.y, kernelRow1.z },
+                { kernelRow2.x, kernelRow2.y, kernelRow2.z }
+            };
+
             // Example - invert the colours of the texture 2D pixels.
             // The old colours and the new colours.
             // It's a 1D array that goes row by row starting at the bottom left.
@@ -91,7 +152,7 @@ namespace util
             Color[] newColors = new Color[oldColors.Length];
 
             // Runs the kernel calculations.
-            for(int i = 0; i < oldColors.Length; i++)
+            for (int i = 0; i < oldColors.Length; i++)
             {
                 // The kernel is a 2D array, so conversions from the 1D array need to be done.
 
@@ -113,9 +174,9 @@ namespace util
                 bool[,] validArr = new bool[3, 3];
 
                 // Goes through the indexes to find the colours.
-                for(int r = 0; r < indexArr.GetLength(0); r++) // Row
+                for (int r = 0; r < indexArr.GetLength(0); r++) // Row
                 {
-                    for(int c = 0; c < indexArr.GetLength(1); c++) // Col
+                    for (int c = 0; c < indexArr.GetLength(1); c++) // Col
                     {
                         // If the index is valid, 
                         if (indexArr[r, c] >= 0 && indexArr[r, c] < oldColors.Length)
@@ -178,13 +239,39 @@ namespace util
                 // Saves the new colour.
                 newColors[i] = newColor;
             }
-            
+
             // Sets the new colours and applies them.
             texture2D.SetPixels(newColors);
             texture2D.Apply();
-            
+
             // Returns the result.
             return texture2D;
+        }
+
+        // Sets kernel using the provided array. The array must be 3x3.
+        public void SetKernel(float[,] arr)
+        {
+            // The length is wrong.
+            if (arr.Length != 9)
+            {
+                Debug.LogError("This is not a 3x3 array. The kernel could not be set.");
+                return;
+            }
+
+            // Row 0
+            kernelRow0.x = arr[0, 0];
+            kernelRow0.y = arr[0, 1];
+            kernelRow0.z = arr[0, 2];
+
+            // Row 1
+            kernelRow1.x = arr[1, 0];
+            kernelRow1.y = arr[1, 1];
+            kernelRow1.z = arr[1, 2];
+
+            // Row 2
+            kernelRow2.x = arr[2, 0];
+            kernelRow2.y = arr[2, 1];
+            kernelRow2.z = arr[2, 2];
         }
     }
 }

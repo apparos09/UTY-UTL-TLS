@@ -153,11 +153,11 @@ namespace util
         {
             base.Start();
 
-            // Testing...
+            // Testing the script using preset kernels.
             // SetKernels(blurKernel);
             // SetKernels(sharpenKernel);
             // SetKernels(embossKernel);
-            SetKernels(edgeKernel);
+            // SetKernel(edgeKernel);
             // SetKernels(outlineKernel);
             // SetKernels(leftSobelKernel);
             // SetKernels(rightSobelKernel);
@@ -203,13 +203,13 @@ namespace util
             postMaterial.SetVector(KERNEL_ROW2_KEY, kernelRow2);
         }
 
-        // Sets kernels using the provided array. The array must be 3x3.
-        public void SetKernels(float[,] arr)
+        // Sets kernel using the provided array. The array must be 3x3.
+        public void SetKernel(float[,] arr)
         {
             // The length is wrong.
             if(arr.Length != 9)
             {
-                Debug.LogError("This is not a 3x3 array. Kernel setting failed.");
+                Debug.LogError("This is not a 3x3 array. The kernel could not be set.");
                 return;
             }
 
