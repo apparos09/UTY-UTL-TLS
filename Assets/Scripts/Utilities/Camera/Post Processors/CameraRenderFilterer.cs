@@ -46,6 +46,12 @@ namespace util
 
             // Blits the output texture 2D to the destination.
             Graphics.Blit(outputTexture2D, destination);
+
+            // Destroys the input and output texture 2D objects.
+            // These are likely the same textuer2D object, but it doesn't error out...
+            // So calling Destroy twice should be okay.
+            Destroy(inputTexture2D);
+            Destroy(outputTexture2D);
         }
 
         // Tries to set the camera the post processor is attached to.
