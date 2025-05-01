@@ -5,7 +5,7 @@ using UnityEngine;
 namespace util
 {
     // Inverts the colours for the camera render.
-    public class CameraRenderInvertFilter : CameraRenderFilterer
+    public class CameraInvertRenderFilter : CameraRenderFilterer
     {
         // Filters the camera render as a texture 2D to invert the colours.
         public override Texture2D FilterRenderAsTexture2D(Texture2D texture2D)
