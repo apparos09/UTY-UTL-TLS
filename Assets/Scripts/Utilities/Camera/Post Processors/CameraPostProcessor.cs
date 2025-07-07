@@ -15,6 +15,7 @@ using UnityEngine;
  *  - https://docs.unity3d.com/es/530/Manual/SL-DataTypesAndPrecision.html
  *  - https://docs.unity3d.com/Manual/shader-writing.html
  *  - https://docs.unity3d.com/Manual/built-in-shader-examples.html
+ *  - https://stackoverflow.com/questions/45402927/unity-apply-post-processing-effects-to-all-ui-elements
  */
 
 namespace util

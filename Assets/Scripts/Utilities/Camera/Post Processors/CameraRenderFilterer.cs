@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 /*
@@ -14,7 +13,9 @@ using UnityEngine;
 
 namespace util
 {
-    // Filters the render image from the camera.
+    // Filters the render image from the camera. This operates without the use of a shader by default.
+    // This should NOT be used since it's VERY INEFFICIENT.
+    // Use the CameraPostProcessor class with a shader instead.
     public class CameraRenderFilterer : MonoBehaviour
     {
         // The camera the post processor is attached to.

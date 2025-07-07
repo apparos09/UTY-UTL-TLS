@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking.Types;
 
 /*
  * Sources:
@@ -14,7 +13,6 @@ using UnityEngine.Networking.Types;
 namespace util
 {
     // The kernel post processor for the camera.
-    // This does not effect the UI layer.
     public class CameraKernelPostProcessor : CameraPostProcessor
     {
         // The saved post process state state. The shader should only be updated if the state has changed.
