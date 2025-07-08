@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: implement catmull-rom and bezier versions with speed control.
 
 namespace util
 {
