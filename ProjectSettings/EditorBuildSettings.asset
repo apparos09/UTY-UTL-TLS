@@ -8,4 +8,28 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AudioScene.unity
     guid: c91aa945a0dc84f449805e6a62c4e17c
+  - enabled: 1
+    path: Assets/Scenes/CopyScene.unity
+    guid: d929a2fcbd661bc4891601dc159788b8
+  - enabled: 1
+    path: Assets/Scenes/InterpolationScene.unity
+    guid: b3cd83def7340204ebd1418bd125173e
+  - enabled: 1
+    path: Assets/Scenes/LoadingScene.unity
+    guid: 7892a7cb658ebc74cac9ada8cde6a89b
+  - enabled: 1
+    path: Assets/Scenes/MouseScene.unity
+    guid: 31d83444ea510b542860e771b3aa29f9
+  - enabled: 1
+    path: Assets/Scenes/PostProcessingScene.unity
+    guid: 91f4ed0ad56907c409c37addf5943196
+  - enabled: 1
+    path: Assets/Scenes/SteeringBehaviourScene.unity
+    guid: 87be2705177500841b08a91154819a70
+  - enabled: 1
+    path: Assets/Scenes/TextScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/UISelectorScene.unity
+    guid: a0d864352ee075c4c9eed76a611a356e
   m_configObjects: {}
