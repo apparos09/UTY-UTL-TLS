@@ -32,7 +32,7 @@ namespace util
             // This is to prevent a look vector of 0 from being set.
             if (transform.position == target.transform.position)
             {
-                rigidBody.velocity = Vector3.zero;
+                rigidBody.linearVelocity = Vector3.zero;
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace util
                 // If below the stop distance, stop the rigid body entirely.
                 if(distVec.magnitude <= Mathf.Abs(velocityStop))
                 {
-                    rigidBody.velocity = Vector3.zero;
+                    rigidBody.linearVelocity = Vector3.zero;
                     transform.position = target.transform.position;
                 }
                 else
@@ -87,14 +87,14 @@ namespace util
                     float distPortion = fromTargetDist.magnitude / slowDistance;
 
                     // Sets the velocity to be the remaining travel portion.
-                    Vector3 newVel = rigidBody.velocity.normalized * (distPortion * slowDistance);
+                    Vector3 newVel = rigidBody.linearVelocity.normalized * (distPortion * slowDistance);
 
                     // If the new velocity's magnitude is greater than that of the old velocity...
                     // Simply apply a counter force. If it's less than the current velocity, overwrite it entirely.
-                    if (newVel.magnitude > rigidBody.velocity.magnitude)
+                    if (newVel.magnitude > rigidBody.linearVelocity.magnitude)
                         ApplyForce(fromTargetDist, newVel.magnitude, false);
                     else
-                        rigidBody.velocity = newVel;
+                        rigidBody.linearVelocity = newVel;
                 }
             }
         }

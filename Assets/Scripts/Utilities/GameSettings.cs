@@ -63,7 +63,7 @@ namespace util
                 if (instance == null)
                 {
                     // Tries to find the instance.
-                    instance = FindObjectOfType<GameSettings>(true);
+                    instance = FindAnyObjectByType<GameSettings>(FindObjectsInactive.Include);
 
 
                     // The instance doesn't already exist.

@@ -22,7 +22,7 @@ namespace util
         public override void RunBehaviour()
         {
             // The distance vector from the target's predicted position to the object's current position.
-            Vector3 distVec = transform.position - (target.transform.position + target.rigidBody.velocity);
+            Vector3 distVec = transform.position - (target.transform.position + target.rigidBody.linearVelocity);
 
             // Applies force.
             ApplyForce(distVec);

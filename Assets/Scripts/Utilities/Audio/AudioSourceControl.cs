@@ -91,10 +91,10 @@ namespace util
             float newVol = Mathf.Clamp01(newVolume);
 
             // Finds all the audios.
-            AudioSourceControl[] audios = FindObjectsOfType<AudioSourceControl>(includeInactive);
+            AudioSourceControl[] audios = FindObjectsByType<AudioSourceControl>(FindObjectsSortMode.None);
 
             // Adjusts the volumes.
-            foreach(AudioSourceControl asc in audios)
+            foreach (AudioSourceControl asc in audios)
             {
                 asc.SetVolumeAsPercentageOfMax(newVol);
             }

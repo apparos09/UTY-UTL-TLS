@@ -51,7 +51,7 @@ namespace util
                 if (instance == null)
                 {
                     // Tries to find the instance.
-                    instance = FindObjectOfType<Singleton>(true);
+                    instance = FindAnyObjectByType<Singleton>(FindObjectsInactive.Include);
 
 
                     // The instance doesn't already exist.

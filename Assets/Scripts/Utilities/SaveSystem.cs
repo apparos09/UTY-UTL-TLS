@@ -122,8 +122,8 @@ namespace util
                 if (instance == null)
                 {
                     // Tries to find the instance.
-                    instance = FindObjectOfType<SaveSystem>(true);
-
+                    instance = instance = FindAnyObjectByType<SaveSystem>(FindObjectsInactive.Include);
+                    
 
                     // The instance doesn't already exist.
                     if (instance == null)

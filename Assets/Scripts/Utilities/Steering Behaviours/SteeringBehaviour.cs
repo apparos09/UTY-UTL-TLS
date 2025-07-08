@@ -41,7 +41,7 @@ namespace util
         // Zeroes out the velocity on the rigid body.
         public void ResetVelocity()
         {
-            rigidBody.velocity = Vector3.zero;
+            rigidBody.linearVelocity = Vector3.zero;
         }
 
         // Applies force to the attached object. The vector provided is the distance of the force.

@@ -33,7 +33,7 @@ namespace util
         {
             // If the event system is not set, try to find it.
             if (eventSystem == null)
-                eventSystem = FindObjectOfType<EventSystem>();
+                eventSystem = FindAnyObjectByType<EventSystem>();
 
             // Sets this to the default selected element.
             eventSystem.firstSelectedGameObject = firstSelected;

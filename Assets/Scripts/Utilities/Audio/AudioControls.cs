@@ -84,7 +84,7 @@ namespace util
                 // Checks to see if the instance exists. If it doesn't, generate an object.
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<AudioControls>(true);
+                    instance = FindAnyObjectByType<AudioControls>(FindObjectsInactive.Include);
 
                     // Generate new instance if an existing instance was not found.
                     if (instance == null)
@@ -246,7 +246,7 @@ namespace util
         public void AdjustAllAudioLevels(float newBgmVolume, float newSfxVolume, float newVceVolume)
         {
             // Finds all the audio source controls.
-            AudioSourceControl[] audios = FindObjectsOfType<AudioSourceControl>();
+            AudioSourceControl[] audios = FindObjectsByType<AudioSourceControl>(FindObjectsSortMode.None);
 
             // Saves the bgm, sfx, and tts volume objects.
             bgmVolume = Mathf.Clamp01(newBgmVolume);

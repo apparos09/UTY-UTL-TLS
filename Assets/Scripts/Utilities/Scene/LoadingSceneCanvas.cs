@@ -85,7 +85,7 @@ namespace util
                 if (instance == null)
                 {
                     // Tries to find the instance.
-                    instance = FindObjectOfType<LoadingSceneCanvas>(true);
+                    instance = FindAnyObjectByType<LoadingSceneCanvas>(FindObjectsInactive.Include);
 
 
                     // The instance doesn't already exist.
