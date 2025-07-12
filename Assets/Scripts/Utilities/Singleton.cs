@@ -42,6 +42,12 @@ namespace util
             }
         }
 
+        // Start is called before the first frame update
+        protected void Start()
+        {
+            // ...
+        }
+
         // Gets the instance.
         public static Singleton Instance
         {
@@ -79,7 +85,7 @@ namespace util
         }
 
         // This function is called when the MonoBehaviour will be destroyed.
-        private void OnDestroy()
+        protected void OnDestroy()
         {
             // If the saved instance is being deleted, set 'instanced' to false.
             if(instance == this)
