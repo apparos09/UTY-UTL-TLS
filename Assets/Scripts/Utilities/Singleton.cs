@@ -43,7 +43,7 @@ namespace util
         }
 
         // Start is called before the first frame update
-        protected void Start()
+        protected virtual void Start()
         {
             // ...
         }
@@ -84,8 +84,14 @@ namespace util
             }
         }
 
+        // Update is called once per frame
+        protected virtual void Update()
+        {
+            // ...
+        }
+
         // This function is called when the MonoBehaviour will be destroyed.
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             // If the saved instance is being deleted, set 'instanced' to false.
             if(instance == this)
