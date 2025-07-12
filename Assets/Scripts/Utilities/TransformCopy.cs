@@ -13,7 +13,7 @@ namespace util
         // Copy the target's information.
         public bool autoCopy = true;
 
-        [Header("Settings")]
+        [Header("Copy Settings")]
         // Copies the position.
         public bool copyPositionX = true;
         public bool copyPositionY = true;
@@ -24,10 +24,23 @@ namespace util
         public bool copyRotationY = true;
         public bool copyRotationZ = true;
 
-        // Copies the scale.
+        // Copies the scale (local scale).
         public bool copyScaleX = true;
         public bool copyScaleY = true;
         public bool copyScaleZ = true;
+
+        [Header("Offsets")]
+        // Offset for Position
+        [Tooltip("Adds to the target's position when copying to this object.")]
+        public Vector3 posOffset = Vector3.zero;
+
+        // Offset for Rotation
+        [Tooltip("Adds to the target's rotation when copying to this object.")]
+        public Vector3 rotOffset = Vector3.zero;
+
+        // Offset for Scale
+        [Tooltip("Multiplies by the target's scale (localScale) when copying to this object.")]
+        public Vector3 scaleOffset = Vector3.one;
 
         // Start is called before the first frame update
         void Start()
@@ -67,9 +80,9 @@ namespace util
 
 
             // Set the transform information.
-            transform.position = newPos;
-            transform.eulerAngles = newRot;
-            transform.localScale = newScl;
+            transform.position = newPos + posOffset;
+            transform.eulerAngles = newRot + rotOffset;
+            transform.localScale = Vector3.Scale(newScl, scaleOffset);
         }
 
         // LateUpdate is called every frame, if the behaviour is enabled.
