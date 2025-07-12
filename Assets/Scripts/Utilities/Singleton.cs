@@ -42,6 +42,12 @@ namespace util
             }
         }
 
+        // Start is called before the first frame update
+        protected virtual void Start()
+        {
+            // ...
+        }
+
         // Gets the instance.
         public static Singleton Instance
         {
@@ -78,11 +84,17 @@ namespace util
             }
         }
 
+        // Update is called once per frame
+        protected virtual void Update()
+        {
+            // ...
+        }
+
         // This function is called when the MonoBehaviour will be destroyed.
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             // If the saved instance is being deleted, set 'instanced' to false.
-            if(instance == this)
+            if (instance == this)
             {
                 instanced = false;
             }
