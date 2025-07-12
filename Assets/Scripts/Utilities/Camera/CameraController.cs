@@ -27,6 +27,34 @@ public class CameraController : MonoBehaviour
     // if 'true', the position limits are used.
     public bool usePositionLimits = false;
 
+    // Position Keys
+    [Header("Keys/Position")]
+
+    public KeyCode posXPlus = KeyCode.D;
+    public KeyCode posXMinus = KeyCode.A;
+
+    public KeyCode posYPlus = KeyCode.Q;
+    public KeyCode posYMinus = KeyCode.E;
+
+    public KeyCode posZPlus = KeyCode.W;
+    public KeyCode posZMinus = KeyCode.S;
+
+    public KeyCode posReset = KeyCode.T;
+
+    // Rotation
+    [Header("Keys/Rotation")]
+
+    public KeyCode rotXPlus = KeyCode.DownArrow;
+    public KeyCode rotXMinus = KeyCode.UpArrow;
+
+    public KeyCode rotYPlus = KeyCode.RightArrow;
+    public KeyCode rotYMinus = KeyCode.LeftArrow;
+
+    public KeyCode rotZPlus = KeyCode.RightBracket;
+    public KeyCode rotZMinus = KeyCode.LeftBracket;
+
+    public KeyCode rotReset = KeyCode.R;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,31 +77,31 @@ public class CameraController : MonoBehaviour
         {
             // Movement of the Camera
             // forward movement and backward movement
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(posZPlus)) // W
             {
-                transform.Translate(new Vector3(0, 0, movementSpeed.z * Time.unscaledDeltaTime));
+                transform.Translate(new Vector3(0, 0, +movementSpeed.z * Time.unscaledDeltaTime));
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(posZMinus)) // S
             {
                 transform.Translate(new Vector3(0, 0, -movementSpeed.z * Time.unscaledDeltaTime));
             }
 
             // leftward and rightward movement
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(posXMinus)) // A
             {
                 transform.Translate(new Vector3(-movementSpeed.x * Time.unscaledDeltaTime, 0, 0));
             }
-            else if (Input.GetKey(KeyCode.D))
+            else if (Input.GetKey(posXPlus)) // D
             {
-                transform.Translate(new Vector3(movementSpeed.x * Time.unscaledDeltaTime, 0, 0));
+                transform.Translate(new Vector3(+movementSpeed.x * Time.unscaledDeltaTime, 0, 0));
             }
 
             // upward movement and downward movement
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetKey(posYPlus)) // Q
             {
-                transform.Translate(new Vector3(0, movementSpeed.y * Time.unscaledDeltaTime, 0));
+                transform.Translate(new Vector3(0, +movementSpeed.y * Time.unscaledDeltaTime, 0));
             }
-            else if (Input.GetKey(KeyCode.E))
+            else if (Input.GetKey(posYMinus)) // E
             {
                 transform.Translate(new Vector3(0, -movementSpeed.y * Time.unscaledDeltaTime, 0));
             }
@@ -81,44 +109,44 @@ public class CameraController : MonoBehaviour
 
             // Rotation of the Camera
             // x-axis rotation
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(rotXMinus)) // UpArrow
             {
                 transform.Rotate(Vector3.right, -rotationSpeed.x * Time.unscaledDeltaTime);
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKey(rotXPlus)) // DownArrow
             {
                 transform.Rotate(Vector3.right, +rotationSpeed.x * Time.unscaledDeltaTime);
             }
 
             // y-axis rotation
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(rotYMinus)) // LeftArrow
             {
                 transform.Rotate(Vector3.up, -rotationSpeed.y * Time.unscaledDeltaTime);
             }
-            else if (Input.GetKey(KeyCode.RightArrow))
+            else if (Input.GetKey(rotYPlus)) // RightArrow
             {
                 transform.Rotate(Vector3.up, +rotationSpeed.y * Time.unscaledDeltaTime);
             }
 
             // z-axis rotation
-            if (Input.GetKey(KeyCode.PageUp))
+            if (Input.GetKey(rotZMinus)) // PageUp
             {
                 transform.Rotate(Vector3.forward, -rotationSpeed.z * Time.unscaledDeltaTime);
             }
-            else if (Input.GetKey(KeyCode.PageDown))
+            else if (Input.GetKey(rotZPlus)) // PageDown
             {
                 transform.Rotate(Vector3.forward, +rotationSpeed.z * Time.unscaledDeltaTime);
             }
         }
 
         // resets the camera's position to what it was when the program first ran.
-        if(Input.GetKey(KeyCode.T))
+        if(Input.GetKey(posReset)) // Transform (T)
         {
             transform.position = defaultPosition;
         }
 
         // resets the camera's orientation to what it was when the program first ran.
-        if(Input.GetKey(KeyCode.R))
+        if(Input.GetKey(rotReset)) // Rotation (R)
         {
             transform.rotation = defaultRotation;
         }
