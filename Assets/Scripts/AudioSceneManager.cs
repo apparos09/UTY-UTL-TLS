@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 using util;
 
@@ -9,6 +10,9 @@ public class AudioSceneManager : MonoBehaviour
 {
     // the audio source
     public AudioSource audioSource;
+
+    // the audio source control (main)
+    public AudioSourceControl audioControlMain;
 
     // the audio slider.
     public Slider slider;
@@ -47,6 +51,65 @@ public class AudioSceneManager : MonoBehaviour
 
         clipStartText.text = looper.clipStart.ToString();
         clipEndText.text = looper.clipEnd.ToString();
+
+
+        // Tests
+        // RESOURCE NAME TEST 1
+        // // The following member calls and functions can be used to print the file name of the audio clip.
+        // // The file extension (e.g., ogg) is not included.
+        // Debug.Log(audioSource.resource); // fileName (UnityEngine.AudioClip)
+        // Debug.Log(audioSource.resource.name); // fileName
+        // Debug.Log(audioSource.resource.ToString()); // fileName (UnityEngine.AudioClip)
+
+        // // RESOURCE NAME TEST 2
+        // if (audioControlMain != null)
+        // {
+        //     if(audioControlMain.isActiveAndEnabled)
+        //     {
+        //         Debug.Log(audioControlMain.GetAudioSourceResourceName());
+        //     }
+        // }
+
+        // // FILE AND FILE PATH TEST
+        // string testFilePath = "World/Myths/Element";
+        // string testFile = "water.txt";
+        // string testFileAndPath;
+        // 
+        // // Test 1 - all forward slashes result
+        // testFilePath = "World/Myths/Element";
+        // testFile = "water.txt";
+        // testFileAndPath = FileReader.CombineFilePathAndFile(testFilePath, testFile);
+        // Debug.Log(testFileAndPath);
+        // 
+        // // Test 2 - all backward slashes result
+        // testFilePath = "World\\Myths\\Element";
+        // testFile = "fire.txt";
+        // testFileAndPath = FileReader.CombineFilePathAndFile(testFilePath, testFile);
+        // Debug.Log(testFileAndPath);
+        // 
+        // // Test 3 - forward slashes and one backward slash added
+        // testFilePath = "World/Myths/Element";
+        // testFile = "earth.txt";
+        // testFileAndPath = FileReader.CombineFilePathAndFile(testFilePath, testFile, false);
+        // Debug.Log(testFileAndPath);
+        // 
+        // // Test 4 - mix of forward slashes and backward slashes
+        // testFilePath = "World/Myths\\Element";
+        // testFile = "air.txt";
+        // testFileAndPath = FileReader.CombineFilePathAndFile(testFilePath, testFile, false);
+        // Debug.Log(testFileAndPath);
+        // 
+        // // Test 5 = mix of forward and backward slashes to all forward slashes
+        // testFilePath = "World/Myths\\Element";
+        // testFile = "electric.txt";
+        // testFileAndPath = FileReader.CombineFilePathAndFile(testFilePath, testFile, true);
+        // Debug.Log(testFileAndPath);
+        // 
+        // // Test 5 = mix of forward and backward slashes to all back slashes
+        // testFilePath = "World\\Myths/Element";
+        // testFile = "energy.txt";
+        // testFileAndPath = FileReader.CombineFilePathAndFile(testFilePath, testFile, true);
+        // Debug.Log(testFileAndPath);
     }
 
     // plays the audio
@@ -115,9 +178,9 @@ public class AudioSceneManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    { 
         // Updates the start clip text.
-        if(clipStartText.text != looper.clipStart.ToString())
+        if (clipStartText.text != looper.clipStart.ToString())
             clipStartText.text = looper.clipStart.ToString();
         
         // Updates the end clip text.
