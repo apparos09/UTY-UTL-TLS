@@ -6,6 +6,9 @@ using util;
 // Manages the sample scene.
 public class TextManager : MonoBehaviour
 {
+    // The file reader.
+    public FileReader fileReader;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +22,10 @@ public class TextManager : MonoBehaviour
         // RunSingletonTests();
 
         // Runs the string equation tests.
-        RunStringEquationTests();
+        // RunStringEquationTests();
+
+        // Runs the file reader tests.
+        RunFileReaderTests();
 
     }
 
@@ -141,6 +147,20 @@ public class TextManager : MonoBehaviour
             Debug.Log(eq + " = " + result);
         }
 
+    }
+
+    // Reads the file reader tests.
+    public void RunFileReaderTests()
+    {
+        // If the file reader exists...
+        if(fileReader != null)
+        {
+            // Reads the file.
+            fileReader.ReadFile();
+
+            // Reads the file a second time to test the array clear function.
+            fileReader.ReadFile();
+        }
     }
 
     // Update is called once per frame

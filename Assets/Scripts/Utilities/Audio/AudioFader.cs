@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Fades in (or out) the audio.
+
 namespace util
 {
+    // Fades in (or out) the audio.
     public class AudioFader : MonoBehaviour
     {
         // The audio source.
