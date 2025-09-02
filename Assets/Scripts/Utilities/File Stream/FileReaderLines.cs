@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 namespace util
 {
@@ -20,7 +21,14 @@ namespace util
                 return;
             }
 
-            // TODO: see if this works for clearing the array. C# garbage collection should take care of this?
+            // Clears the lines array. Not sure if necessary.
+            if(lines != null)
+            {
+                // Clears the lines array. This sets all entries to 'null' or an equivalent value.
+                Array.Clear(lines, 0, lines.Length);
+            }
+
+            // Sets lines to null.
             lines = null;
 
             // Gets all the lines from the file (@ specifies where the path is relative to - may not be needed).

@@ -3,6 +3,8 @@
  * - https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-read-from-a-text-file
  * - https://support.unity.com/hc/en-us/articles/115000341143-How-do-I-read-and-write-data-from-a-text-file-
  * - https://docs.microsoft.com/en-us/dotnet/api/system.io.file.exists?view=net-6.0
+ * - https://learn.microsoft.com/en-us/dotnet/api/system.io.path?view=net-9.0
+ * - https://learn.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=net-9.0
  */
 
 using System.Collections;
@@ -38,6 +40,48 @@ namespace util
             // Combines the two.
             result = filePath + fileName;
 
+            return result;
+        }
+
+        // Uses 'Path.Combine' to combine the provided file path and file.
+        // If 'convertSlashes' is true, the function will alter the result to contain only back slashes ("\") or forward slashes ("/").
+        // If the file path contains both a forward slash ("/") and a backwards slash ("\")...
+        // All slashes are changed to whichever one appears first. This is because...
+        // Path.Combine() can end up combining forward and backward slashes based on what's provided.
+        public static string CombineFilePathAndFile(string filePath, string file, bool convertSlashes = true)
+        {
+            // Gets the combination as a string.
+            string combo = Path.Combine(filePath, file);
+
+            // The result to be returned.
+            string result;
+
+            // If the combination contains a forward and backward slash, convert all the slashes to one type.
+            if(convertSlashes && combo.Contains("/") && combo.Contains("\\"))
+            {
+                // Gets the back and forward slash.
+                int forwardSlashIndex = combo.IndexOf("/");
+                int backSlashIndex = combo.IndexOf("\\");
+
+                // If forward slash comes first, convert all back slashes to forward slashes.
+                if(forwardSlashIndex < backSlashIndex)
+                {
+                    result = combo.Replace("\\", "/");
+                }
+                // If backslash comes first, or if the two indexes are the same (which shouldn't be possible)...
+                // Convert all forward slashes to back slashes.
+                else
+                {
+                    result = combo.Replace("/", "\\");
+                }
+            }
+            else
+            {
+                // No need to make changes.
+                result = combo;
+            }
+
+            // Return the result.
             return result;
         }
 
