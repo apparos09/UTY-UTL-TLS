@@ -358,6 +358,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 214172622}
   m_CullTransparentMesh: 1
+--- !u!1 &255724317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 255724319}
+  - component: {fileID: 255724318}
+  m_Layer: 0
+  m_Name: Audio File Dictionary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &255724318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255724317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af7bee46214fca4fa7376c4ceb2edb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &255724319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255724317}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261452114
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,7 +848,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 651184172}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc89aa234ee05d846b43cb961829f3c5, type: 3}
   m_Name: 
@@ -914,6 +957,7 @@ GameObject:
   m_Component:
   - component: {fileID: 810703978}
   - component: {fileID: 810703979}
+  - component: {fileID: 810703981}
   - component: {fileID: 810703980}
   m_Layer: 0
   m_Name: Audio Source (Main)
@@ -1048,6 +1092,21 @@ MonoBehaviour:
   stopOnFadeOut: 1
   resetVolumeOnFadeOutEnd: 1
   fadeDuration: 7
+--- !u!114 &810703981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810703977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052f69ae20921ef4ea1c5a3a69eb04d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 810703979}
+  maxVolume: 1
+  autoSetMaxVolume: 1
 --- !u!1 &905442316
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,6 +1458,7 @@ MonoBehaviour:
   clipEnd: 30
   playAtClipStart: 0
   loopRelative: 1
+  clipLoopEnabled: 1
 --- !u!114 &1418963700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1412,13 +1472,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 810703979}
+  audioControlMain: {fileID: 810703981}
   slider: {fileID: 195997346}
   audioCurrTime: {fileID: 1907770511}
   audioCurrTimeSeconds: {fileID: 1166089067}
   audioLength: {fileID: 1437600616}
   clipStartText: {fileID: 699207922}
   clipEndText: {fileID: 481978841}
-  audioFader: {fileID: 0}
+  audioFader: {fileID: 810703980}
   looper: {fileID: 1418963699}
 --- !u!114 &1418963702
 MonoBehaviour:
@@ -1437,6 +1498,7 @@ MonoBehaviour:
   clipEnd: 30
   playAtClipStart: 1
   loopRelative: 0
+  clipLoopEnabled: 1
   mainFade: {fileID: 810703980}
   transitionFade: {fileID: 1605140227}
   fadeDuration: 5
