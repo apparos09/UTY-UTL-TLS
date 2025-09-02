@@ -47,32 +47,60 @@ namespace util
             // GameSettings.Instance.AdjustAudio(this);
         }
 
-        // Gets the name of the audio source's resource. This does NOT include the file extension.
-        public string GetAudioSourceResourceName()
+        // Gets the name of the audio source's clip. This does NOT include the file extension.
+        public string GetAudioSourceClipName()
         {
             // If the audio source doesn't exist, return empty string.
-            if(audioSource == null)
+            if (audioSource == null)
             {
                 return string.Empty;
             }
             else
             {
-                // If no resource is set, return an empty string.
-                if(audioSource.resource == null)
+                // If no clip is set, return an empty string.
+                if (audioSource.clip == null)
                 {
                     return string.Empty;
                 }
-                // If the audio resource exists, return its name.
+                // If the audio clip exists, return its name.
                 else
                 {
-                    // If "audioSource.resource" or "audioSource.resource.ToString()" are used...
+                    // If "audioSource.clip" or "audioSource.clip.ToString()" are used...
                     // the text "(UnityEngine.AudioClip)" will be included. In other words, the result will be...
                     // "fileName (UnityEngine.AudioClip)".
                     // e.g., a file named "music.mp3" would produce "music (UnityEngine.AudioClip)".
-                    return audioSource.resource.name;
+                    return audioSource.clip.name;
                 }
             }
         }
+
+        // Commented out because older Unity versions don't support this, and AudioClip is more accurate.
+        // // Gets the name of the audio source's resource. This does NOT include the file extension.
+        // public string GetAudioSourceResourceName()
+        // {
+        //     // If the audio source doesn't exist, return empty string.
+        //     if(audioSource == null)
+        //     {
+        //         return string.Empty;
+        //     }
+        //     else
+        //     {
+        //         // If no resource is set, return an empty string.
+        //         if(audioSource.resource == null)
+        //         {
+        //             return string.Empty;
+        //         }
+        //         // If the audio resource exists, return its name.
+        //         else
+        //         {
+        //             // If "audioSource.resource" or "audioSource.resource.ToString()" are used...
+        //             // the text "(UnityEngine.AudioClip)" will be included. In other words, the result will be...
+        //             // "fileName (UnityEngine.AudioClip)".
+        //             // e.g., a file named "music.mp3" would produce "music (UnityEngine.AudioClip)".
+        //             return audioSource.resource.name;
+        //         }
+        //     }
+        // }
 
         // The maximum volume variable.
         public float MaxVolume

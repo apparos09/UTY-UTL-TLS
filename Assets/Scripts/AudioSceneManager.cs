@@ -54,7 +54,7 @@ public class AudioSceneManager : MonoBehaviour
 
 
         // Tests
-        // RESOURCE NAME TEST 1
+        // // RESOURCE NAME TEST 1
         // // The following member calls and functions can be used to print the file name of the audio clip.
         // // The file extension (e.g., ogg) is not included.
         // Debug.Log(audioSource.resource); // fileName (UnityEngine.AudioClip)
@@ -69,6 +69,23 @@ public class AudioSceneManager : MonoBehaviour
         //         Debug.Log(audioControlMain.GetAudioSourceResourceName());
         //     }
         // }
+
+
+        // AUDIO CLIP NAME TEST 1
+        // Debug.Log(audioSource.clip); // fileName (UnityEngine.AudioClip)
+        // Debug.Log(audioSource.clip.name); // fileName
+        // Debug.Log(audioSource.clip.ToString()); // fileName (UnityEngine.AudioClip)
+
+        // // // AUDIO CLIP NAME TEST 2
+        // if (audioControlMain != null)
+        // {
+        //     if(audioControlMain.isActiveAndEnabled)
+        //     {
+        //         Debug.Log(audioControlMain.GetAudioSourceClipName());
+        // 
+        //     }
+        // }
+
 
         // // FILE AND FILE PATH TEST
         // string testFilePath = "World/Myths/Element";

@@ -22,7 +22,7 @@ namespace util
             public string fileName;
 
             // The file type (extension) for the file.
-            // NOTE: getting the name of a resource in Unity provides its name, but not its file extension.
+            // NOTE: getting the name of a asset in Unity provides its name, but not its file extension.
             // Not sure if there's a way to get the file extension, but since Unity largely ignores this...
             // It has been left out.
             public string fileType;
