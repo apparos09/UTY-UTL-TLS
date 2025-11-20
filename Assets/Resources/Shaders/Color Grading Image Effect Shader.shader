@@ -51,16 +51,12 @@ Shader "Hidden/Color Grading Image Effect Shader"
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
-                
-                // The three color coordinates for the current pixel.
-                fixed colR = col.r;
-                fixed colG = col.g;
-                fixed colB = col.b;
+               
 
                 // Gets the new colors for red, green, and blue color coordinates as uvs.
                 fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, col.r));
-                fixed4 newColGreen = tex2D(_ColorGradeRed, fixed2(col.g, col.g));
-                fixed4 newColBlue = tex2D(_ColorGradeRed, fixed2(col.b, col.b));
+                fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, col.g));
+                fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, col.b));
 
                 // Creates the new color.
                 fixed4 newCol = col;

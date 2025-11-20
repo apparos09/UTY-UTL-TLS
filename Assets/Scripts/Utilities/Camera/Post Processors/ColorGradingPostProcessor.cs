@@ -57,7 +57,7 @@ namespace util
         // Sets the textures to be used for color grading.
         public void SetColorGradeTexturesToMaterial()
         {
-            // Sets the color grading textures.
+            // Sets the color grading textures. Data type sampler2D in the shader.
             postMaterial.SetTexture(colorGradeRedId, colorGradeRed);
             postMaterial.SetTexture(colorGradeGreenId, colorGradeGreen);
             postMaterial.SetTexture(colorGradeBlueId, colorGradeBlue);
