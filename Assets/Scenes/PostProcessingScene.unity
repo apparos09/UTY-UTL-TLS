@@ -888,9 +888,9 @@ MonoBehaviour:
   colorGradeRedId: _ColorGradeRed
   colorGradeGreenId: _ColorGradeGreen
   colorGradeBlueId: _ColorGradeBlue
-  colorGradeRed: {fileID: 2800000, guid: 41a97ed7ef9254e449f42ed0444e2d78, type: 3}
-  colorGradeGreen: {fileID: 2800000, guid: 7dc0e47e48de35a4a8275a6294bcd4e9, type: 3}
-  colorGradeBlue: {fileID: 2800000, guid: 2e402c6856fbae34aa1cd260f8334bdf, type: 3}
+  colorGradeRed: {fileID: 2800000, guid: f11dea033f1bbb14fae0e12f7cb5ee3a, type: 3}
+  colorGradeGreen: {fileID: 2800000, guid: 9329a69c2433a1f48ada7a1f652993f9, type: 3}
+  colorGradeBlue: {fileID: 2800000, guid: 310cc8e9172613e4f9d5bbdaaebc9a15, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

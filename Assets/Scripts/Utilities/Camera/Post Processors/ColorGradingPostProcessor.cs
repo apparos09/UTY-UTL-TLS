@@ -1,4 +1,3 @@
-using Unity.Android.Gradle;
 using UnityEngine;
 
 namespace util
@@ -30,15 +29,15 @@ namespace util
         protected override void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             // Gets the material's tint.
-            Texture2D red = (Texture2D)postMaterial.GetTexture(colorGradeRedId);
-            Texture2D green = (Texture2D)postMaterial.GetTexture(colorGradeGreenId);
-            Texture2D blue = (Texture2D)postMaterial.GetTexture(colorGradeBlueId);
+            // Texture2D red = (Texture2D)postMaterial.GetTexture(colorGradeRedId);
+            // Texture2D green = (Texture2D)postMaterial.GetTexture(colorGradeGreenId);
+            // Texture2D blue = (Texture2D)postMaterial.GetTexture(colorGradeBlueId);
 
-            // If one of the textures don't match, update them.
-            if (red != colorGradeRed || green != colorGradeGreen || blue != colorGradeBlue)
-            {
-                SetColorGradeTexturesToMaterial();
-            }
+            // // If one of the textures don't match, update them.
+            // if (red != colorGradeRed || green != colorGradeGreen || blue != colorGradeBlue)
+            // {
+            //     SetColorGradeTexturesToMaterial();
+            // }
 
             base.OnRenderImage(source, destination);
         }
