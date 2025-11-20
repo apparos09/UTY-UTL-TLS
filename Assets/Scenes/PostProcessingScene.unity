@@ -760,11 +760,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2140499235}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3455ef0376acd34a97eaa51788b10bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f1ac29607f150745bc159d8210a3687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 2140499237}
-  postShader: {fileID: 4800000, guid: af15bc4f1fff9c44e8d6f0a07ede2b42, type: 3}
+  camera: {fileID: 0}
+  postShader: {fileID: 4800000, guid: fc8e0c606a45bde44a88bdfa13e374e7, type: 3}
 --- !u!114 &2140499240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,7 +830,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140499235}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d36f0e349238443408d74860b3b0712f, type: 3}
   m_Name: 
@@ -878,7 +878,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140499235}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8e8353a908f51140bb874ede7d9e995, type: 3}
   m_Name: 

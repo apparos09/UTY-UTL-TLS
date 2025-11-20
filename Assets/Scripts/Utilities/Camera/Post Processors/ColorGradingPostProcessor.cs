@@ -4,7 +4,7 @@ using UnityEngine;
 namespace util
 {
     // Alters the colour of the image using color grading.
-    public class CameraColorGradingPostProcessor : CameraPostProcessor
+    public class ColorGradingPostProcessor : PostProcessor
     {
         [Header("Texture IDs")]
         public string colorGradeRedId = "_ColorGradeRed";

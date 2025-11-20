@@ -5,10 +5,10 @@ Shader "Hidden/Color Grading Image Effect Shader"
         _MainTex ("Texture", 2D) = "white" {}
     }
 
-    CGINCLUDE
-        Texture _ColorGradeRed;
-        Texture _ColorGradeGreen;
-        Texture _ColorGradeBlue;
+    // CGINCLUDE
+    //     Texture _ColorGradeRed;
+    //     Texture _ColorGradeGreen;
+    //     Texture _ColorGradeBlue;
 
     SubShader
     {

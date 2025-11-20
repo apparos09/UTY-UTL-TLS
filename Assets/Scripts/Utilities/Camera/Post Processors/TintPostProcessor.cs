@@ -5,7 +5,7 @@ using UnityEngine;
 namespace util
 {
     // A camera tint post processor for a camera.
-    public class CameraTintPostProcessor : CameraPostProcessor
+    public class TintPostProcessor : PostProcessor
     {
         [Header("Tint")]
 
