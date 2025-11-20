@@ -13,7 +13,7 @@ using UnityEngine;
 namespace util
 {
     // The kernel post processor for the camera.
-    public class CameraKernelPostProcessor : CameraPostProcessor
+    public class KernelPostProcessor : PostProcessor
     {
         // The saved post process state state. The shader should only be updated if the state has changed.
         protected struct ProcessState

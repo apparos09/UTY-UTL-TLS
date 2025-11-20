@@ -22,7 +22,7 @@ namespace util
 {
     // If 'true', the effects are executed in edit mode and scene view.
     // [ExecuteInEditMode, ImageEffectAllowedInSceneView]
-    public class CameraPostProcessor : MonoBehaviour
+    public class PostProcessor : MonoBehaviour
     {
         // The camera the post processor is attached to.
         public new Camera camera;

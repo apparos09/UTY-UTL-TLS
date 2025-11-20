@@ -16,7 +16,7 @@ namespace util
     // Applies a convolution kernel to the camera render.
     // This code is INEFFICIENT since it goes through every pixel of the render texture.
     // It's recommended that this is NOT USED. Use the post processing version that operates with a shader instead.
-    public class CameraKernelRenderFilter : CameraRenderFilterer
+    public class KernelRenderFilter : RenderFilterer
     {
         // The most common kernel sizes are 1x1 and 3x3.
         // 3x3 convolutions are more efficient than 5x5 and 7x7.
