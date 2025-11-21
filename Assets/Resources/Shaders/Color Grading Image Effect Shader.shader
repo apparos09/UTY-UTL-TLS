@@ -28,6 +28,10 @@ Shader "Hidden/Color Grading Image Effect Shader"
             return o;
         }
 
+        // Specifies if using one colour grade or not.
+        fixed _SingleGradeMode;
+
+        sampler2D _ColorGrade;
         sampler2D _ColorGradeRed;
         sampler2D _ColorGradeGreen;
         sampler2D _ColorGradeBlue;
@@ -52,17 +56,30 @@ Shader "Hidden/Color Grading Image Effect Shader"
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
                
-
-                // Gets the new colors for red, green, and blue color coordinates as uvs.
-                fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, col.r));
-                fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, col.g));
-                fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, col.b));
-
-                // Creates the new color.
+                // The new color.
                 fixed4 newCol = col;
-                newCol.r = newColRed.r;
-                newCol.g = newColGreen.g;
-                newCol.b = newColBlue.b;
+
+                // 0 = false, anything else is true.
+                if(_SingleGradeMode) // Single grade mode.
+                {
+                    // R = U (X), G = UV (XY), B = V (Y)
+                    newCol.r = tex2D(_ColorGrade, fixed2(col.r, 0.0F));
+                    newCol.g = tex2D(_ColorGrade, fixed2(col.g, col.g));
+                    newCol.b = tex2D(_ColorGrade, fixed2(0.0F, col.b));
+                }
+                else // Multi-grade mode.
+                {
+                    // Gets the new colors for red, green, and blue color coordinates as uvs.
+                    fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, col.r));
+                    fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, col.g));
+                    fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, col.b));
+
+                    // Sets new colors.
+                    newCol.r = newColRed.r;
+                    newCol.g = newColGreen.g;
+                    newCol.b = newColBlue.b;
+                    newCol.a = col.a; // Unneeded.
+                }
 
                 // Returns the new color.
                 return newCol;
