@@ -58,28 +58,37 @@ Shader "Hidden/Color Grading Image Effect Shader"
                
                 // The new color.
                 fixed4 newCol = col;
-
-                // 0 = false, anything else is true.
-                if(_SingleGradeMode) // Single grade mode.
+                
+                // Checks that the new color is not black or white.
+                fixed notBlack = newCol.r != 0.0F && newCol.g != 0.0F && newCol.b != 0.0F;
+                fixed notWhite = newCol.r != 1.0F && newCol.g != 1.0F && newCol.b != 1.0F;
+                
+                if(notBlack && notWhite)
                 {
-                    // R = U (X), G = UV (XY), B = V (Y)
-                    newCol.r = tex2D(_ColorGrade, fixed2(col.r, 0.0F));
-                    newCol.g = tex2D(_ColorGrade, fixed2(col.g, col.g));
-                    newCol.b = tex2D(_ColorGrade, fixed2(0.0F, col.b));
-                }
-                else // Multi-grade mode.
-                {
-                    // Gets the new colors for red, green, and blue color coordinates as uvs.
-                    fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.0F));
-                    fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, 0.0F));
-                    fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, 0.0F));
+                    // 0 = false, anything else is true.
+                    if(_SingleGradeMode) // Single grade mode.
+                    {
+                        // R = U (X), G = UV (XY), B = V (Y)
+                        newCol.r = tex2D(_ColorGrade, fixed2(col.r, 0.0F));
+                        newCol.g = tex2D(_ColorGrade, fixed2(col.g, col.g));
+                        newCol.b = tex2D(_ColorGrade, fixed2(0.0F, col.b));
+                    }
+                    else // Multi-grade mode.
+                    {
+                        // Gets the new colors for red, green, and blue color coordinates as uvs.
+                        fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.5F));
+                        fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, 0.5F));
+                        fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, 0.5F));
 
-                    // Sets new colors.
-                    newCol.r = newColRed.r;
-                    newCol.g = newColGreen.g;
-                    newCol.b = newColBlue.b;
-                    // newCol.a = col.a; // Unneeded.
+                        // Sets new colors.
+                        newCol.r = newColRed.r;
+                        newCol.g = newColGreen.g;
+                        newCol.b = newColBlue.b;
+                        // newCol.a = col.a; // Unneeded.
+                    }
                 }
+
+                
 
                 // Returns the new color.
                 return newCol;
