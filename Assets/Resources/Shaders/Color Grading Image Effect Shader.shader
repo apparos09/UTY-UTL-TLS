@@ -63,9 +63,10 @@ Shader "Hidden/Color Grading Image Effect Shader"
                 if(_SingleGradeMode) // Single grade mode.
                 {
                     // R = U (X), G = UV (XY), B = V (Y)
-                    newCol.r = tex2D(_ColorGrade, fixed2(col.r, 0.0F));
-                    newCol.g = tex2D(_ColorGrade, fixed2(col.g, col.g));
-                    newCol.b = tex2D(_ColorGrade, fixed2(0.0F, col.b));
+                    // Red is the top row, Green is the middle row, and Blue is the bottom row.
+                    newCol.r = tex2D(_ColorGrade, fixed2(col.r, 1.0F));
+                    newCol.g = tex2D(_ColorGrade, fixed2(col.g, 0.5F));
+                    newCol.b = tex2D(_ColorGrade, fixed2(col.b, 0.0F));
                 }
                 else // Multi-grade mode.
                 {
