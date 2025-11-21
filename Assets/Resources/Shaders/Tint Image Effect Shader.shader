@@ -51,7 +51,7 @@ Shader "Hidden/Tint Image Effect Shader"
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                // tint the colors
+                // Tint the colors
                 return col * _Tint;
             }
             ENDCG

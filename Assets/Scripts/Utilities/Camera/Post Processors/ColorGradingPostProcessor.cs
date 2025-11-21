@@ -3,6 +3,9 @@ using UnityEngine;
 namespace util
 {
     // Alters the colour of the image using color grading.
+    // TODO: the colour grading shaders don't work. For some reason, the darkest and lightest parts of the render...
+    // Don't get recoloured properly. Telling the program to ignore pure black and white from the original render...
+    // Didn't fix it either. Don't use this, as it doesn't work properly.
     public class ColorGradingPostProcessor : PostProcessor
     {
         [Header("ColorGrading")]
