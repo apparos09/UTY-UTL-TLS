@@ -1,4 +1,4 @@
-Shader "Hidden/Color Grading Image Effect Shader"
+Shader "Hidden/Color Grading Multiple Image Effect Shader"
 {
     Properties
     {
@@ -26,12 +26,8 @@ Shader "Hidden/Color Grading Image Effect Shader"
             o.vertex = UnityObjectToClipPos(v.vertex);
             o.uv = v.uv;
             return o;
-        }
+        };
 
-        // Specifies if using one colour grade or not.
-        fixed _SingleGradeMode;
-
-        sampler2D _ColorGradeRGB;
         sampler2D _ColorGradeRed;
         sampler2D _ColorGradeGreen;
         sampler2D _ColorGradeBlue;
@@ -59,28 +55,11 @@ Shader "Hidden/Color Grading Image Effect Shader"
                 fixed4 newCol = col;
 
                 // RGB components of the new color.
-                fixed4 newColRed;
-                fixed4 newColGreen;
-                fixed4 newColBlue;
-
                 // In Unity UV space, the bottom left corner is (0,0).
-
-                // Gets the new colors.
-                // 0 = false, anything else is true.
-                if(_SingleGradeMode) // Single grade mode. One texture has all 3 channels seperated.
-                {
-                    // Red is the top row, Green is the middle row, and Blue is the bottom row.
-                    newColRed = tex2D(_ColorGradeRGB, fixed2(col.r, 1.0F));
-                    newColGreen = tex2D(_ColorGradeRGB, fixed2(col.g, 0.5F));
-                    newColBlue = tex2D(_ColorGradeRGB, fixed2(col.b, 0.0F));
-                }
-                else // Multi-grade mode. Each channel is a seperate texture.
-                {
-                    // Each image is one color channel (R, G, B).
-                    newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.0F));
-                    newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, 0.0F));
-                    newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, 0.0F));
-                }
+                // Gets the new RGB channel values from the reference textures. Each texture is one channel (R, G, B).
+                fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.0F));
+                fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, 0.0F));
+                fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, 0.0F));
                 
                 // Sets new colors.
                 newCol.r = newColRed.r;
