@@ -885,13 +885,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
   postShader: {fileID: 4800000, guid: a4ec008dd13ed0147b9815102ce56377, type: 3}
-  singleGradeMode: 0
+  singleGradeMode: 1
   singleGradeModeId: _SingleGradeMode
-  colorGradeId: _ColorGrade
+  colorGradeRGBId: _ColorGradeRGB
   colorGradeRedId: _ColorGradeRed
   colorGradeGreenId: _ColorGradeGreen
   colorGradeBlueId: _ColorGradeBlue
-  colorGrade: {fileID: 2800000, guid: e719a58d51683d945b1e313c43186089, type: 3}
+  colorGradeRGB: {fileID: 2800000, guid: e719a58d51683d945b1e313c43186089, type: 3}
   colorGradeRed: {fileID: 2800000, guid: 0b4965a50234af5419d384cf97457754, type: 3}
   colorGradeGreen: {fileID: 2800000, guid: 9172d1b2342990b4ebd68a4473a9e08b, type: 3}
   colorGradeBlue: {fileID: 2800000, guid: 9786620b4ca4e5346b7b4418d67eb4a6, type: 3}

@@ -19,7 +19,7 @@ namespace util
 
         [Header("ColorGrading/Texture IDs")]
         // All in 1 color grade.
-        public string colorGradeId = "_ColorGrade";
+        public string colorGradeRGBId = "_ColorGradeRGB";
 
         // RGB
         public string colorGradeRedId = "_ColorGradeRed";
@@ -28,7 +28,7 @@ namespace util
 
         [Header("ColorGrading/Textures")]
         // Combined color grade.
-        public Texture2D colorGrade;
+        public Texture2D colorGradeRGB;
 
         // The three colour grading textures.
         public Texture2D colorGradeRed;
@@ -66,7 +66,7 @@ namespace util
         // Sets the combined color grade texture.
         protected void SetColorGradeTexture(Texture2D colorGrade)
         {
-            this.colorGrade = colorGrade;
+            this.colorGradeRGB = colorGrade;
             SetValuesToMaterial();
         }
 
@@ -94,7 +94,7 @@ namespace util
             // Combined color grade.
             if(singleGradeMode)
             {
-                postMaterial.SetTexture(colorGradeId, colorGrade);
+                postMaterial.SetTexture(colorGradeRGBId, colorGradeRGB);
             }
             else
             {

@@ -31,7 +31,7 @@ Shader "Hidden/Color Grading Image Effect Shader"
         // Specifies if using one colour grade or not.
         fixed _SingleGradeMode;
 
-        sampler2D _ColorGrade;
+        sampler2D _ColorGradeRGB;
         sampler2D _ColorGradeRed;
         sampler2D _ColorGradeGreen;
         sampler2D _ColorGradeBlue;
@@ -59,28 +59,34 @@ Shader "Hidden/Color Grading Image Effect Shader"
                 // The new color.
                 fixed4 newCol = col;
 
+                // RGB components of the new color.
+                fixed4 newColRed;
+                fixed4 newColGreen;
+                fixed4 newColBlue;
+
+                // In Unity UV space, the bottom left corner is (0,0).
+
                 // 0 = false, anything else is true.
                 if(_SingleGradeMode) // Single grade mode.
                 {
-                    // R = U (X), G = UV (XY), B = V (Y)
                     // Red is the top row, Green is the middle row, and Blue is the bottom row.
-                    newCol.r = tex2D(_ColorGrade, fixed2(col.r, 1.0F));
-                    newCol.g = tex2D(_ColorGrade, fixed2(col.g, 0.5F));
-                    newCol.b = tex2D(_ColorGrade, fixed2(col.b, 0.0F));
+                    newColRed = tex2D(_ColorGradeRGB, fixed2(col.r, 1.0F));
+                    newColGreen = tex2D(_ColorGradeRGB, fixed2(col.g, 0.5F));
+                    newColBlue = tex2D(_ColorGradeRGB, fixed2(col.b, 0.0F));
                 }
                 else // Multi-grade mode.
                 {
                     // Gets the new colors for red, green, and blue color coordinates as uvs.
-                    fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.0F));
-                    fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, 0.0F));
-                    fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, 0.0F));
-
-                    // Sets new colors.
-                    newCol.r = newColRed.r;
-                    newCol.g = newColGreen.g;
-                    newCol.b = newColBlue.b;
-                    // newCol.a = col.a; // Unneeded.
+                    newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.0F));
+                    newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, 0.0F));
+                    newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, 0.0F));
                 }
+                
+                // Sets new colors.
+                newCol.r = newColRed.r;
+                newCol.g = newColGreen.g;
+                newCol.b = newColBlue.b;
+                // newCol.a = col.a; // Unneeded.
 
                 // Returns the new color.
                 return newCol;
