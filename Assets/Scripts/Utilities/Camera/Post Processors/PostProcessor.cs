@@ -5,6 +5,7 @@ using UnityEngine;
 /*
  * Sources:
  *  - https://www.youtube.com/watch?v=ahplcYCmfG0
+ *  - https://www.youtube.com/watch?v=gY1Mx4kkZPU
  *  - https://docs.unity3d.com/Manual/Shaders.html
  *  - https://docs.unity3d.com/Manual/PostProcessingOverview.html
  *  - https://docs.unity3d.com/ScriptReference/Graphics.Blit.html
