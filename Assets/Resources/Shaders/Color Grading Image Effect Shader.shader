@@ -70,15 +70,15 @@ Shader "Hidden/Color Grading Image Effect Shader"
                 else // Multi-grade mode.
                 {
                     // Gets the new colors for red, green, and blue color coordinates as uvs.
-                    fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, col.r));
-                    fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, col.g));
-                    fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, col.b));
+                    fixed4 newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.0F));
+                    fixed4 newColGreen = tex2D(_ColorGradeGreen, fixed2(col.g, 0.0F));
+                    fixed4 newColBlue = tex2D(_ColorGradeBlue, fixed2(col.b, 0.0F));
 
                     // Sets new colors.
                     newCol.r = newColRed.r;
                     newCol.g = newColGreen.g;
                     newCol.b = newColBlue.b;
-                    newCol.a = col.a; // Unneeded.
+                    // newCol.a = col.a; // Unneeded.
                 }
 
                 // Returns the new color.
