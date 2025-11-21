@@ -667,6 +667,8 @@ GameObject:
   - component: {fileID: 2140499240}
   - component: {fileID: 2140499244}
   - component: {fileID: 2140499246}
+  - component: {fileID: 2140499248}
+  - component: {fileID: 2140499247}
   - component: {fileID: 2140499241}
   - component: {fileID: 2140499242}
   - component: {fileID: 2140499243}
@@ -878,7 +880,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140499235}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8e8353a908f51140bb874ede7d9e995, type: 3}
   m_Name: 
@@ -886,15 +888,51 @@ MonoBehaviour:
   camera: {fileID: 0}
   postShader: {fileID: 4800000, guid: a4ec008dd13ed0147b9815102ce56377, type: 3}
   singleGradeMode: 1
-  singleGradeModeId: _SingleGradeMode
-  colorGradeRGBId: _ColorGradeRGB
-  colorGradeRedId: _ColorGradeRed
-  colorGradeGreenId: _ColorGradeGreen
-  colorGradeBlueId: _ColorGradeBlue
+  singleGradeModeID: _SingleGradeMode
+  colorGradeRGBID: _ColorGradeRGB
+  colorGradeRedID: _ColorGradeRed
+  colorGradeGreenID: _ColorGradeGreen
+  colorGradeBlueID: _ColorGradeBlue
   colorGradeRGB: {fileID: 2800000, guid: e719a58d51683d945b1e313c43186089, type: 3}
   colorGradeRed: {fileID: 2800000, guid: 0b4965a50234af5419d384cf97457754, type: 3}
   colorGradeGreen: {fileID: 2800000, guid: 9172d1b2342990b4ebd68a4473a9e08b, type: 3}
   colorGradeBlue: {fileID: 2800000, guid: 9786620b4ca4e5346b7b4418d67eb4a6, type: 3}
+--- !u!114 &2140499247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140499235}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594583ec20ee7d6469f61314ea3014b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  postShader: {fileID: 4800000, guid: 67398ff04e153014ba7f54176caa9901, type: 3}
+  colorGradeRedID: _ColorGradeRed
+  colorGradeGreenID: _ColorGradeGreen
+  colorGradeBlueID: _ColorGradeBlue
+  colorGradeRed: {fileID: 2800000, guid: 0b4965a50234af5419d384cf97457754, type: 3}
+  colorGradeGreen: {fileID: 2800000, guid: 9172d1b2342990b4ebd68a4473a9e08b, type: 3}
+  colorGradeBlue: {fileID: 2800000, guid: 9786620b4ca4e5346b7b4418d67eb4a6, type: 3}
+--- !u!114 &2140499248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140499235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb03bcacd9f7bfa4584eb58c82146784, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  postShader: {fileID: 4800000, guid: b6a1ebe82f3dd3340a8c02cb561bae97, type: 3}
+  colorGradeRGBID: _ColorGradeRGB
+  colorGradeRGB: {fileID: 2800000, guid: e719a58d51683d945b1e313c43186089, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

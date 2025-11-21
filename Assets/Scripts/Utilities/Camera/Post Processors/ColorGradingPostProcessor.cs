@@ -15,19 +15,19 @@ namespace util
         public bool singleGradeMode = true;
 
         // ID used for setting single grade mode.
-        public string singleGradeModeId = "_SingleGradeMode";
+        public string singleGradeModeID = "_SingleGradeMode";
 
         [Header("ColorGrading/Texture IDs")]
         // All in 1 color grade.
-        public string colorGradeRGBId = "_ColorGradeRGB";
+        public string colorGradeRGBID = "_ColorGradeRGB";
 
         // RGB
-        public string colorGradeRedId = "_ColorGradeRed";
-        public string colorGradeGreenId = "_ColorGradeGreen";
-        public string colorGradeBlueId = "_ColorGradeBlue";
+        public string colorGradeRedID = "_ColorGradeRed";
+        public string colorGradeGreenID = "_ColorGradeGreen";
+        public string colorGradeBlueID = "_ColorGradeBlue";
 
         [Header("ColorGrading/Textures")]
-        // Combined color grade.
+        // Combined color grade. Top row is red, middle row is green, and bottom row is blue.
         public Texture2D colorGradeRGB;
 
         // The three colour grading textures.
@@ -54,9 +54,9 @@ namespace util
             float singleGradeModeFloat = singleGradeMode ? 1.0F : 0.0F;
 
             // The texture mode needs to be changed.
-            if(postMaterial.GetFloat(singleGradeModeId) != singleGradeModeFloat)
+            if(postMaterial.GetFloat(singleGradeModeID) != singleGradeModeFloat)
             {
-                postMaterial.SetFloat(singleGradeModeId, singleGradeModeFloat);
+                postMaterial.SetFloat(singleGradeModeID, singleGradeModeFloat);
             }
 
             base.OnRenderImage(source, destination);
@@ -88,20 +88,20 @@ namespace util
         {
             // Setting the mode.
             float singleGradeModeFloat = singleGradeMode ? 1.0F : 0.0F;
-            postMaterial.SetFloat(singleGradeModeId, singleGradeModeFloat);
+            postMaterial.SetFloat(singleGradeModeID, singleGradeModeFloat);
 
             // Setting the texture seems to work, but not getting the texture.
             // Combined color grade.
             if(singleGradeMode)
             {
-                postMaterial.SetTexture(colorGradeRGBId, colorGradeRGB);
+                postMaterial.SetTexture(colorGradeRGBID, colorGradeRGB);
             }
             else
             {
                 // Sets the color grading textures. Data type sampler2D in the shader.
-                postMaterial.SetTexture(colorGradeRedId, colorGradeRed);
-                postMaterial.SetTexture(colorGradeGreenId, colorGradeGreen);
-                postMaterial.SetTexture(colorGradeBlueId, colorGradeBlue);
+                postMaterial.SetTexture(colorGradeRedID, colorGradeRed);
+                postMaterial.SetTexture(colorGradeGreenID, colorGradeGreen);
+                postMaterial.SetTexture(colorGradeBlueID, colorGradeBlue);
             }
         }
     }
