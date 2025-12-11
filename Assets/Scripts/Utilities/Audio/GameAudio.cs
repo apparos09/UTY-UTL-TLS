@@ -19,6 +19,13 @@ namespace util
         // Voice
         public AudioSource vceSource;
 
+
+        // Awake is called when the script instance is being loaded
+        protected virtual void Awake()
+        {
+            // ...
+        }
+
         // Start is called before the first frame update
         protected virtual void Start()
         {
@@ -33,8 +40,6 @@ namespace util
                 }
             }
         }
-
-
 
         // BACKGROUND MUSIC
         // Plays the provided background music.
@@ -225,6 +230,12 @@ namespace util
         {
             if (vceSource != null)
                 vceSource.Stop();
+        }
+
+        // Update is called once per frame
+        protected virtual void Update()
+        {
+            // ...
         }
     }
 }
