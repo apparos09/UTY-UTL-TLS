@@ -98,7 +98,7 @@ namespace util
         private TextBoxCallback closedCallback;
 
         // Callback for the textbox finishing.
-        private TextBoxCallback doneCallback;
+        private TextBoxCallback finishedCallback;
 
         // Start is called before the first frame update
         void Start()
@@ -629,21 +629,21 @@ namespace util
         // This is only called if the user attempts to go onto the next page when there is none.
         public void OnTextBoxFinishedAddCallback(TextBoxCallback callback)
         {
-            doneCallback += callback;
+            finishedCallback += callback;
         }
 
         // Removes the callback.
         public void OnTextBoxFinishedRemoveCallback(TextBoxCallback callback)
         {
-            doneCallback -= callback;
+            finishedCallback -= callback;
         }
 
         // Called when all the text has been displayed.
         private void OnTextBoxFinished()
         {
             // Checks if there are functions to call.
-            if (doneCallback != null)
-                doneCallback();
+            if (finishedCallback != null)
+                finishedCallback();
 
             // If the text box should be closed when it's done.
             if (closeOnEnd)
