@@ -17,7 +17,7 @@ namespace util
         public static List<T> RandomizeListOrder<T>(List<T> list)
         {
             // Creates a copy of the list and makes a list for random values.
-            List<T> listCopy = list;
+            List<T> listCopy = new List<T>(list);
             List<T> randList = new List<T>();
 
             // While the list copy has values, add them to randList in a random order.
