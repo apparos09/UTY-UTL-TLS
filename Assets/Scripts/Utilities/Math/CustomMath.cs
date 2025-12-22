@@ -881,5 +881,110 @@ namespace util
 
             return result;
         }
+
+        // Gets argument 'gridPosition' in a grid in world units. This accounts for the gri's origin and the size (in pixels) of each grid space.
+        // The grid origin ranges from (0, 0) to (1, 1). The middle of the grid is (0.5, 0.5).
+        // The space origin is the origin point of a space, which ranges from (0, 0) to (1, 1). By default it should be the middle of the space (0.5, 0.5).
+        public static Vector2 GetPositionInGridInWorldUnits(Vector2 gridSize, Vector2 gridOrigin, Vector2 spaceSize, Vector2 spaceOrigin, Vector2 gridPosition)
+        {
+            // The grid size in world units.
+            Vector2 gridSizeWorld = gridSize * spaceSize;
+
+            // The grid's origin position offset.
+            // This operates under the assumption that the grid origin is its centre (0.5, 0.5) by default.
+            // Since the default origin is (0.5, 0.5), a calculation is done to offset it.
+            // e.g., if the origin was (0.4, 0.4), the calculation would be (0.4, 0.4) - (0.5, 0.5) = (-0.1, -0.1).
+            // - This would result in spaces shifting over by 0.10 towards the bottom left.
+            Vector2 gridOriginBaseOffset = gridOrigin - new Vector2(0.5F, 0.5F);
+
+            // Calculates the grid origin position given the grid size.
+            // It applies the origin offset as part of this calculation.
+            Vector2 gridOriginWorld = gridSizeWorld * (gridOrigin + gridOriginBaseOffset);
+
+            // The provided grid position as a percentage.
+            Vector2 gridPositionPercent = gridPosition / gridSize;
+
+            // The grid's position in the grid in world units.
+            Vector2 gridPositionWorld = gridSizeWorld * gridPositionPercent;
+
+            // Adjusts the grid world position in the world based on the grid's origin in the world.
+            gridPositionWorld -= gridOriginWorld;
+
+            // The origin of the space in world units. This is the space origin based on the size of the space in world units.
+            Vector2 spaceWorldOrigin = spaceSize * spaceOrigin;
+
+            // Adjust the space's world position by its space world origin.
+            // The base calculation assumes the space origin is its bottom-left corner.
+            gridPositionWorld += spaceWorldOrigin;
+
+            // Returns the grid position in world units.
+            return gridPositionWorld;
+        }
+
+        // Gets the position in the grid in world units.
+        // This autosets the origins for the grid and the spaces as being their centres (0.5, 0.5).
+        public static Vector2 GetPositionInGridInWorldUnits(Vector2 gridSize, Vector2 spaceSize, Vector2 gridPosition)
+        {
+            // Uses the centre origin, which is (0.5, 0.5).
+            Vector2 origin = new Vector2(0.5F, 0.5F);
+            return GetPositionInGridInWorldUnits(gridSize, origin, spaceSize, origin, gridPosition);
+        }
+
+        // Gets argument 'gridPosition' in a 3D grid in world units. This is the vector3 verison of the function.
+        public static Vector3 GetPositionInGridInWorldUnits(Vector3 gridSize, Vector3 gridOrigin, Vector3 spaceSize, Vector3 spaceOrigin, Vector3 gridPosition)
+        {
+            // The grid size in world units.
+            Vector3 gridSizeWorld = Vector3.Scale(gridSize, spaceSize);
+
+            // The grid's origin position offset.
+            // This operates under the assumption that the grid origin is its centre (0.5, 0.5, 0.5) by default.
+            // Since the default origin is (0.5, 0.5, 0.5), a calculation is done to offset it.
+            // e.g., if the origin was (0.4, 0.4, 0.4), the calculation would be (0.4, 0.4, 0.4) - (0.5, 0.5, 0.5) = (-0.1, -0.1, -0.1).
+            // - This would result in spaces shifting over by 0.10 towards the bottom left.
+            Vector3 gridOriginBaseOffset = gridOrigin - new Vector3(0.5F, 0.5F, 0.5F);
+
+            // Calculates the grid origin position given the grid size.
+            // It applies the origin offset as part of this calculation.
+            Vector3 gridOriginWorld = Vector3.Scale(gridSizeWorld, gridOrigin + gridOriginBaseOffset);
+
+            // The provided grid position as a percentage.
+
+            // The grid size needs to have a negative exponent applied so that the scale function can be used for division.
+            Vector3 gridSizeReciprocal = new Vector3(
+                Mathf.Pow(gridSize.x, -1),
+                Mathf.Pow(gridSize.y, -1),
+                Mathf.Pow(gridSize.z, -1)
+                );
+
+            // Uses the inverted Vector3 with the scale function to make it a division operation.
+            // Vector2 gridPositionPercent = gridPosition / gridSize; // Vector2 Version
+            Vector3 gridPositionPercent = Vector3.Scale(gridPosition, gridSizeReciprocal);
+
+
+            // The grid's position in the grid in world units.
+            Vector3 gridPositionWorld = Vector3.Scale(gridSizeWorld, gridPositionPercent);
+
+            // Adjusts the grid world position in the world based on the grid's origin in the world.
+            gridPositionWorld -= gridOriginWorld;
+
+            // The origin of the space in world units. This is the space origin based on the size of the space in world units.
+            Vector3 spaceWorldOrigin = Vector3.Scale(spaceSize, spaceOrigin);
+
+            // Adjust the space's world position by its space world origin.
+            // The base calculation assumes the space origin is its bottom-left corner.
+            gridPositionWorld += spaceWorldOrigin;
+
+            // Returns the grid position in world units.
+            return gridPositionWorld;
+        }
+
+        // Gets the position in the grid in world units. This is the vector 3 version.
+        // This autosets the origins for the grid and the spaces as being their centres (0.5, 0.5, 0.5).
+        public static Vector3 GetPositionInGridInWorldUnits(Vector3 gridSize, Vector3 spaceSize, Vector3 gridPosition)
+        {
+            // Uses the centre origin, which is (0.5, 0.5, 0.5).
+            Vector3 origin = new Vector3(0.5F, 0.5F, 0.5F);
+            return GetPositionInGridInWorldUnits(gridSize, origin, spaceSize, origin, gridPosition);
+        }
     }
 }

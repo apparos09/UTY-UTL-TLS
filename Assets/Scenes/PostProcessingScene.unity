@@ -672,6 +672,7 @@ GameObject:
   - component: {fileID: 2140499241}
   - component: {fileID: 2140499242}
   - component: {fileID: 2140499243}
+  - component: {fileID: 2140499249}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -924,7 +925,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140499235}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb03bcacd9f7bfa4584eb58c82146784, type: 3}
   m_Name: 
@@ -933,6 +934,24 @@ MonoBehaviour:
   postShader: {fileID: 4800000, guid: b6a1ebe82f3dd3340a8c02cb561bae97, type: 3}
   colorGradeRGBID: _ColorGradeRGB
   colorGradeRGB: {fileID: 2800000, guid: e719a58d51683d945b1e313c43186089, type: 3}
+--- !u!114 &2140499249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140499235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b997f4a9ac548864da364ac7d769b1c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  postShader: {fileID: 4800000, guid: 4b1fc2daee651ae44bc81f33b1993f5e, type: 3}
+  mixTextureID: _MixTexture
+  mixTexture: {fileID: 2800000, guid: e719a58d51683d945b1e313c43186089, type: 3}
+  mixTID: _MixT
+  mixT: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
