@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace util
@@ -50,23 +51,14 @@ namespace util
             // Needs to be set every frame for some reason.
             SetValuesToMaterial();
 
-            // Converts single grade mode to a float value. 1.0 is true, 0.0 is false.
-            float singleGradeModeFloat = singleGradeMode ? 1.0F : 0.0F;
-
-            // The texture mode needs to be changed.
-            if(postMaterial.GetFloat(singleGradeModeID) != singleGradeModeFloat)
-            {
-                postMaterial.SetFloat(singleGradeModeID, singleGradeModeFloat);
-            }
-
             base.OnRenderImage(source, destination);
         }
 
         // Better to manually set them.
         // Sets the combined color grade texture.
-        protected void SetColorGradeTexture(Texture2D colorGrade)
+        protected void SetColorGradeTexture(Texture2D colorGradeRGB)
         {
-            this.colorGradeRGB = colorGrade;
+            this.colorGradeRGB = colorGradeRGB;
             SetValuesToMaterial();
         }
 
@@ -86,9 +78,12 @@ namespace util
         // Sets the textures to be used for color grading.
         public void SetValuesToMaterial()
         {
-            // Setting the mode.
-            float singleGradeModeFloat = singleGradeMode ? 1.0F : 0.0F;
-            postMaterial.SetFloat(singleGradeModeID, singleGradeModeFloat);
+            // Pretty sure this int (bool) doesn't need to be set every frame, but since all the other values are...
+            // You might as well set everything to be sure.
+            // Setting the mode (single or multi) by converting the bool to an int.
+            // 0 = false, 1 = true. Anything that's not 0 registers as true.
+            int singleGradeModeInt = Convert.ToInt32(singleGradeMode);
+            postMaterial.SetInt(singleGradeModeID, singleGradeModeInt);
 
             // Setting the texture seems to work, but not getting the texture.
             // Combined color grade.

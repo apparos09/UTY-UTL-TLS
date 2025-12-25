@@ -28,6 +28,9 @@ Shader "Hidden/Color Grading Multiple Image Effect Shader"
             return o;
         };
 
+        // Three textures that represent the Red (R), Green (G), and B (Blue) channels respectively.
+        // Recommended that you use textures that range from 256x256 to 1024x1024. 
+        // Smaller than 256x256 doesn't represent all color codes, and bigger than 1024x1024 doesn't give any more color variance.
         sampler2D _ColorGradeRed;
         sampler2D _ColorGradeGreen;
         sampler2D _ColorGradeBlue;

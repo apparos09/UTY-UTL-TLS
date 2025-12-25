@@ -29,6 +29,8 @@ Shader "Hidden/Color Grading Single Image Effect Shader"
         }
 
         // A texture that has the RGB channels seperated.
+        // Recommended that you use a texture that ranges from 256x256 to 1024x1024. 
+        // Smaller than 256x256 doesn't represent all color codes, and bigger than 1024x1024 doesn't give any more color variance.
         sampler2D _ColorGradeRGB;
 
     ENDCG
