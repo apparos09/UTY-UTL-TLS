@@ -29,8 +29,12 @@ Shader "Hidden/Color Grading Image Effect Shader"
         }
 
         // Specifies if using one colour grade or not.
-        fixed _SingleGradeMode;
+        // This is an integer, but it's converted from a boolean value.
+        int _SingleGradeMode;
 
+        // A combined RGB color grade, and color grades for the individual RGB components.
+        // Recommended that you use a texture that ranges from 256x256 to 1024x1024. 
+        // Smaller than 256x256 doesn't represent all color codes, and bigger than 1024x1024 doesn't give any more color variance.
         sampler2D _ColorGradeRGB;
         sampler2D _ColorGradeRed;
         sampler2D _ColorGradeGreen;
@@ -67,14 +71,14 @@ Shader "Hidden/Color Grading Image Effect Shader"
 
                 // Gets the new colors.
                 // 0 = false, anything else is true.
-                if(_SingleGradeMode) // Single grade mode. One texture has all 3 channels seperated.
+                if(_SingleGradeMode != 0) // Single grade mode. One texture that contains seperated RGB channels.
                 {
                     // Red is the top row, Green is the middle row, and Blue is the bottom row.
                     newColRed = tex2D(_ColorGradeRGB, fixed2(col.r, 1.0F));
                     newColGreen = tex2D(_ColorGradeRGB, fixed2(col.g, 0.5F));
                     newColBlue = tex2D(_ColorGradeRGB, fixed2(col.b, 0.0F));
                 }
-                else // Multi-grade mode. Each channel is a seperate texture.
+                else // Multi-grade mode. Each RGB channel is a seperate texture.
                 {
                     // Each image is one color channel (R, G, B).
                     newColRed = tex2D(_ColorGradeRed, fixed2(col.r, 0.0F));
