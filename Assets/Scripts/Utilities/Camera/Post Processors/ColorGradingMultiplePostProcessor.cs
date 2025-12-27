@@ -5,7 +5,7 @@ namespace util
     // Color grading post processing with multiple textures.
     public class ColorGradingMultiplePostProcessor : PostProcessor
     {
-        [Header("ColorGrading")]
+        [Header("Color Grading Multiple")]
 
         // Color Grade IDs
         public string colorGradeRedID = "_ColorGradeRed";
