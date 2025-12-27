@@ -11,12 +11,12 @@ namespace util
     {
         [Header("ColorGrading")]
 
+        // ID used for setting single grade mode.
+        public string singleGradeModeID = "_SingleGradeMode";
+
         // If 'true', a single color grade is being used.
         // IF 'false', the grade is split between RGB.
         public bool singleGradeMode = true;
-
-        // ID used for setting single grade mode.
-        public string singleGradeModeID = "_SingleGradeMode";
 
         [Header("ColorGrading/Texture IDs")]
         // All in 1 color grade.
@@ -78,8 +78,8 @@ namespace util
         // Sets the textures to be used for color grading.
         public void SetValuesToMaterial()
         {
-            // Pretty sure this int (bool) doesn't need to be set every frame, but since all the other values are...
-            // You might as well set everything to be sure.
+            // Pretty sure this int (bool) doesn't need to be set every frame, but since other values...
+            // Are being set, you might as well set all the values to be sure.
             // Setting the mode (single or multi) by converting the bool to an int.
             // 0 = false, 1 = true. Anything that's not 0 registers as true.
             int singleGradeModeInt = Convert.ToInt32(singleGradeMode);

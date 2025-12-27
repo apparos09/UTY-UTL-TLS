@@ -620,6 +620,9 @@ GameObject:
   - component: {fileID: 2140499242}
   - component: {fileID: 2140499243}
   - component: {fileID: 2140499249}
+  - component: {fileID: 2140499250}
+  - component: {fileID: 2140499251}
+  - component: {fileID: 2140499252}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -819,15 +822,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140499235}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8e8353a908f51140bb874ede7d9e995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
   postShader: {fileID: 4800000, guid: a4ec008dd13ed0147b9815102ce56377, type: 3}
-  singleGradeMode: 1
   singleGradeModeID: _SingleGradeMode
+  singleGradeMode: 1
   colorGradeRGBID: _ColorGradeRGB
   colorGradeRedID: _ColorGradeRed
   colorGradeGreenID: _ColorGradeGreen
@@ -890,3 +893,67 @@ MonoBehaviour:
   mixTexture: {fileID: 2800000, guid: e719a58d51683d945b1e313c43186089, type: 3}
   mixTID: _MixT
   mixT: 0
+--- !u!114 &2140499250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140499235}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa4dcbe20921ad45a8a53dded2a1417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  postShader: {fileID: 4800000, guid: 62ca84a4f3f18d5478bddaa02cbea77a, type: 3}
+  flipXID: _FlipX
+  flipX: 0
+  flipYID: _FlipY
+  flipY: 0
+--- !u!114 &2140499251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140499235}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32c458f3bb31c9479a3d9ce0f45709d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  postShader: {fileID: 4800000, guid: c98220b10a9c74b4cb11b5119970d080, type: 3}
+  radialCenterID: _RadialCenter
+  radialCenter: {x: 0.5, y: 0.5}
+  radialAngleID: _RadialAngle
+  radialAngle: 0
+  inDegrees: 1
+  clockwiseID: _Clockwise
+  clockwise: 1
+  sampleCountID: _SampleCount
+  sampleCount: 0
+--- !u!114 &2140499252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140499235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0112bd8ebe394640854df8af306a79b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  postShader: {fileID: 4800000, guid: 250685e8ff3b4e340a29b96e56477b53, type: 3}
+  screenResolutionID: _ScreenResolution
+  zoomCenterID: _ZoomCenter
+  zoomCenter: {x: 0.5, y: 0.5}
+  zoomLengthID: _ZoomLength
+  zoomLength: 0
+  zoomInID: _ZoomIn
+  zoomIn: 1
+  sampleCountID: _SampleCount
+  sampleCount: 0
