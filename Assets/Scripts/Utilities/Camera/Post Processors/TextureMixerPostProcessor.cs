@@ -5,7 +5,7 @@ namespace util
     // Mixes a texture in with the game image.
     public class TextureMixerPostProcessor : PostProcessor
     {
-        [Header("TextureMixer")]
+        [Header("Texture Mixer")]
 
         // Mix Texture
         public string mixTextureID = "_MixTexture";
@@ -15,7 +15,7 @@ namespace util
         // This uses a lerp calculation.
         public string mixTID = "_MixT";
 
-        [Range(0.0F, 1.0F)]
+        // [Range(0.0F, 1.0F)] // Comment out to cap the interpolation (t).
         public float mixT = 0.0F;
 
         // Awake is called when the script instance is being loaded

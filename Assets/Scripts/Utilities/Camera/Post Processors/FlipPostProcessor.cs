@@ -8,6 +8,8 @@ namespace util
     // Mirrors the rendered image.
     public class FlipPostProcessor : PostProcessor
     {
+        [Header("Flip")]
+
         // ID used for flipping on the x-axis.
         public string flipXID = "_FlipX";
 
