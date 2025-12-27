@@ -79,7 +79,9 @@ Shader "Hidden/Zoom Blur Image Effect Shader"
                 fixed sampleInc = _ZoomLength / _SampleCount;
 
                 // The number of samples used.
-                int samplesUsed = 0;
+                // The current pixel is counted in the number of samples, so this variable starts at 1.
+                // If there are no other samples, the pixel color will be divided by 1, which means no change will occur.
+                int samplesUsed = 1;
 
                 // Gets all the pixels being used based on the sample count.
                 for(int n = 1; n <= _SampleCount; n++)
@@ -111,14 +113,12 @@ Shader "Hidden/Zoom Blur Image Effect Shader"
                 }
 
                 // If there were samples used, average out the color.
+                // Since there's always at least 1 sample (the current pixel), theroretically this check isn't needed.
+                // But this check is still here for safety reasons.
                 if(samplesUsed > 0)
                 {
                     newCol /= samplesUsed;
-                }
-                
-
-                // Gets the pixel color from the altered UV coordinates.
-                // newCol = tex2D(_MainTex, newUV.xy);
+                } 
 
                 // Returns the new color.
                 return newCol;

@@ -5,7 +5,7 @@ namespace util
     // Color grading post processing with a single texture.
     public class ColorGradingSinglePostProcessor : PostProcessor
     {
-        [Header("ColorGradingSingle")]
+        [Header("Color Grading Single")]
 
         // Color Grade ID
         public string colorGradeRGBID = "_ColorGradeRGB";
