@@ -180,6 +180,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bar: {fileID: 3355401992850854678}
+  backgroundImage: {fileID: 0}
+  fillImage: {fileID: 3750724150935097511}
+  setValueOnAwake: 1
   speed: 1
   fixedSpeed: 0
   useTimeScale: 0
