@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static util.TextBox;
 
 namespace util
 {
@@ -11,6 +10,9 @@ namespace util
     {
         // The slider bar that's being animated.
         public Slider bar;
+
+        // The bar's fill image.
+        public Image fillImage;
 
         // Checks the bar for the min and max values instead, since that makes more sense.
         // Doing the min and max values this way also prevented the user from changing the min-max values on the bar.
