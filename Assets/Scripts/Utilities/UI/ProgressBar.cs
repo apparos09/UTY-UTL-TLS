@@ -46,6 +46,10 @@ namespace util
         // The starting value that's used for animation.
         private float startValue = 0.0F;
 
+        [Tooltip("If true, the bar transitions between values. If false, the bar instantly changes when switching values.")]
+        // If 'true', the progress bar transitions between values. If false, the bar instantly switches between values.
+        public bool useTransition = true;
+
         // Set to 'true' if the bar is transitioning between values.
         private bool transitioning = false;
 
@@ -125,8 +129,16 @@ namespace util
             return value;
         }
 
+        // Sets the value for the progess bar, using the member variable to determine...
+        // If a transition should be used.
+        public void SetValue(float newValue)
+        {
+            SetValue(newValue, useTransition);
+        }
+
         // Sets the value for the progress bar.
-        public void SetValue(float newValue, bool transition = true)
+        // The argument 'transition' determines if the new value is transitioned to, or if the change is instant.
+        public void SetValue(float newValue, bool transition)
         {
             // If the minimum value is larger than the maximum value they will be swapped.
             // Since the bar min and max values are being used, this may not be necessary...
@@ -184,8 +196,16 @@ namespace util
             return Mathf.InverseLerp(bar.minValue, bar.maxValue, value);
         }
 
+        // Sets the value as a percentage, using the member variable 'useTransition' to determine...
+        // If a transition should be used.
+        public void SetValueAsPercentage(float newValue)
+        {
+            SetValueAsPercentage(newValue, useTransition);
+        }
+
         // Sets the value as a percentage.
-        public void SetValueAsPercentage(float newValue, bool transition = true)
+        // Argument 'transition' determines if a transition is used or not.
+        public void SetValueAsPercentage(float newValue, bool transition)
         {
             SetValue(newValue * bar.maxValue, transition);
         }
