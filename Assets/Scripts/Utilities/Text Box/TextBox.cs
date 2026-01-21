@@ -100,8 +100,16 @@ namespace util
         // Callback for the textbox finishing.
         private TextBoxCallback finishedCallback;
 
+
+        // Awake is called when the script instance is being loaded
+        protected virtual void Awake()
+        {
+            // ...
+        }
+
+
         // Start is called before the first frame update
-        void Start()
+        protected virtual void Start()
         {
             // Sets the box object to the game object.
             // if (boxObject == null)
@@ -218,6 +226,12 @@ namespace util
         public bool IsVisibleInHierachy()
         {
             return boxObject.activeInHierarchy;
+        }
+
+        // Returns 'true' if the text box has pages.
+        public bool HasPages()
+        {
+            return pages.Count > 0;
         }
 
         // Gets the page count.
@@ -670,7 +684,7 @@ namespace util
         }
 
         // Update is called once per frame
-        void Update()
+        protected virtual void Update()
         {
             // Changed this from the courtine version.
             if (loadingChars)
@@ -697,6 +711,12 @@ namespace util
                     }
                 }
             }
+        }
+
+        // This function is called when the MonoBehaviour will be destroyed
+        protected virtual void OnDestroy()
+        {
+           // ... 
         }
     }
 }
