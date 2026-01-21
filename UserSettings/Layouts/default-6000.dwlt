@@ -1267,7 +1267,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Prefabs/Utilities
+    - Assets/Scripts/Utilities/Text Box
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1277,16 +1277,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 62
   m_LastFolders:
-  - Assets/Resources/Prefabs/Utilities
+  - Assets/Scripts/Utilities/Text Box
   m_LastFoldersGridSize: 62
   m_LastProjectPath: C:\Users\roder\source\Unity\UTY-UTL-TLS
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 22.800018}
+    scrollPos: {x: 0, y: 118.80002}
     m_SelectedIDs: 0c660000
     m_LastClickedID: 26124
-    m_ExpandedIDs: 000000006c650000046600000e660000
+    m_ExpandedIDs: 000000006c650000086600000e660000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1343,7 +1343,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000985c0000485c0000c65c0000605c0000e25c0000e85c0000c85c0000c2590000f4660000165a0000aa670000f8660000c65900008cf10000bc620000da63000032660000ea6200003e620000506b000094620000b26b00004065000096640000aa65000046720000be6100006261020000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
