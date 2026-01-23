@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3663107413126206060}
+  - component: {fileID: 4371369585434411839}
   - component: {fileID: 6200797455419875602}
   - component: {fileID: 3133410968096232477}
-  - component: {fileID: 4371369585434411839}
   m_Layer: 5
   m_Name: Loading Graphic
   m_TagString: Untagged
@@ -39,38 +39,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6200797455419875602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910826829969789985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bab22ee70af62c4e8e79add90212fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextScene: 
-  asyncLoader: {fileID: 3133410968096232477}
-  loadNextScene: 1
-  loadSceneAsync: 1
-  animator: {fileID: 4371369585434411839}
-  openingAnim: 
-  progressAnim: 
-  closingAnim: 
---- !u!114 &3133410968096232477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910826829969789985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a124439835595a746a59ac58bb762999, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &4371369585434411839
 Animator:
   serializedVersion: 7
@@ -93,6 +61,39 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6200797455419875602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910826829969789985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bab22ee70af62c4e8e79add90212fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadingSceneCanvas: {fileID: 2024169351741833756}
+  nextScene: 
+  asyncLoader: {fileID: 3133410968096232477}
+  loadNextScene: 1
+  loadSceneAsync: 1
+  animator: {fileID: 4371369585434411839}
+  openingAnim: 
+  progressAnim: 
+  closingAnim: 
+--- !u!114 &3133410968096232477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910826829969789985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a124439835595a746a59ac58bb762999, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6265355955392447631
 GameObject:
   m_ObjectHideFlags: 0

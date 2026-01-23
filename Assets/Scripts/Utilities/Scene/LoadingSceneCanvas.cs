@@ -5,6 +5,7 @@ using UnityEngine;
 namespace util
 {
     // The canvas for the loading graphic.
+    // TODO: the async scene loader probably shouldn't be attached to the graphic.
     public class LoadingSceneCanvas : MonoBehaviour
     {
         // The singleton instance.
@@ -23,8 +24,8 @@ namespace util
         // If 'true', the loading graphic is used.
         private const bool USE_LOADING_GRAPHIC = true;
 
-        // If 'true', the loading screen canvas isn't destroyed on load. This is applied in Awake()
-        [Tooltip("If 'true', this object is set to not be destroyed on load. This is set in the Awake() function.")]
+        // If 'true', the loading screen canvas isn't destroyed on load. This is applied in Start()
+        [Tooltip("If 'true', this object is set to not be destroyed on load. This is set in the Start() function.")]
         public bool dontDestroyOnLoad = true;
 
         // Constructor
@@ -52,13 +53,6 @@ namespace util
             if (!instanced)
             {
                 instanced = true;
-
-                // Don't destroy this object.
-                // This is done because this graphic is used for loading scenes.
-                if(dontDestroyOnLoad)
-                {
-                    DontDestroyOnLoad(gameObject);
-                }
             }
         }
 
@@ -72,6 +66,17 @@ namespace util
                 if (!TryGetComponent(out canvas))
                 {
                     Debug.LogWarning("The canvas component could not be found.");
+                }
+            }
+
+            // If this is the instance, apply certain functions.
+            if(instance == this)
+            {
+                // Don't destroy this object.
+                // This is done because this graphic is used for loading scenes.
+                if (dontDestroyOnLoad)
+                {
+                    DontDestroyOnLoad(gameObject);
                 }
             }
         }
@@ -112,7 +117,11 @@ namespace util
             }
         }
 
-        // Returns 'true' if the loading screen should be used.
+        // Returns 'true' if the loading screen graphic should be used.
+        // Returns 'false' if the loading screen graphic isn't being used...
+        // The canvas is null or the loadingGraphic is null.
+        // TODO: if this returns false, the loading scene won't work, since it relies on the loading scene graphic.
+        // Either make this clearer, or move the loading functions to the loading scene canvas.
         public bool IsUsingLoadingGraphic()
         {
             // If loading should be used, and the related objects exist.
@@ -146,10 +155,11 @@ namespace util
             loadingGraphic.nextScene = sceneName;
         }
 
-        // Runs the loading screen.
+        // Loads the scene using the loading scene graphic.
         public void LoadScene()
         {
             // Plays the loading screen opening animation.
+            // If there is no opening animation, it calls start and end.
             loadingGraphic.PlayLoadingGraphicOpeningAnimation();
         }
 

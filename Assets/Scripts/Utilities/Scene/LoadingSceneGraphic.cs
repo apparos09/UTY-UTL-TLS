@@ -8,6 +8,9 @@ namespace util
     // The loading scene graphic.
     public class LoadingSceneGraphic : MonoBehaviour
     {
+        // The loading scene canvas this graphic belongs to.
+        public LoadingSceneCanvas loadingSceneCanvas;
+
         // The scene that is getting loaded.
         public string nextScene = "";
 
@@ -52,6 +55,8 @@ namespace util
         private bool animPlaying = false;
 
         // Opening, loading, and closing animations.
+        // If an animation isn't available, the start and end functions related to the animations...
+        // Are called if applicable.
 
         // Loading opening animation. This is the opening portion of the loading animation.
         public string openingAnim = "";
@@ -63,7 +68,7 @@ namespace util
         public string closingAnim = "";
 
         // Awake is called when the script instance is being loaded
-        private void Awake()
+        protected virtual void Awake()
         {
             // If the animator is not set, set it.
             if (animator == null)
@@ -77,9 +82,14 @@ namespace util
         }
 
         // Start is called before the first frame update
-        void Start()
+        protected virtual void Start()
         {
-            // ...
+            // If the loading scene canvas isn't set, but LoadingSceneCanvas has been instantiated...
+            // Get the instance.
+            if(loadingSceneCanvas == null && LoadingSceneCanvas.Instantiated)
+            {
+                loadingSceneCanvas = LoadingSceneCanvas.Instance;
+            }
         }
 
         // Returns 'true' if the async loader is loading.
@@ -90,6 +100,34 @@ namespace util
                 return asyncLoader.IsLoading;
             }
 
+        }
+
+        // Loads the scene using the set next scene.
+        protected virtual void LoadScene(bool loadSceneAsync)
+        {
+            // The next scene is set.
+            if (nextScene != string.Empty)
+            {
+                // Checks if the scene should be loaded asynchronously or not.
+                if (loadSceneAsync) // Async
+                {
+                    asyncLoader.LoadScene(nextScene);
+                }
+                else // Sync
+                {
+                    SceneManager.LoadScene(nextScene);
+                }
+            }
+        }
+
+        // Loads the scene, which uses the set asyncLoader.
+        // The argument 'nextScene' overwrites the saved variable 'nextScene'.
+        protected virtual void LoadScene(string nextScene, bool loadSceneAsync)
+        {
+            // Overwrites the member variable nextScene with the argument nextScene...
+            // And loads the scene.
+            this.nextScene = nextScene;
+            LoadScene(loadSceneAsync);
         }
 
         // CALLBACKS
@@ -203,7 +241,15 @@ namespace util
         {
             // If there is an opening animation, play it.
             if (openingAnim != string.Empty)
+            {
                 animator.Play(openingAnim);
+            }
+            // No opening animation, so call opening start and end functions.
+            else
+            {
+                OnLoadingGraphicOpeningStart();
+                OnLoadingGraphicOpeningEnd();
+            } 
         }
 
         // Loading Graphic - Opening Start
@@ -228,19 +274,24 @@ namespace util
             // If the next scene should be loaded, load it.
             if (loadNextScene)
             {
-                // The next scene is set.
-                if (nextScene != string.Empty)
-                {
-                    // Checks if the scene should be loaded asynchronously or not.
-                    if (loadSceneAsync) // Async
-                    {
-                        asyncLoader.LoadScene(nextScene);
-                    }
-                    else // Sync
-                    {
-                        SceneManager.LoadScene(nextScene);
-                    }
-                }
+                // Loads the scene.
+                // Uses the saved member variable 'nextScene'.
+                LoadScene(loadSceneAsync);
+
+                // Moved to dedicated function.
+                // // The next scene is set.
+                // if (nextScene != string.Empty)
+                // {
+                //     // Checks if the scene should be loaded asynchronously or not.
+                //     if (loadSceneAsync) // Async
+                //     {
+                //         asyncLoader.LoadScene(nextScene);
+                //     }
+                //     else // Sync
+                //     {
+                //         SceneManager.LoadScene(nextScene);
+                //     }
+                // }
 
             }
         }
@@ -250,8 +301,10 @@ namespace util
         public void PlayLoadingGraphicProgressAnimation()
         {
             // If there is a progress animation, play it.
-            if(progressAnim != string.Empty)
+            if (progressAnim != string.Empty)
+            {
                 animator.Play(progressAnim);
+            }
         }
 
         // Plays the loading graphic closing animation.
@@ -260,7 +313,16 @@ namespace util
         {
             // If there is a closing animation, play it.
             if (closingAnim != string.Empty)
+            {
                 animator.Play(closingAnim);
+            }
+            // No closing animation, so call closing start and end functions.
+            else
+            {
+                OnLoadingGraphicClosingStart();
+                OnLoadingGraphicClosingEnd();
+            }
+                
         }
 
         // Loading Graphic - Closing Start
