@@ -8,8 +8,13 @@ namespace util
     // The class for the text box for the game.
     public class TextBox : MonoBehaviour
     {
-        // the text box object to be opened/closed.
+        // The text box object to be opened/closed.
+        [Tooltip("The box object that's opened/closed. By default, it's set to gameObject.")]
         public GameObject boxObject;
+
+        // The text box visual to be shown/hidden. By default it's the same as box object.
+        [Tooltip("The box visual that can be shown/hidden. By default, it's the same as boxObject.")]
+        public GameObject boxVisual;
 
         [Header("Text Settings")]
 
@@ -111,9 +116,14 @@ namespace util
         // Start is called before the first frame update
         protected virtual void Start()
         {
-            // Sets the box object to the game object.
-            // if (boxObject == null)
-            //     boxObject = gameObject;
+            // Sets the box object to the game object if null.
+            if (boxObject == null)
+                boxObject = gameObject;
+
+            // Sets the box visual to box object if null.
+            // By default, it's the same as box object.
+            if (boxVisual == null)
+                boxVisual = boxObject;
 
             // Set this to the max by default.
             SetAutoNextTimerToMax();
@@ -167,8 +177,12 @@ namespace util
         // Shows the textbox.
         public void Open()
         {
-            // TODO: add animation.
+            // Makes sure the visual is active (may be same as box object).
+            boxVisual.SetActive(true);
+
+            // Activate the box object.
             boxObject.SetActive(true);
+            
 
             // Calls the callbacks for opening the textbox.
             if (openedCallback != null)
@@ -193,7 +207,11 @@ namespace util
         // Hides the textbox.
         public void Close()
         {
-            // TODO: add animation.
+            // Makes sure the box object visual is active by default.
+            // If this is the same as box object, it'll be turned off anyway.
+            boxVisual.SetActive(true);
+
+            // Turns off the box object.
             boxObject.SetActive(false);
 
             // Calls the callbacks for closing the textbox.
@@ -204,28 +222,58 @@ namespace util
         // Shows the textbox. This does NOT call the Open callbacks.
         public void Show()
         {
-            boxObject.SetActive(true);
+            // Activate the box visual (may be same as object box).
+            // boxObject.SetActive(true); // Old
+            boxVisual.SetActive(true); // New
 
-            // Reset the timer.
+            // Reset the auto next timer.
             SetAutoNextTimerToMax();
         }
 
         // Hides the textbox. This does Not call the Close callbacks.
         public void Hide()
         {
-            boxObject.SetActive(false);
+            // Deactivate the box visual (may be same as box object).
+            // boxObject.SetActive(false); // Old
+            boxVisual.SetActive(false); // New
         }
 
-        // Checks if the textbox is visible.
-        public bool IsVisible()
+        // Returns 'true' if the box object is active.
+        public bool IsBoxObjectActiveSelf()
         {
             return boxObject.activeSelf;
         }
 
-        // Checks if the textbox is visible in the hierarchy.
-        public bool IsVisibleInHierachy()
+        // Returns 'true' if the box object is active in the hierachy.
+        public bool IsBoxObjectActiveInHierachy()
         {
             return boxObject.activeInHierarchy;
+        }
+
+        // Checks if the box visual is active.
+        public bool IsBoxVisualActiveSelf()
+        {
+            // return boxObject.activeSelf; // Old
+            return boxVisual.activeSelf;
+        }
+
+        // Checks if the textbox is visible in the hierarchy.
+        public bool IsBoxVisualActiveInHierachy()
+        {
+            // return boxObject.activeInHierarchy; // Old
+            return boxVisual.activeInHierarchy;
+        }
+
+        // Returns 'true' if activeSelf for box object and box visual return true.
+        public bool IsBoxObjectAndVisualActiveSelves()
+        {
+            return boxObject.activeSelf && boxVisual.activeSelf;
+        }
+
+        // Returns 'true' if activeInHierachy for box object and box visual return true.
+        public bool IsBoxObjectAndVisualActiveInHierachies()
+        {
+            return boxObject.activeInHierarchy && boxVisual.activeInHierarchy;
         }
 
         // Returns 'true' if the text box has pages.

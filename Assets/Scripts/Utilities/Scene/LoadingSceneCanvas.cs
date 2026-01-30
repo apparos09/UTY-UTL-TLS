@@ -144,19 +144,19 @@ namespace util
         }
 
         // Gets the next scene.
-        public string GetNextScene()
+        public virtual string GetNextScene()
         {
             return loadingGraphic.nextScene;
         }
 
         // Sets the next scene.
-        public void SetNextScene(string sceneName)
+        public virtual void SetNextScene(string sceneName)
         {
             loadingGraphic.nextScene = sceneName;
         }
 
         // Loads the scene using the loading scene graphic.
-        public void LoadScene()
+        public virtual void LoadScene()
         {
             // Plays the loading screen opening animation.
             // If there is no opening animation, it calls start and end.
@@ -164,14 +164,14 @@ namespace util
         }
 
         // Sets the scene name and runs the loading screen.
-        public void LoadScene(string sceneName)
+        public virtual void LoadScene(string sceneName)
         {
             SetNextScene(sceneName);
             LoadScene();
         }
 
         // Returns 'true' if the animation is playing.
-        public bool IsAnimationPlaying()
+        public virtual bool IsAnimationPlaying()
         {
             return loadingGraphic.IsAnimationPlaying();
         }
