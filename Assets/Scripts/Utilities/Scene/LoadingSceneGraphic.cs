@@ -54,7 +54,7 @@ namespace util
         // Gets set to 'true' when an animation is playing.
         private bool animPlaying = false;
 
-        // Opening, loading, and closing animations.
+        // Opening, progress, and closing animations.
         // If an animation isn't available, the start and end functions related to the animations...
         // Are called if applicable.
 
@@ -84,11 +84,29 @@ namespace util
         // Start is called before the first frame update
         protected virtual void Start()
         {
-            // If the loading scene canvas isn't set, but LoadingSceneCanvas has been instantiated...
-            // Get the instance.
-            if(loadingSceneCanvas == null && LoadingSceneCanvas.Instantiated)
+            // If the loading scene canvas isn't set, try to find it.
+            if(loadingSceneCanvas == null)
             {
-                loadingSceneCanvas = LoadingSceneCanvas.Instance;
+                // The loading graphic should be a child of the canvas, hence why...
+                // The parent is checked and then the self.
+
+                // Checks parent, then self.
+                // Tries to get the component in the parent.
+                loadingSceneCanvas = GetComponentInParent<LoadingSceneCanvas>();
+
+                // Couldn't find the component in the parent, so checks the game object instead.
+                if(loadingSceneCanvas == null)
+                {
+                    loadingSceneCanvas = GetComponent<LoadingSceneCanvas>();
+                }
+
+                // Checks self, then parent.
+                // // First checks if the loading scene canvas is an attached component.
+                // if(!TryGetComponent(out loadingSceneCanvas))
+                // {
+                //     // Didn't work, so try to get the loading scene canvas from the parent.
+                //     loadingSceneCanvas = GetComponentInParent<LoadingSceneCanvas>();
+                // }
             }
         }
 

@@ -652,6 +652,10 @@ PrefabInstance:
       propertyPath: dontDestroyOnLoad
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2024169351741833756, guid: 6a95f55e83f9a9d4f966322440d8b6ec, type: 3}
+      propertyPath: dontDestroyOnLoadOnStart
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3923042978114031829, guid: 6a95f55e83f9a9d4f966322440d8b6ec, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
