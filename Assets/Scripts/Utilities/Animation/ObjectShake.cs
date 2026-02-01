@@ -24,13 +24,22 @@ namespace util
         [Tooltip("Sets the object's reset local position on awake if true. If the object is already shaking, this is ignored.")]
         public bool setLocalResetPosOnAwake = true;
 
-        // The shake duration.
-        [Tooltip("The shake duration of the object.")]
-        public float duration = 1.0F;
-
         // If 'true', the object constantly shakes. The timer is not updated.
         [Tooltip("Constantly shakes the object if true. When enabled, the shake timer doesn't go down.")]
         public bool constantShaking = false;
+
+        // Gets set to 'true' if object was shoken the last frame.
+        private bool updatedShaking = false;
+
+        // If 'true', shaking is enabled. WHen shaking is disabled, no check are done.
+        [Tooltip("If true, shaking is enabled. If false, shaking is disabled, meaning no checks are done.")]
+        public bool shakeEnabled = true;
+
+        [Header("Timer")]
+
+        // The shake duration.
+        [Tooltip("The shake duration of the object.")]
+        public float duration = 1.0F;
 
         // The timer used for shaking. When the timer runs out, the object stops shaking.
         [Tooltip("The timer for how long the shake occurs for.")]
@@ -44,9 +53,6 @@ namespace util
         // If 'false', the time scale is referenced, meaning that shakes will not occur if the time scale is 0.
         [Tooltip("If 'false', the shaking stops if the time scale is 0.")]
         public bool ignoreTimeScale = false;
-
-        // Gets set to 'true' if object was shoken the last frame.
-        private bool updatedShaking = false;
 
         [Header("Axes")]
 
@@ -126,47 +132,51 @@ namespace util
         // Update is called once per frame
         void Update()
         {
-            //  If the shake should be updated.
-            if(IsShakingScaled())
+            // Checks if shaking is enabled.
+            if(shakeEnabled)
             {
-                // Reduce the timer if there is not constant shaking.
-                if(!constantShaking)
+                //  If the shake should be updated.
+                if (IsShakingScaled())
                 {
-                    shakeTimer -= (useScaledDeltaTime) ? Time.deltaTime : Time.unscaledDeltaTime;
+                    // Reduce the timer if there is not constant shaking.
+                    if (!constantShaking)
+                    {
+                        shakeTimer -= (useScaledDeltaTime) ? Time.deltaTime : Time.unscaledDeltaTime;
+                    }
+
+                    // There should be shaking.
+                    if (shakeTimer > 0.0F || constantShaking)
+                    {
+                        // Change the local position by offsetting from the reset position.
+                        Vector3 newLocalPos = resetLocalPosition + Random.insideUnitSphere * distanceMax;
+
+                        // Checks what axes to kepe and which ones to ignore.
+                        newLocalPos.x = freezeX ? resetLocalPosition.x : newLocalPos.x;
+                        newLocalPos.y = freezeY ? resetLocalPosition.y : newLocalPos.y;
+                        newLocalPos.z = freezeZ ? resetLocalPosition.z : newLocalPos.z;
+
+                        // Set the new local position.
+                        transform.localPosition = newLocalPos;
+
+                        // The object has been shoken.
+                        updatedShaking = true;
+                    }
+                    // Reset the position.
+                    else
+                    {
+                        // Stops the shaking.
+                        StopShaking();
+                    }
                 }
-
-                // There should be shaking.
-                if(shakeTimer > 0.0F || constantShaking)
-                {
-                    // Change the local position.
-                    Vector3 newLocalPos = Random.insideUnitSphere * distanceMax;
-
-                    // Checks what axes to kepe and which ones to ignore.
-                    newLocalPos.x = (freezeX) ? resetLocalPosition.x : newLocalPos.x;
-                    newLocalPos.y = (freezeY) ? resetLocalPosition.y : newLocalPos.y;
-                    newLocalPos.z = (freezeZ) ? resetLocalPosition.z : newLocalPos.z;
-                    
-                    // Set the new local position.
-                    transform.localPosition = newLocalPos;
-
-                    // The object has been shoken.
-                    updatedShaking = true;
-                }
-                // Reset the position.
                 else
                 {
-                    // Stops the shaking.
-                    StopShaking();
-                }
-            }
-            else
-            {
-                // If the shaking was updated last time, and was expected to update again...
-                // Stop the shaking.
-                // This is here to account for the constant shake parameter.
-                if(updatedShaking)
-                {
-                    StopShaking();
+                    // If the shaking was updated last time, and was expected to update again...
+                    // Stop the shaking.
+                    // This is here to account for the constant shake parameter.
+                    if (updatedShaking)
+                    {
+                        StopShaking();
+                    }
                 }
             }
         }
