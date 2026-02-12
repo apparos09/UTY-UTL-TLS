@@ -146,7 +146,9 @@ namespace util
             float newVol = Mathf.Clamp01(newVolume);
 
             // Finds all the audios.
-            AudioSourceControl[] audios = FindObjectsByType<AudioSourceControl>(FindObjectsSortMode.None);
+            AudioSourceControl[] audios = FindObjectsByType<AudioSourceControl>(
+                includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude, 
+                FindObjectsSortMode.None);
 
             // Adjusts the volumes.
             foreach (AudioSourceControl asc in audios)

@@ -246,7 +246,7 @@ namespace util
         public void AdjustAllAudioLevels(float newBgmVolume, float newSfxVolume, float newVceVolume)
         {
             // Finds all the audio source controls.
-            AudioSourceControl[] audios = FindObjectsByType<AudioSourceControl>(FindObjectsSortMode.None);
+            AudioSourceControl[] audios = FindObjectsByType<AudioSourceControl>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             // Saves the bgm, sfx, and tts volume objects.
             bgmVolume = Mathf.Clamp01(newBgmVolume);
