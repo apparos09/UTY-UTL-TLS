@@ -18,38 +18,38 @@ namespace util
         // NOTE: be aware that the time of the audio may not be accurate if the audio is compressed.
         // As such, it may be best not to use this.
 
-        // The start of the clip. If this value is negative, the clip continues like normal.
-        // If clip start is less than 0, then it doesn't function.
-        [Tooltip("The start of the clip in seconds.")]
-        public float clipStart = 0.0F;
+        // The start of the clip loop. If this value is negative, the clip continues like normal.
+        // If loop start is less than 0, then it doesn't function.
+        [Tooltip("The start of the clip loop in seconds.")]
+        public float loopStart = 0.0F;
 
-        // The end of the clip
+        // The end of the clip loop.
         // TODO: find out what happen if time is set greater than the length of an audio file.
         /// <summary>
         /// * I don't know what happens if the time is set beyond the clip length but I assume it just errors out.
-        /// * on another note that if clipEnd is set to the end of the clip, the song will loop back to the start...
+        /// * on another note that if loopEnd is set to the end of the clip, the song will loop back to the start...
         /// * instead of looping back to the pre-defined clip start. 
         /// * so it's best to either have some silence, or continue the file a little longer so that the loop...
         /// * has time to work properly.
         /// </summary>
-        [Tooltip("The end of the clip in seconds.")]
-        public float clipEnd = 0.0F;
+        [Tooltip("The end of the clip loop in seconds.")]
+        public float loopEnd = 0.0F;
 
         // If 'true', a song will be limited to the clip range.
         // If 'false', the start of the song will play normally,...
         // But once within the clip range it will stay within the clip.
-        [Tooltip("If true, the audio starts at clipStart instead of at the start of the audio clip itself when PlayAudio() is called.")]
-        public bool playAtClipStart = false;
+        [Tooltip("If true, the audio starts at loopStart instead of at the start of the audio clip itself when PlayAudio() is called.")]
+        public bool playAtLoopStart = false;
 
 
         // Adjusts the loop point dynamically based on where the audio is.
         // e.g., if the audio is 1 second past the endpoint, it loops back to 1 second past the clip start point.
-        [Tooltip("If true, clipStart is offset by where the audio is in reference to clipEnd when a loop is being performed.")]
+        [Tooltip("If true, loopStart is offset by where the audio is in reference to loopEnd when a loop is being performed.")]
         public bool loopRelative = true;
 
         // If 'true', the clip loop is applied. If false, this script does not apply the clip loop.
         [Tooltip("Enables the clip loop if true. It's recommended that this is set to false if the audio clip file loops perfectly.")]
-        public bool clipLoopEnabled = true;
+        public bool loopEnabled = true;
 
         // Start is called before the first frame update
         protected virtual void Start()
@@ -63,28 +63,28 @@ namespace util
             {
                 // If the clip start and end are both set to zero (i.e. they weren't set)
                 // Clip Start - avoid negative value.
-                if (clipStart < 0.0F)
-                    clipStart = 0.0F;
+                if (loopStart < 0.0F)
+                    loopStart = 0.0F;
 
                 // Clip End - avoid negative value.
-                if (clipEnd < 0.0F)
-                    clipEnd = 0.0F;
+                if (loopEnd < 0.0F)
+                    loopEnd = 0.0F;
 
                 // If the audio source is set.
                 if(audioSource.clip != null)
                 {
                     // If the clip end is less than 0, equal to 0, or is greater than the clip length...
                     // Set it to the clip length.
-                    if (clipEnd <= 0.0F || clipEnd > audioSource.clip.length)
-                        clipEnd = audioSource.clip.length;
+                    if (loopEnd <= 0.0F || loopEnd > audioSource.clip.length)
+                        loopEnd = audioSource.clip.length;
 
-                    // NOTE: this throws an error if clipStart is greater than the length of the audio.
-                    // Starts at clipStart instead of at the start of the audio itself.
-                    if (playAtClipStart)
+                    // NOTE: this throws an error if loopStart is greater than the length of the audio.
+                    // Starts at loopStart instead of at the start of the audio itself.
+                    if (playAtLoopStart)
                     {
-                        // If the clipStart is less than the length of the clip, play at clipStart.
-                        if (clipStart < audioSource.clip.length)
-                            audioSource.time = clipStart;
+                        // If the loopStart is less than the length of the clip, play at loopStart.
+                        if (loopStart < audioSource.clip.length)
+                            audioSource.time = loopStart;
                     }
                 }                
                     
@@ -105,9 +105,9 @@ namespace util
             if (resetAudio)
             {
                 // If the audio should start at the clip start when first played.
-                if (playAtClipStart && clipStart >= 0.0F && clipStart < audioSource.clip.length)
+                if (playAtLoopStart && loopStart >= 0.0F && loopStart < audioSource.clip.length)
                 {
-                    audioSource.time = clipStart;
+                    audioSource.time = loopStart;
                 }
                 else // Start source at the start of the audio.
                 {
@@ -148,9 +148,9 @@ namespace util
             if(resetAudio)
             {
                 // Bring audio to clip start.
-                if (playAtClipStart && clipStart >= 0.0F && clipStart < audioSource.clip.length)
+                if (playAtLoopStart && loopStart >= 0.0F && loopStart < audioSource.clip.length)
                 {
-                    audioSource.time = clipStart;
+                    audioSource.time = loopStart;
                 }
                 else // Bring audio to start of the song.
                 {
@@ -176,21 +176,21 @@ namespace util
                 audioSource.loop = looping;
         }
 
-        // Returns the length of the audio clip
-        public float GetClipLength()
+        // Returns the length of the audio clip loop.
+        public float GetLoopLength()
         {
-            return clipEnd - clipStart;
+            return loopEnd - loopStart;
         }
 
-        // Returns the value of clip start
-        public float GetClipStart()
+        // Returns the value of loop start.
+        public float GetLoopStart()
         {
-            return clipStart;
+            return loopStart;
         }
 
-        // Sets the value of clip start in seconds
+        // Sets the value of loop start in seconds
         // This only works if the audioClip has been set.
-        public void SetClipStartInSeconds(float seconds)
+        public void SetLoopStartInSeconds(float seconds)
         {
             // If the audio source is null.
             if (audioSource == null)
@@ -202,12 +202,12 @@ namespace util
 
 
             // Setting value to clip start.
-            clipStart = (seconds >= 0.0F && seconds <= audioSource.clip.length) ?
-                seconds : clipStart;
+            loopStart = (seconds >= 0.0F && seconds <= audioSource.clip.length) ?
+                seconds : loopStart;
         }
 
-        // Sets the clip start time as a percentage, with 0 being 0% and 1 being 100%.
-        public void SetClipStartAsPercentage(float t)
+        // Sets the loop start time as a percentage, with 0 being 0% and 1 being 100%.
+        public void SetLoopStartAsPercentage(float t)
         {
             // If the audio source is null.
             if (audioSource == null)
@@ -218,18 +218,18 @@ namespace util
                 return;
 
             t = Mathf.Clamp(t, 0.0F, 1.0F);
-            clipStart = Mathf.Lerp(0.0F, audioSource.clip.length, t);
+            loopStart = Mathf.Lerp(0.0F, audioSource.clip.length, t);
         }
 
-        // Returns the value of clip end
-        public float GetClipEnd()
+        // Returns the value of loop end.
+        public float GetLoopEnd()
         {
-            return clipEnd;
+            return loopEnd;
         }
 
-        // Sets the value of clip end in seconds
+        // Sets the value of loop end in seconds
         // This only works if the audioClip has been set.
-        public void SetClipEndInSeconds(float seconds)
+        public void SetLoopEndInSeconds(float seconds)
         {
             // If the audio source is null.
             if (audioSource == null)
@@ -241,12 +241,12 @@ namespace util
 
 
             // Setting value to clip start.
-            clipEnd = (seconds >= 0.0F && seconds <= audioSource.clip.length) ?
-                seconds : clipEnd;
+            loopEnd = (seconds >= 0.0F && seconds <= audioSource.clip.length) ?
+                seconds : loopEnd;
         }
 
         // Sets the clip end time as a percentage, with 0 being 0% and 1 being 100%.
-        public void SetClipEndAsPercentage(float t)
+        public void SetLoopEndAsPercentage(float t)
         {
             // If the audio source is null.
             if (audioSource == null)
@@ -257,19 +257,19 @@ namespace util
                 return;
 
             t = Mathf.Clamp(t, 0.0F, 1.0F);
-            clipEnd = Mathf.Lerp(0.0F, audioSource.clip.length, t);
+            loopEnd = Mathf.Lerp(0.0F, audioSource.clip.length, t);
         }
 
         // Gets the variable that says whether or not to start the song at the start of the clip.
-        public bool GetPlayAtClipStart()
+        public bool GetPlayAtLoopStart()
         {
-            return playAtClipStart;
+            return playAtLoopStart;
         }
 
         // Sets the play at clip start
-        public void SetPlayAtClipStart(bool pacs)
+        public void SetPlayAtLoopStart(bool pacs)
         {
-            playAtClipStart = pacs;
+            playAtLoopStart = pacs;
 
             // If the audio source is null.
             if (audioSource == null)
@@ -280,17 +280,17 @@ namespace util
                 return;
 
             // If the audio should play at the start of the clip.
-            if (playAtClipStart)
+            if (playAtLoopStart)
             {
                 // If the start of the clip is greater than the current time of the clip...
                 // The audioSouce is set to the start of the clip.
-                if (clipStart > audioSource.time)
-                    audioSource.time = clipStart;
+                if (loopStart > audioSource.time)
+                    audioSource.time = loopStart;
             }
         }
 
         // TODO: check how well this works with compressed audio.
-        // Sets the current time in clip as a percentage of the whole c
+        // Sets the current time in audio clip as a percentage of the audio clip's length.
         public void SetClipTime(float t)
         {
             // Sets the clip time
@@ -311,26 +311,26 @@ namespace util
             switch (audioSource.loop)
             {
                 case true: // Audio is looping
-                    // Checks if clipStart should be offset relative to how far past clipEnd the audio currently is.
+                    // Checks if loopStart should be offset relative to how far past loopEnd the audio currently is.
                     if(loopRelative) // Offset clip start.
                     {
-                        // Calculates how much clipStart should be offset by.
-                        float offsetStart = audioSource.time - clipEnd;
+                        // Calculates how much loopStart should be offset by.
+                        float offsetStart = audioSource.time - loopEnd;
 
-                        // Set current clip start as clipStart adjusted by the offset amount.
-                        float currClipStart = clipStart + offsetStart;
+                        // Set current loop start as loopStart adjusted by the offset amount.
+                        float currLoopStart = loopStart + offsetStart;
 
 
                         // If the current clip start is negative (i.e., it's before the start of the audio itself)...
-                        // Then use normal clipStart.
-                        if(currClipStart >= 0)
-                            audioSource.time = currClipStart;
+                        // Then use normal loopStart.
+                        if(currLoopStart >= 0)
+                            audioSource.time = currLoopStart;
                         else
-                            audioSource.time = clipStart;
+                            audioSource.time = loopStart;
                     }
-                    else // Set back to clipStart.
+                    else // Set back to loopStart.
                     {
-                        audioSource.time = clipStart;
+                        audioSource.time = loopStart;
                     }
                     break;
 
@@ -338,7 +338,7 @@ namespace util
                             
                     // Audio is stopped, and returns to clip start.
                     audioSource.Stop();
-                    audioSource.time = clipStart;
+                    audioSource.time = loopStart;
                     break;
             }
         }
@@ -352,34 +352,34 @@ namespace util
             if (audioSource.clip == null)
                 return;
 
-            // Clamp clipStart and clipEnd
+            // Clamp loopStart and loopEnd
             // TODO: see if using if statements is less computationally expensive (2 conditional statements per clamp)
-            clipStart = Mathf.Clamp(clipStart, 0.0F, audioSource.clip.length);
-            clipEnd = Mathf.Clamp(clipEnd, 0.0F, audioSource.clip.length);
+            loopStart = Mathf.Clamp(loopStart, 0.0F, audioSource.clip.length);
+            loopEnd = Mathf.Clamp(loopEnd, 0.0F, audioSource.clip.length);
 
             // if the clips are the same, no audio can play.
-            if (clipStart == clipEnd)
+            if (loopStart == loopEnd)
             {
                 return;
             }
             // If the clip end is greater than the clip start, then the values are swapped.
-            else if (clipStart > clipEnd)
+            else if (loopStart > loopEnd)
             {
-                float temp = clipStart;
-                clipStart = clipEnd;
-                clipEnd = temp;
+                float temp = loopStart;
+                loopStart = loopEnd;
+                loopEnd = temp;
             }
 
             // If the clip loop is enabled, and the audio source is playing.
-            if (clipLoopEnabled && audioSource.isPlaying)
+            if (loopEnabled && audioSource.isPlaying)
             {
                 // This isn't needed since using the Play() function in this class handles this.
                 // Puts the audio source at the clip start.
-                // if (audioSource.time < clipStart && !playAtClipStart)
-                //     audioSource.time = clipStart;
+                // if (audioSource.time < loopStart && !playAtLoopStart)
+                //     audioSource.time = loopStart;
 
                 // The audioSource has reached the end of the clip.
-                if (audioSource.time >= clipEnd)
+                if (audioSource.time >= loopEnd)
                 {
                     // Call to loop the clip.
                     OnLoopClip();

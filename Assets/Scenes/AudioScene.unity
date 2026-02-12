@@ -989,7 +989,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 80350439c16d1ab45a2859d0632ee03d, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 80350439c16d1ab45a2859d0632ee03d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -1418,8 +1418,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1418963698}
   - component: {fileID: 1418963699}
-  - component: {fileID: 1418963700}
   - component: {fileID: 1418963702}
+  - component: {fileID: 1418963700}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1457,11 +1457,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 810703979}
-  clipStart: 15
-  clipEnd: 30
-  playAtClipStart: 0
+  loopStart: 15
+  loopEnd: 30
+  playAtLoopStart: 0
   loopRelative: 1
-  clipLoopEnabled: 1
+  loopEnabled: 1
 --- !u!114 &1418963700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1497,11 +1497,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
-  clipStart: 15
-  clipEnd: 30
-  playAtClipStart: 1
+  loopStart: 15
+  loopEnd: 30
+  playAtLoopStart: 0
   loopRelative: 0
-  clipLoopEnabled: 1
+  loopEnabled: 1
   mainFade: {fileID: 810703980}
   transitionFade: {fileID: 1605140227}
   fadeDuration: 5

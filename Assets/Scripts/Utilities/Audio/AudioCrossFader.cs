@@ -58,10 +58,10 @@ namespace util
             if (loopRelative)
             {
                 // Calculates how much clipStart should be offset by.
-                float offsetStart = audioSource.time - clipEnd;
+                float offsetStart = audioSource.time - loopEnd;
 
                 // Set current clip start as clipStart adjusted by the offset amount.
-                float currClipStart = clipStart + offsetStart;
+                float currClipStart = loopStart + offsetStart;
 
 
                 // If the current clip start is negative (i.e., it's before the start of the audio itself)...
@@ -73,14 +73,14 @@ namespace util
                 }
                 else
                 {
-                    audioSource.time = clipStart;
-                    mainFade.audioSource.time = clipStart;
+                    audioSource.time = loopStart;
+                    mainFade.audioSource.time = loopStart;
                 }
             }
             else
             {
-                audioSource.time = clipStart;
-                mainFade.audioSource.time = clipStart;
+                audioSource.time = loopStart;
+                mainFade.audioSource.time = loopStart;
             }
 
             // Play the audio, fading in the main fade, and fading out for the transition.

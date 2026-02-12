@@ -49,8 +49,8 @@ public class AudioSceneManager : MonoBehaviour
         // Display
         audioLength.text = audioSource.clip.length.ToString();
 
-        clipStartText.text = looper.clipStart.ToString();
-        clipEndText.text = looper.clipEnd.ToString();
+        clipStartText.text = looper.loopStart.ToString();
+        clipEndText.text = looper.loopEnd.ToString();
 
 
         // Tests
@@ -197,12 +197,12 @@ public class AudioSceneManager : MonoBehaviour
     void Update()
     { 
         // Updates the start clip text.
-        if (clipStartText.text != looper.clipStart.ToString())
-            clipStartText.text = looper.clipStart.ToString();
+        if (clipStartText.text != looper.loopStart.ToString())
+            clipStartText.text = looper.loopStart.ToString();
         
         // Updates the end clip text.
-        if(clipEndText.text != looper.clipEnd.ToString())
-            clipEndText.text = looper.clipEnd.ToString();
+        if(clipEndText.text != looper.loopEnd.ToString())
+            clipEndText.text = looper.loopEnd.ToString();
 
         // parameters set.
         if (audioSource != null && slider != null)
