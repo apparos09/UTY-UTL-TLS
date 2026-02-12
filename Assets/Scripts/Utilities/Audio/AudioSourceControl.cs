@@ -102,7 +102,6 @@ namespace util
         //     }
         // }
 
-
         // The maximum volume variable.
         public float MaxVolume
         {
@@ -150,7 +149,7 @@ namespace util
             AudioSourceControl[] audios = FindObjectsOfType<AudioSourceControl>(includeInactive);
 
             // Adjusts the volumes.
-            foreach(AudioSourceControl asc in audios)
+            foreach (AudioSourceControl asc in audios)
             {
                 asc.SetVolumeAsPercentageOfMax(newVol);
             }

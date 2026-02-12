@@ -56,8 +56,8 @@ namespace util
                     bgmLooper.audioSource.clip = bgmClip;
 
                     // Sets the start and end for the BGM.
-                    bgmLooper.clipStart = clipStart;
-                    bgmLooper.clipEnd = clipEnd;
+                    bgmLooper.loopStart = clipStart;
+                    bgmLooper.loopEnd = clipEnd;
 
                     // Play the BGM through the looper, providing the delay.
                     bgmLooper.PlayAudio(true, delay);
