@@ -84,7 +84,7 @@ namespace util
 
         }
 
-        // Plays background music with the provided clip start and end.
+        // Plays background music with the provided loop start and end.
         // This has the audio play instantly.
         public void PlayBackgroundMusic(AudioClip bgmClip, float loopStart, float loopEnd)
         {
