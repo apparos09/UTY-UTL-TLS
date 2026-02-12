@@ -43,8 +43,8 @@ namespace util
 
         // BACKGROUND MUSIC
         // Plays the provided background music.
-        // The arguments 'clipStart' and 'clipEnd' are used for the BGM looper.
-        public void PlayBackgroundMusic(AudioClip bgmClip, float clipStart, float clipEnd, float delay)
+        // The arguments 'loopStart' and 'loopEnd' are used for the BGM looper.
+        public void PlayBackgroundMusic(AudioClip bgmClip, float loopStart, float loopEnd, float delay)
         {
             if (bgmSource != null)
             {
@@ -56,8 +56,8 @@ namespace util
                     bgmLooper.audioSource.clip = bgmClip;
 
                     // Sets the start and end for the BGM.
-                    bgmLooper.loopStart = clipStart;
-                    bgmLooper.loopEnd = clipEnd;
+                    bgmLooper.loopStart = loopStart;
+                    bgmLooper.loopEnd = loopEnd;
 
                     // Play the BGM through the looper, providing the delay.
                     bgmLooper.PlayAudio(true, delay);
@@ -86,9 +86,9 @@ namespace util
 
         // Plays background music with the provided clip start and end.
         // This has the audio play instantly.
-        public void PlayBackgroundMusic(AudioClip bgmClip, float clipStart, float clipEnd)
+        public void PlayBackgroundMusic(AudioClip bgmClip, float loopStart, float loopEnd)
         {
-            PlayBackgroundMusic(bgmClip, clipStart, clipEnd, 0);
+            PlayBackgroundMusic(bgmClip, loopStart, loopEnd, 0);
 
         }
 
@@ -98,7 +98,7 @@ namespace util
             PlayBackgroundMusic(bgmClip, 0, bgmClip.length, delay);
         }
 
-        // Plays the background music (clipStart and clipEnd are autoset to the start and end of the audio).
+        // Plays the background music (loopStart and loopEnd are autoset to the start and end of the audio).
         // The audio also plays instantly.
         public void PlayBackgroundMusic(AudioClip bgmClip)
         {
