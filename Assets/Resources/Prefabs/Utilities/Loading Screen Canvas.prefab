@@ -51,7 +51,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 0}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 3240327406171759222}
   loadingGraphic: {fileID: 6200797455419875602}
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoadOnStart: 1
 --- !u!1001 &8501663780862894182
 PrefabInstance:
   m_ObjectHideFlags: 0
