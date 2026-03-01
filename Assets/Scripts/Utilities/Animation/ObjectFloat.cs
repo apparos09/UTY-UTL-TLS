@@ -39,6 +39,10 @@ namespace util
         [Tooltip("The speed of the animation.")]
         public float speed = 1.0F;
 
+        // If true, scaled delta time is used. If false, unscaled delta time is used.
+        [Tooltip("Uses scaled delta time if true, unscaled delta time if false.")]
+        public bool useScaledDeltaTime = true;
+
         // If set to 'true', floating is enabled.
         [Tooltip("If true, floating is enabled")]
         public bool floatEnabled = true;
@@ -178,8 +182,16 @@ namespace util
         // Sets the object to the reset position.
         public void SetObjectToResetPosition()
         {
+            // Sets the object to its reset position, which also resets the process.
+            SetObjectToResetPosition(true);   
+        }
+
+        // Sets the object to its reset position.
+        // resetProcess: if true, the process is also reset.
+        public void SetObjectToResetPosition(bool resetProcess)
+        {
             // Determines what position to reset.
-            if(useLocalPosition)
+            if (useLocalPosition)
             {
                 transform.localPosition = resetPosition;
             }
@@ -187,7 +199,12 @@ namespace util
             {
                 transform.position = resetPosition;
             }
-                
+
+            // If the process should be reset.
+            if(resetProcess)
+            {
+                ResetProcess();
+            }
         }
 
         // Update is called once per frame
@@ -196,8 +213,13 @@ namespace util
             // If floating is enabled.
             if (floatEnabled)
             {
-                // Increment the timer.
-                time += Time.deltaTime * speed;
+                // Checks if using scaled or unscaled delta time.
+                float dt = useScaledDeltaTime ? Time.deltaTime : Time.unscaledDeltaTime;
+
+                // Increments the timer.
+                time += dt * speed;
+
+                // Clamps the time value within 0-1 bounds.
                 time = Mathf.Clamp01(time);
 
                 // Change the object's position.
