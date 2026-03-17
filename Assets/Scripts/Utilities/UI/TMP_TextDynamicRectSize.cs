@@ -19,7 +19,7 @@ namespace util
     // Dynamically resizes a text object.
     // This is only available for TMP_Text since it has the ability to check if the text is overflowing.
     // NOTE: make sure the text is set to overflow.
-    public class TMP_TextDynamicSize : MonoBehaviour
+    public class TMP_TextDynamicRectSize : MonoBehaviour
     {
         // The axis to be resized.
         // Horizontal Vertical: averages the size between the two axes.
