@@ -288,8 +288,6 @@ namespace util
             return pages.Count;
         }
 
-
-        // TODO: is this necessary?
         // Changes the page index.
         public void SetPage(int index)
         {
@@ -301,6 +299,25 @@ namespace util
         {
             // Increases the index, and sets the text.
             SetTextBoxText(currPageIndex + 1);
+        }
+
+        // Moves onto the next page.
+        // wrapAround: if true, the text box loops around to the beginning if there is no next page.
+        public void NextPage(bool wrapAround)
+        {
+            // Increase the index.
+            int newIndex = currPageIndex + 1;
+
+            // Checks if the text box should wrap around.
+            if (wrapAround)
+            {
+                // Out of bounds, so wrap around to 0.
+                if (newIndex >= pages.Count)
+                    newIndex = 0;
+            }
+
+            // Sets the new index.
+            SetTextBoxText(newIndex);
         }
 
         // Returns to the previous page.
@@ -320,6 +337,45 @@ namespace util
                 // SetTextBoxText(currPageIndex - 1);
                 SetTextBoxText(currPageIndex - 1);
             }
+        }
+
+        // Returns to the previous page.
+        // wrapAround: if true, the textbox arounds around to the beginning if there is no previous page.
+        public void PreviousPage(bool wrapAround)
+        {
+            // Gets the new index.
+            int newIndex = currPageIndex - 1;
+
+            // If the text box should wrap around.
+            if(wrapAround)
+            {
+                // Out of bounds, so wrap around to last page.
+                if (newIndex < 0)
+                    newIndex = pages.Count - 1;
+            }
+
+            // If the animation should be skipped when going back, and only when going back.
+            if (enableAnimationBackSkip && !enableAnimationSkip)
+            {
+                // Finishes the page instead of finishing it.
+                SetTextBoxText(newIndex, false);
+            }
+            else // Standard
+            {
+                // TODO: maybe have the back button skip the text always instead of loading up the rest of the page?
+                SetTextBoxText(newIndex);
+            }
+        }
+
+        // Called when the page has changed.
+        // This is called even if the current page was set to the value it already had.
+        // This is called only if the page has changed. If you want to call a function everytime...
+        // The text box text has changed (e.g., characters aren't all being loaded in at once), call OnTextBoxTextChanged().
+        // newPageIndex: the new page index, which is now the current index.
+        //  - This may differ from the new page index that was provided if said index was out of bounds.
+        public virtual void OnPageChanged(Page newPage, int newPageIndex)
+        {
+            // ...
         }
 
         // CONTROLS //
@@ -478,6 +534,7 @@ namespace util
         }
 
         // Sets the text that's on the text box.
+        // fnishPage: determines if the text should be finished, or if it should skip to the next page.
         private void SetTextBoxText(int nextPageIndex, bool finishPage = true)
         {
             // If text is still being loaded just sub in the rest and stop loading in new characters.
@@ -601,12 +658,30 @@ namespace util
 
             // Sets the auto next timer to max. If autoNext is set to false, the timer won't decrease anyway.
             SetAutoNextTimerToMax();
+
+            // The page has changed.
+            OnPageChanged(pages[currPageIndex], currPageIndex);
+
+            // If characters were loaded instantly, call the on OnTextBoxTextChanged() function.
+            // If the characters aren't being laoded instantly, don't call it here, since the first set...
+            // Of characters will be loaded by the LoadCharacterByCharacter() function.
+            if (!loadingChars)
+                OnTextBoxTextChanged(boxText.text);
+        }
+
+        // Called wheen the text box text has been changed.
+        // If characters are being loaded gradually, this is called everytime a character is loaded.
+        // If you want a function that's only called when the page has changed and not the text, use OnPageChanged().
+        // newText: the text that has been loaded into the text box.
+        public virtual void OnTextBoxTextChanged(string newText)
+        {
+            // ...
         }
 
         // Loads character by character.
         private void LoadCharacterByCharacter()
         {
-            // Checks if the timer has reached 0 for displaying the next character.
+            // Checks if there are characters to load from the queue.
             if (charQueue.Count != 0)
             {
                 // If the timer has reached 0 or less.
@@ -640,6 +715,9 @@ namespace util
                         charTimer = 1.0F;
                     else
                         charTimer = 0.0F;
+
+                    // The text box text has changed.
+                    OnTextBoxTextChanged(boxText.text);
                 }
                 else // Reduce timer.
                 {
@@ -736,8 +814,9 @@ namespace util
         {
             // Changed this from the courtine version.
             if (loadingChars)
+            {
                 LoadCharacterByCharacter();
-
+            }
 
             // If the page should automatically change.
             if(autoNext)
