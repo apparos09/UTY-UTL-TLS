@@ -7,6 +7,9 @@ namespace util
     // A page in a textbox.
     public class Page
     {
+        // The title for the page.
+        public string title = "";
+
         // The text for the page.
         public string text = "";
 
@@ -22,12 +25,20 @@ namespace util
         // Generates the empty page.
         public Page()
         {
+            title = "";
             text = "";
         }
 
         // Adds a page with text.
         public Page(string text)
         {
+            this.text = text;
+        }
+
+        // Adds a page with a title and text.
+        public Page(string title, string text)
+        {
+            this.title = title;
             this.text = text;
         }
 
