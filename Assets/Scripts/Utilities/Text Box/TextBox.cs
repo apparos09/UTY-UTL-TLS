@@ -24,7 +24,13 @@ namespace util
         // List of pages.
         public List<Page> pages = new List<Page>();
 
+        // The title of the text box.
+        // NOTE: the box may not have a title, so make sure you always check that this object exists first.
+        [Tooltip("The title of the text box, which updates to match each page. This can be left null if page titles aren't being used.")]
+        public TMP_Text boxTitle;
+
         // The text in the text box.
+        [Tooltip("The box text, which is set using the provided pages.")]
         public TMP_Text boxText;
 
         // If enabled, the program will automatically go to the next page once it is loaded.
@@ -552,6 +558,13 @@ namespace util
 
                     if (finishPage || !(nextPageIndex >= 0 && nextPageIndex < pages.Count)) // Finish loading the page.
                     {
+                        // Updates the box text if the object is set.
+                        // This likely isn't necessary, since presumably a page's title...
+                        // Won't be changed. However, this is still here to make sure...
+                        // That the box title is being updated properly.
+                        if (boxTitle != null)
+                            boxTitle.text = pages[currPageIndex].title;
+
                         // Finishes the text instead of replacing the page.
                         boxText.text = pages[currPageIndex].text;
                         charQueue.Clear();
@@ -584,9 +597,12 @@ namespace util
             }
 
 
+            // Clears out existing title.
+            if (boxTitle != null)
+                boxTitle.text = string.Empty;
 
             // Clears out the existing text.
-            boxText.text = "";
+            boxText.text = string.Empty;
 
             // Calls the function for the page that's being closed.
             // If the new index is the same as the current index, don't call the OnPageClosed() function.
@@ -623,6 +639,12 @@ namespace util
             // This was to address an error that was being encountered.
             if (currPageIndex >= 0 && currPageIndex < pages.Count)
             {
+                // Sets the box title if the object is set.
+                // This is always loaded instantly, while the box text might be loaded...
+                // Instantly or gradually depending on the text box's settings.
+                if (boxTitle != null)
+                    boxTitle.text = pages[currPageIndex].title;
+
                 // Checks if the text should be shown automatically, or if it should be shown letter by letter.
                 if (instantText) // Instant
                 {
@@ -650,9 +672,16 @@ namespace util
                     }
                 }
             }
+            // Invalid page index.
             else
             {
+                // If the box title is set, clear it.
+                if (boxTitle != null)
+                    boxTitle.text = string.Empty;
+
+                // Clears the box title.
                 boxText.text = string.Empty;
+
                 // TODO: close textbox?
             }
 
@@ -802,7 +831,12 @@ namespace util
             // Now at index 0.
             currPageIndex = 0;
 
-            // Clear out waiting
+            // If the box title is set, clear the text.
+            if (boxTitle != null)
+                boxTitle.text = string.Empty;
+
+            // Clear out the text and characters in the queue.
+            // Also reset the character load timer.
             loadingChars = false;
             boxText.text = string.Empty;
             charQueue.Clear();
