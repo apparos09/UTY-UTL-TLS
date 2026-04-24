@@ -33,6 +33,15 @@ namespace util
         [Tooltip("The box text, which is set using the provided pages.")]
         public TMP_Text boxText;
 
+        // The text for showing the text page number.
+        [Tooltip("The box page number, which shows the current page number. Will be ignored if left null.")]
+        public TMP_Text boxPageNumberText;
+
+        // If true, the page number is shown as a fraction (page number/page total).
+        // If false, the page number is shown as a whole number (page number).
+        [Tooltip("If true, the page number is shown as a fraction ((page index + 1)/page count). If false, the page number is shown as a whole number (page index + 1).")]
+        public bool showPageNumberAsFraction = true;
+
         // If enabled, the program will automatically go to the next page once it is loaded.
         public bool autoNext = false;
 
@@ -54,7 +63,7 @@ namespace util
         // Closes the text box when all the end has been reached.
         public bool closeOnEnd = true;
 
-        [Header("UI")]
+        [Header("Controls")]
 
         // The previous page button.
         public Button prevPageButton;
@@ -381,7 +390,8 @@ namespace util
         //  - This may differ from the new page index that was provided if said index was out of bounds.
         public virtual void OnPageChanged(Page newPage, int newPageIndex)
         {
-            // ...
+            // Updates the text box page number text.
+            UpdatePageNumberText();
         }
 
         // CONTROLS //
@@ -781,6 +791,38 @@ namespace util
             }
         }
 
+        // Updates the text box page number text.
+        public virtual void UpdatePageNumberText()
+        {
+            // The box page number text is set.
+            if(boxPageNumberText != null)
+            {
+                // There are pages.
+                if(pages.Count > 0)
+                {
+                    // If true, the page number is shown as a fraction ((page index + 1) / page number).
+                    if(showPageNumberAsFraction)
+                    {
+                        // Set as current page index + 1 / page count.
+                        boxPageNumberText.text =
+                            (currPageIndex + 1).ToString() + "/" + pages.Count.ToString();
+                    }
+                    // If false, the page number is shown as a whole number (page index + 1).
+                    else
+                    {
+                        // Set as current page index + 1.
+                        boxPageNumberText.text = (currPageIndex + 1).ToString();
+                    }
+
+                }
+                // No pages.
+                else
+                {
+                    boxPageNumberText.text = string.Empty;
+                }
+            }
+        }
+
         // Sets the timer to its max.
         public void SetAutoNextTimerToMax()
         {
@@ -841,6 +883,10 @@ namespace util
             boxText.text = string.Empty;
             charQueue.Clear();
             charTimer = 0.0F;
+
+            // Clears the page number text if the object is set.
+            if(boxPageNumberText != null)
+                boxPageNumberText.text = string.Empty;
         }
 
         // Update is called once per frame
