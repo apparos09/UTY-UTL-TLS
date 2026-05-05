@@ -8,6 +8,8 @@ namespace util
     // The class for the text box for the game.
     public class TextBox : MonoBehaviour
     {
+        // [Header("Text Box")]
+
         // The text box object to be opened/closed.
         [Tooltip("The box object that's opened/closed. By default, it's set to gameObject.")]
         public GameObject boxObject;
@@ -16,13 +18,7 @@ namespace util
         [Tooltip("The box visual that can be shown/hidden. By default, it's the same as boxObject.")]
         public GameObject boxVisual;
 
-        [Header("Text Settings")]
-
-        // The current page.
-        private int currPageIndex = -1;
-
-        // List of pages.
-        public List<Page> pages = new List<Page>();
+        [Header("Text Box/Text Settings")]
 
         // The title of the text box.
         // NOTE: the box may not have a title, so make sure you always check that this object exists first.
@@ -42,28 +38,45 @@ namespace util
         [Tooltip("If true, the page number is shown as a fraction ((page index + 1)/page count). If false, the page number is shown as a whole number (page index + 1).")]
         public bool showPageNumberAsFraction = true;
 
+        // List of pages for the text box.
+        public List<Page> pages = new List<Page>();
+
+        // The current page index.
+        private int currPageIndex = -1;
+
         // If enabled, the program will automatically go to the next page once it is loaded.
-        public bool autoNext = false;
+        [Tooltip("Goes to the next page automatically if true.")]
+        public bool autoNextEnabled = false;
 
         // The max time it takes for a box to automatically turn to the next page.
+        [Tooltip("The maximum time for going to the next page automatically.")]
         public float autoNextTimerMax = 5.0F;
 
         // The timer for automatically going to the next page.
+        [Tooltip("The timer for automatically going to the next page.")]
         public float autoNextTimer = 0.0F;
 
         // Extra time added when TTS is enabled.
+        [Tooltip("The amount of extra time added to the text box auto next page timer, which is meant to account for TTS.")]
         public float ttsExtraTime = 1.0F;
 
         // Allows for extra time to be added to the timer when TTS is active.
+        [Tooltip("If true, extra time is added to the auto next timer to give more time for reading TTS.")]
         public bool addTtsExtraTime = true;
 
         // Set to 'true' to pause the timer.
+        [Tooltip("Pauses the auto next page timer.")]
         public bool autoNextTimerPaused = false;
 
-        // Closes the text box when all the end has been reached.
+        // Uses scaled delta time for all time based functions if true. Uses unscaled delta time if false.
+        [Tooltip("If true, scaled delta time is used for all time-based text box functions. If false, unscaledDeltaTime is used.")]
+        public bool useScaledDeltaTime = true;
+
+        // Closes the text box when the end of the pages has been reached.
+        [Tooltip("Closes the text box once it reaches the end (i.e., there are no more pages next).")]
         public bool closeOnEnd = true;
 
-        [Header("Controls")]
+        [Header("Text Box/Controls")]
 
         // The previous page button.
         public Button prevPageButton;
@@ -76,7 +89,7 @@ namespace util
 
         // Animation clips were taken out, since animation is done entirely by char loading.
 
-        [Header("Animation")]
+        [Header("Text Box/Animation")]
         // If 'true', all the shown is shown at once. If false, the text is shown letter by letter.
         public bool instantText = true;
 
@@ -99,9 +112,11 @@ namespace util
         private float charTimer = 0.0F;
 
         // The amount of characters loaded per interation.
+        [Tooltip("How many characters are loaded per instance.")]
         public int charsPerLoad = 1;
 
         // The speed that the text is shown on the screen. This is ignored if the text is instantly shown.
+        [Tooltip("The text/character loading speed. The higher the value, the faster the text. If <= 0, characters are loaded every frame.")]
         public float textSpeed = 0.0F;
 
         // Becomes 'true' when characters are loading up.
@@ -760,7 +775,25 @@ namespace util
                 }
                 else // Reduce timer.
                 {
-                    charTimer -= Time.deltaTime * textSpeed;
+                    // If the text speed is greater than 0, reduce the timer.
+                    if(textSpeed > 0)
+                    {
+                        // If scaled delta time should be used.
+                        if (useScaledDeltaTime)
+                        {
+                            charTimer -= Time.deltaTime * textSpeed;
+                        }
+                        // If unscaled delta time should be used.
+                        else
+                        {
+                            charTimer -= Time.unscaledDeltaTime * textSpeed;
+                        }
+                    }
+                    // The text speed is 0 or less, so set char timer to 0 (load characters every frame).
+                    else
+                    {
+                        charTimer = 0.0F;
+                    }
                 }
             }
             else
@@ -771,7 +804,7 @@ namespace util
 
                 // If the text box should automatically go onto the next page when it's done after a certain period of time...
                 // Set the timer.
-                if (autoNext)
+                if (autoNextEnabled)
                     SetAutoNextTimerToMax();
 
 
@@ -899,13 +932,15 @@ namespace util
             }
 
             // If the page should automatically change.
-            if(autoNext)
+            if(autoNextEnabled)
             {
                 // If the timer is not finished yet, reduce the time.
                 // Don't do it if the timer is paused.
                 if(autoNextTimer > 0.0F && !autoNextTimerPaused)
                 {
-                    autoNextTimer -= Time.deltaTime;
+                    // If scaled delta time is used, use Time.deltaTime.
+                    // If unscaled delta time is used, use Time.unscaledDeltaTime.
+                    autoNextTimer -= (useScaledDeltaTime) ? Time.deltaTime : Time.unscaledDeltaTime;
 
                     // If the timer is now finished, turn the page.
                     if(autoNextTimer <= 0.0F)
