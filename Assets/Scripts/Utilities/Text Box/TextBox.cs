@@ -763,7 +763,7 @@ namespace util
                     // else
                     //     charTimer = 0.0F;
 
-                    // Reset the value.
+                    // Reset the value to 1 second. How much gets reduced is based on the text speed.
                     // If textSpeed is set to '0', then a character is loaded every frame.
                     if (textSpeed > 0)
                         charTimer = 1.0F;
@@ -788,6 +788,10 @@ namespace util
                         {
                             charTimer -= Time.unscaledDeltaTime * textSpeed;
                         }
+
+                        // If the char timer is negative, set it to 0.
+                        if (charTimer < 0.0F)
+                            charTimer = 0.0F;
                     }
                     // The text speed is 0 or less, so set char timer to 0 (load characters every frame).
                     else
