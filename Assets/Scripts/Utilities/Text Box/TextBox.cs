@@ -716,11 +716,17 @@ namespace util
             // The page has changed.
             OnPageChanged(pages[currPageIndex], currPageIndex);
 
-            // If characters were loaded instantly, call the on OnTextBoxTextChanged() function.
+            // If characters were loaded instantly...
+            // Call the OnCharactersFinishedLoading() and OnTextBoxTextChanged() function.
             // If the characters aren't being laoded instantly, don't call it here, since the first set...
             // Of characters will be loaded by the LoadCharacterByCharacter() function.
             if (!loadingChars)
+            {
+                // In the load character by character function the characters finished loading function...
+                // Is called after the text box text changed function, so that's done here as well.
                 OnTextBoxTextChanged(boxText.text);
+                OnCharactersFinishedLoading();
+            }
         }
 
         // Called wheen the text box text has been changed.
@@ -730,6 +736,18 @@ namespace util
         public virtual void OnTextBoxTextChanged(string newText)
         {
             // ...
+        }
+
+        // Returns 'true' if the text box is loading characters.
+        public bool IsLoadingCharacters()
+        {
+            return loadingChars;
+        }
+
+        // Returns the remaining characters that must be loaded.
+        public int GetRemainingCharactersToLoad()
+        {
+            return charQueue.Count;
         }
 
         // Loads character by character.
@@ -825,7 +843,16 @@ namespace util
                 {
                     DisablePreviousButtonOnFirstPage();
                 }
+
+                // The characters have finished loading, so call the related function.
+                OnCharactersFinishedLoading();
             }
+        }
+
+        // Called when all characters have finished being loaded for the current page.
+        public virtual void OnCharactersFinishedLoading()
+        {
+            // ...
         }
 
         // Updates the text box page number text.

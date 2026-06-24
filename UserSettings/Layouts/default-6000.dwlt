@@ -145,7 +145,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 112}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 64
+  controlID: 18
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -693,21 +693,11 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: []
+      m_SelectedIDs:
+      - m_Data: 28860
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -9532
-      - m_Data: -9472
-      - m_Data: -9108
-      - m_Data: -9086
-      - m_Data: -9070
-      - m_Data: -9040
-      - m_Data: -9034
-      - m_Data: -8928
-      - m_Data: -8916
-      - m_Data: -8908
-      - m_Data: -8874
       - m_Data: -1330
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -1587,7 +1577,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Utilities/Text Box
+    - Assets/Scenes
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1597,18 +1587,18 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 62
   m_LastFolders:
-  - Assets/Scripts/Utilities/Text Box
+  - Assets/Scenes
   m_LastFoldersGridSize: 62
   m_LastProjectPath: C:\Users\roder\source\Unity\UTY-UTL-TLS
   m_LockTracker:
     m_IsLocked: 0
   m_LastLocalAssetsSearchArea: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 50.80002}
+    scrollPos: {x: 0, y: 31}
     m_SelectedIDs:
-    - m_Data: 28866
+    - m_Data: 28860
     m_LastClickedID:
-      m_Data: 28866
+      m_Data: 28860
     m_ExpandedIDs:
     - m_Data: 0
     - m_Data: 28764
@@ -1673,9 +1663,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: []
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs:
+    - m_Data: 28860
+    m_LastClickedInstanceID: 28860
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: []
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1784,7 +1775,7 @@ MonoBehaviour:
     m_DynamicPanelBehavior: 0
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 0
+  m_LastSelectedObjectID: 28860
 --- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52
