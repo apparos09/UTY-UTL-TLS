@@ -446,7 +446,7 @@ namespace util
         }
 
         // Enables the previous button.
-        public void EnablePreviousButton()
+        public void EnablePreviousPageButton()
         {
             // Enables the prev page button.
             if (prevPageButton != null)
@@ -454,7 +454,7 @@ namespace util
         }
 
         // Disables the previous button.
-        public void DisablePreviousButton()
+        public void DisablePreviousPageButton()
         {
             // Disables the prev page button.
             if (prevPageButton != null)
@@ -462,7 +462,7 @@ namespace util
         }
 
         // Disables the previous page button if on the first page.
-        public void DisablePreviousButtonOnFirstPage()
+        public void DisablePreviousPageButtonOnFirstPage()
         {
             // Checks for the previous page button being set.
             if (prevPageButton != null)
@@ -477,7 +477,7 @@ namespace util
         }
 
         // Enables the next button.
-        public void EnableNextButton()
+        public void EnableNextPageButton()
         {
             // Enables the next page button.
             if (nextPageButton != null)
@@ -485,7 +485,7 @@ namespace util
         }
 
         // Disables the previous button.
-        public void DisableNextButton()
+        public void DisableNextPageButton()
         {
             // Disables the next page button.
             if (nextPageButton != null)
@@ -657,7 +657,7 @@ namespace util
 
             // If the previous button should be automatically disabled on the first page, try to disable it.
             if(autoDisablePrevButtonOnFirstPage)
-                DisablePreviousButtonOnFirstPage();
+                DisablePreviousPageButtonOnFirstPage();
 
 
             // A bounds check is done again to make sure that the pages weren't cleared in a callback.
@@ -689,11 +689,11 @@ namespace util
                     if (!enableAnimationSkip && DisableControlsIfAnimSkipDisabled)
                     {
                         // Disables the next button.
-                        DisableNextButton();
+                        DisableNextPageButton();
 
                         // Disables the previous button.
                         if (!enableAnimationBackSkip)
-                            DisablePreviousButton();
+                            DisablePreviousPageButton();
                     }
                 }
             }
@@ -841,7 +841,7 @@ namespace util
                 // This is put after the auto skip settings.
                 if (autoDisablePrevButtonOnFirstPage)
                 {
-                    DisablePreviousButtonOnFirstPage();
+                    DisablePreviousPageButtonOnFirstPage();
                 }
 
                 // The characters have finished loading, so call the related function.
