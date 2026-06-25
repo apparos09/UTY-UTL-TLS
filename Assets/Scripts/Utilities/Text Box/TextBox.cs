@@ -93,6 +93,10 @@ namespace util
         // If 'true', all the shown is shown at once. If false, the text is shown letter by letter.
         public bool instantText = true;
 
+        // If 'true, the text controls are enabled once the text box animation ends.
+        [Tooltip("If true, the text box controls are enabled when all text is loaded. Related variables may take priority when it comes to enabling text box controls.")]
+        public bool enableTextControlsOnAnimEnd = true;
+
         // Allows the user to skip the text loading animation if this is set to 'true'.
         [Tooltip("If true, the user can skip to the next page before all the text is loaded. The back skip still works by default unless enableAnimationBackSkip is set to false.")]
         public bool enableAnimationSkip = true;
@@ -830,8 +834,9 @@ namespace util
                     SetAutoNextTimerToMax();
 
 
-                // If the textbox controls should be disabled when the animation skip is turned off.
-                if (!enableAnimationSkip && DisableControlsIfAnimSkipDisabled)
+                // Enables the text box controls when the animation ends.
+                // The textbox controls should be disabled when the animation skip is turned off.
+                if (enableTextControlsOnAnimEnd && !enableAnimationSkip && DisableControlsIfAnimSkipDisabled)
                 {
                     // Enable the controls.
                     EnableTextBoxControls();
